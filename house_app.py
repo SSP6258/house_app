@@ -166,7 +166,10 @@ def fn_set_color_by(by, df):
 @st.cache()
 def fn_get_house_data(path):
     df = pd.read_csv(path)
-    read_typ = path.split('\\')[-3]
+    if '\\' in path:
+        read_typ = path.split('\\')[-3]
+    else:
+        read_typ = path.split('/')[-3]
 
     if read_typ == 'pre_sold_house':
         pre_ownd_path = path.replace('pre_sold_house', 'pre_owned house')
@@ -1796,7 +1799,7 @@ def fn_chrome_96_workaround():
 
 def fn_app(page='data'):
     print(f'fn_app() start, page = {page}')
-    fn_chrome_96_workaround()
+    # fn_chrome_96_workaround()
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=111, value=(100, 111))
