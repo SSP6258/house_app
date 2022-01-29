@@ -1,19 +1,13 @@
-import streamlit as st
 from multiapp import MultiApp
-from apps import home, data, model # import your app modules here
+from apps import app_eda, app_train, app_inference, app_reference, app_tools
 
 app = MultiApp()
 
-st.markdown("""
-# Multi-Page App
-
-This multi-page app is using the [streamlit-multiapps](https://github.com/upraneelnihar/streamlit-multiapps) framework developed by [Praneel Nihar](https://medium.com/@u.praneel.nihar). Also check out his [Medium article](https://medium.com/@u.praneel.nihar/building-multi-page-web-app-using-streamlit-7a40d55fa5b4).
-
-""")
-
 # Add all your application here
-app.add_app("Home", home.app)
-app.add_app("Data", data.app)
-app.add_app("Model", model.app)
+app.add_app("🕵‍♂ 資料探勘", app_eda.app)
+app.add_app("🏋‍♂ 模型訓練", app_train.app)
+app.add_app("🧙 模型推論", app_inference.app)
+app.add_app("📚 參考資料", app_reference.app)
+app.add_app("🧰 開發工具", app_tools.app)
 # The main app
 app.run()
