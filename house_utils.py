@@ -15,8 +15,8 @@ from workalendar.asia import Taiwan
 dic_of_path = {
     # 'root': r'D:\05_Database\house_data',
     # 'database': r'D:\05_Database\house_data\database'
-    'root': r'.\house_data',
-    'database': r'.\house_data\database',
+    'root': r'house_data',
+    'database': r'house_data\database',
 }
 
 
