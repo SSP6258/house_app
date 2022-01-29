@@ -1682,6 +1682,7 @@ def fn_gen_web_ml_inference(path, build_typ):
 def fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
     path_output = os.path.join(path, r'.\output\house_all.csv')
+    print(path_output)
     if not os.path.exists(path_output):
         assert path_output + ' NOT existed !!!'
     # Initialization
