@@ -1529,12 +1529,18 @@ def fn_gen_web_ml_inference(path, build_typ):
         st.write('')
         st.subheader('模型推論')
 
+        print(model_file)
         model_fdr = model_file.split('\\ml_model.sav')[0]
         models = []
         for i, j, files in os.walk(model_fdr):
             for f in files:
                 if '.sav' in f and f not in models:
                     models.append(f)
+
+        if len(models) == 0:
+            st.write(f'No models found in {model_fdr} , {model_file}')
+            st.write('請先進行 "模型訓練')
+            return
 
         model_sel = st.selectbox('模型選擇:', models)
         model_typ = model_sel.split('tpe')[-1].split('mse')[0].replace('_', '')
