@@ -1777,7 +1777,7 @@ def fn_gen_web_tools():
     st.write('')
     st.subheader('函式庫:')
     st.write("- 自動化資料分析: [DataPrep](https://docs.dataprep.ai/user_guide/user_guide.html)")
-    st.write("- 網頁爬蟲白動化: [Selenium](https://www.selenium.dev/documentation/webdriver/)")
+    st.write("- 網頁爬蟲自動化: [Selenium](https://www.selenium.dev/documentation/webdriver/)")
     st.write("- 好看的網頁表格: [Streamlit-Aggrid](https://github.com/PablocFonseca/streamlit-aggrid)")
     st.write("- 互動式網頁圖表: [Plotly](https://plotly.com/python/)")
     st.write("- 座標的距離計算: [GeoPy](https://geopy.readthedocs.io/en/stable/)")
