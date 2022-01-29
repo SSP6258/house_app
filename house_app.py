@@ -166,9 +166,9 @@ def fn_set_color_by(by, df):
 @st.cache()
 def fn_get_house_data(path):
     df = pd.read_csv(path)
-    if '\\' in path:
+    try:
         read_typ = path.split('\\')[-3]
-    else:
+    except:
         read_typ = path.split('/')[-3]
 
     if read_typ == 'pre_sold_house':
