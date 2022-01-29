@@ -1680,9 +1680,9 @@ def fn_gen_web_ml_inference(path, build_typ):
     print(f'fn_gen_web_inference: {dur} 秒')
 
 
-def fn_gen_web_init(path):
+def fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
-    path_output = os.path.join(path, 'output\\house_all.csv')
+    path_output = os.path.join(path, r'output\house_all.csv')
     if not os.path.exists(path_output):
         assert path_output + ' NOT existed !!!'
     # Initialization
@@ -1701,11 +1701,13 @@ def fn_gen_web_init(path):
     # print(f'session_state: {st.session_state}')
     df = fn_get_house_data(path_output)
     df = fn_cln_house_data(df.copy())
-    cat_features = ['鄉鎮市區', '主要建材', '車位類別', 'MRT']
-    for cat in cat_features:
-        df_cat = pd.DataFrame(columns=[cat], data=sorted(list(df[cat].unique())))
-        file = os.path.join(path, f'output\\Feature_{cat}.csv')
-        df_cat.to_csv(file, encoding='utf-8-sig')
+
+    if page == 'train':
+        cat_features = ['鄉鎮市區', '主要建材', '車位類別', 'MRT']
+        for cat in cat_features:
+            df_cat = pd.DataFrame(columns=[cat], data=sorted(list(df[cat].unique())))
+            file = os.path.join(path, f'output\\Feature_{cat}.csv')
+            df_cat.to_csv(file, encoding='utf-8-sig')
 
     print('fn_gen_web_init done')
     return df.copy()
@@ -1801,7 +1803,7 @@ def fn_app(page='data'):
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
     root = dic_of_path['root']
     path = os.path.join(root, 'pre_sold_house') if sel == '預售屋' else os.path.join(root, 'pre_owned_house')
-    ml_model = os.path.join(path, 'output\\model')
+    ml_model = os.path.join(path, r'output\model')
 
     if not os.path.exists(ml_model):
         os.makedirs(ml_model)
@@ -1826,7 +1828,7 @@ def fn_app(page='data'):
         fn_gen_web_eda(df)
 
     elif page == 'train':
-        df = fn_gen_web_init(path)
+        df = fn_gen_web_init(path, page=page)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         build_typ = c2.selectbox('建物型態', ['大樓', '華廈', '不限'], index=0)
         df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
