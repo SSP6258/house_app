@@ -164,7 +164,6 @@ def fn_set_color_by(by, df):
 
 
 @st.cache()
-# Object of type builtins.function: <function fn_get_house_data at 0x000001FA4A1E3790>
 def fn_get_house_data(path):
     df = pd.read_csv(path)
     read_typ = path.split('\\')[-3]
@@ -1682,7 +1681,7 @@ def fn_gen_web_ml_inference(path, build_typ):
 
 def fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
-    path_output = os.path.join(path, r'output\house_all.csv')
+    path_output = os.path.join(path, r'.\output\house_all.csv')
     if not os.path.exists(path_output):
         assert path_output + ' NOT existed !!!'
     # Initialization
@@ -1802,7 +1801,7 @@ def fn_app(page='data'):
     c1, c2 = st.sidebar.columns(2)
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
     root = dic_of_path['root']
-    path = os.path.join(root, 'pre_sold_house') if sel == '預售屋' else os.path.join(root, 'pre_owned_house')
+    path = os.path.join(root, r'pre_sold_house') if sel == '預售屋' else os.path.join(root, r'pre_owned_house')
     ml_model = os.path.join(path, r'output\model')
 
     if not os.path.exists(ml_model):
