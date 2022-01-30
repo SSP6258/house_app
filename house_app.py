@@ -404,6 +404,8 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
 
             st.write('')
             AgGrid(df_show)
+
+            del df
         else:
             st.write(f'此檔共有 {n_data}筆 資料, 經篩選後不可進行模型預估 !')
 
@@ -1418,17 +1420,17 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     if is_model_save:
         df_F = pd.DataFrame()
         df_F['Features'] = X_train.columns
-        df_F.to_csv(model_file.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
-        pickle.dump(regr, open(model_file, 'wb'))
+        # df_F.to_csv(model_file.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
+        # pickle.dump(regr, open(model_file, 'wb'))
         mse = round(df_result.loc["MSE", "測試集"], 2)
         st.session_state['Model_Metrics'] = f'此 {ml_model} 模型在測試資料集MSE為 {mse}'
-        st.markdown(f'{"#" * 6} {st.session_state["Model_Metrics"]} 已儲存 💾 !')
-        st.write(f'save to {model_file}')
+        # st.markdown(f'{"#" * 6} {st.session_state["Model_Metrics"]} 已儲存 💾 !')
+        # st.write(f'save to {model_file}')
         date = datetime.datetime.today().date()
         # date = str(date.month)+str(date.day)
         date_str = str(date.month) if date.month > 9 else '0' + str(date.month)
         date_str += str(date.day) if date.day > 9 else '0' + str(date.day)
-        print(mse)
+        # print(mse)
         if mse < 6:
             model_typ = 'xgb' if ml_model == 'XGBRegressor' else 'rf'
             city = 'all_city'
@@ -1439,7 +1441,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
                              0] + f'_{city}_{model_typ}_mse_{str(mse).replace(".", "p")}_{date_str}.sav'
             df_F.to_csv(good_model.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
             pickle.dump(regr, open(good_model, 'wb'))
-            st.markdown(f'{"#" * 6} ✨ 🥇 唉呦~ 不錯喔! 打上標籤 收藏起來:ml_{good_model.split("ml_")[-1]} ✨ !')
+            st.markdown(f'{"#" * 6} ✨ 🥇 ✨ 唉呦~ 不錯喔! 打上標籤 收藏起來: ml_{good_model.split("ml_")[-1]} 💾 !')
     else:
         # st.write( 訓練模型尚未儲存!
         st.markdown(f'{"#" * 6} 訓練型尚未儲存 !')
@@ -1464,6 +1466,8 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     df_metrics['地址'] = df[[idx in df_metrics.index for idx in df.index]]['地址']
     # df_metrics['樓層']=x[[idx in df_metrics.index for idx in x.index]][移轉層次]
     df_metrics['MRT'] = df[[idx in df_metrics.index for idx in df.index]]['MRT']
+
+    del df
 
     c1, c2 = st.columns(2)
     c1.table(df_result)
