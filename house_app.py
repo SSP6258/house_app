@@ -1520,7 +1520,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 def fn_gen_web_ml_inference(path, build_typ):
     ts = time.time()
 
-    ml_model = os.path.join(path, 'output\\model')
+    ml_model = os.path.join(path, r'output/model')
     if not os.path.exists(ml_model):
         os.makedirs(ml_model)
     model_file = os.path.join(ml_model, 'ml_model.sav')
@@ -1530,7 +1530,7 @@ def fn_gen_web_ml_inference(path, build_typ):
         st.subheader('模型推論')
 
         print(model_file)
-        model_fdr = model_file.split('\\ml_model.sav')[0]
+        model_fdr = model_file.split('ml_model.sav')[0]
         models = []
         for i, j, files in os.walk(model_fdr):
             for f in files:
@@ -1681,6 +1681,7 @@ def fn_gen_web_ml_inference(path, build_typ):
         is_rf = model_typ == 'rf'
         fn_gen_pred(path, loaded_model, model_sel, df_F, build_typ, is_rf)
     else:
+        st.write(f'路徑: {model_file} 不存在 ?')
         st.write('請先進行"模型訓練')
 
     te = time.time()
