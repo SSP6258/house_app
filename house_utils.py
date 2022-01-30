@@ -444,8 +444,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         # print(addr, '--> known coor: ', addr_coor)
     else:
         try:
-            addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
-            # addr_coor = fn_get_coordinate(addr, slp)
+            addr_coor = fn_get_coordinate(addr, slp)
             # print(addr, addr_coor)
         except:
             addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
