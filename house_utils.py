@@ -282,8 +282,9 @@ def fn_get_coor_fr_db(addr, df_coor):
         for a in ['號', '弄', '巷', '路']:
             if a in dic_of_dist.keys() and a in dic_of_dist[a] and not matched:
                 num = int(dic_of_dist[a].split(a)[0])
-                nums = df_coor[a].apply(lambda x: int(str(x).split(a)[0].split('之')[0])).tolist()
-                diff = [abs(n - num) for n in nums]
+                nums = df_coor[a].apply(
+                    lambda x: x if str(x) == 'nan' else int(str(x).split(a)[0].split('之')[0])).tolist()
+                diff = [abs(n - num) for n in nums if str(n) != 'nan']
                 sel = diff.index(min(diff))
                 matched = True
                 print(a, num, nums, sel, nums[sel], matched)
@@ -443,7 +444,8 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         # print(addr, '--> known coor: ', addr_coor)
     else:
         try:
-            addr_coor = fn_get_coordinate(addr, slp)
+            addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
+            # addr_coor = fn_get_coordinate(addr, slp)
             # print(addr, addr_coor)
         except:
             addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
@@ -645,7 +647,8 @@ def fn_get_school_total(df, df_ps, year):
 def fn_gen_school_filter(path):
     coor = os.path.join(path, 'School_coor.csv')
     df_cr = pd.read_csv(coor, encoding='utf-8-sig')
-    df = df_cr[df_cr['address'].apply(lambda x: '台北' in str(x).replace('臺', '台') or '淡水' in str(x) or '八里' in str(x))].copy()
+    df = df_cr[
+        df_cr['address'].apply(lambda x: '台北' in str(x).replace('臺', '台') or '淡水' in str(x) or '八里' in str(x))].copy()
     df.to_csv(os.path.join(path, 'School_info.csv'), encoding='utf-8-sig', index=False)
 
 
