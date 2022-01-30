@@ -1145,7 +1145,7 @@ def fn_gen_web_eda(df):
 def fn_gen_web_ml_train(df, path):
     ts = time.time()
 
-    ml_model = os.path.join(path, 'output\\model')
+    ml_model = os.path.join(path, 'output/model')
 
     # df =df[df['建案名稱']!='康寶日出印象']
 
