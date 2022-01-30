@@ -1423,6 +1423,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
         mse = round(df_result.loc["MSE", "測試集"], 2)
         st.session_state['Model_Metrics'] = f'此 {ml_model} 模型在測試資料集MSE為 {mse}'
         st.markdown(f'{"#" * 6} {st.session_state["Model_Metrics"]} 已儲存 💾 !')
+        st.write(f'save to {model_file}')
         date = datetime.datetime.today().date()
         # date = str(date.month)+str(date.day)
         date_str = str(date.month) if date.month > 9 else '0' + str(date.month)
