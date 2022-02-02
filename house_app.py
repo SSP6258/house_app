@@ -190,11 +190,14 @@ def fn_get_house_data(path):
                         col_drop.append(c)
                 df_ownd.drop(columns=col_drop, inplace=True)
                 df = df.append(df_ownd)
-                df.drop_duplicates(subset=['土地位置建物門牌交易年月日移層次', '每坪單價(萬)', '建物移轉坪數'], inplace=True), df.reset_index(
-                    drop=True, inplace=True)
+                # df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數'],
+                #                    inplace=True)
+                # df.reset_index(drop=True, inplace=True)
                 df.to_csv(path.replace('.csv', f'_add_{df_ownd.shape[0]}.csv'), encoding='utf-8-sig', index=False)
                 print(f'Append {df_ownd.shape[0]} data from pre_ownd to {read_typ} and total is {df.shape[0]}')
 
+    df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數'], inplace=True)
+    df.reset_index(drop=True, inplace=True)
     print(f'Read {read_typ} data from {path} !!!')
     return df
 
@@ -917,7 +920,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         st.write('')
         st.subheader(f'🏡 建案: {build_case}'
                      f'📝 登錄: {deals} 筆'
-                     f'💰 金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+                     f'💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
         r = st.radio('檢視選項:', options=['總價(萬)', '每坪單價(萬)', '建物坪數', '總價-車位(萬)', '車位總價(萬)', '交易日期'], index=0)
         fn_set_radio_2_hor()
@@ -1100,7 +1103,7 @@ def fn_gen_web_eda(df):
     map_style = "carto-positron"  # "open-street-map"
     fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color)
 
-    latest_rel = '0121'
+    latest_rel = '0201'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -1479,7 +1482,8 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     margin = dict(t=30, b=250, l=0, r=400)
     fig = fn_gen_plotly_hist(fig, df_metrics['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, opacity=0.7)
-    fig = fn_gen_plotly_hist(fig, df_sel['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, bins=10, barmode='overlay', opacity=0.7)
+    fig = fn_gen_plotly_hist(fig, df_sel['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, bins=10, barmode='overlay',
+                             opacity=0.7)
 
     c2.plotly_chart(fig)
 
