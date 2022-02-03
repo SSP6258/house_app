@@ -133,6 +133,17 @@ def fn_cln_house_data(df):
     return df
 
 
+@st.cache
+def fn_load_model(model_sel):
+
+    try:
+        loaded_model = pickle.load(open(model_sel, 'rb'))
+    except:
+        assert False, f'fn_load_model() fail, from {model_sel}'
+
+    return loaded_model
+
+
 def fn_set_radio_2_hor():
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
@@ -1529,7 +1540,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 def fn_gen_web_ml_inference(path, build_typ):
     ts = time.time()
 
-    ml_model = os.path.join(path, r'output/model')
+    ml_model = os.path.join(path, r'output\model')
     if not os.path.exists(ml_model):
         os.makedirs(ml_model)
 
@@ -1564,10 +1575,9 @@ def fn_gen_web_ml_inference(path, build_typ):
         model_sel = os.path.join(model_fdr, model_sel)
 
         # load the model from disk
-        loaded_model = pickle.load(open(model_sel, 'rb'))
+        loaded_model = fn_load_model(model_sel)
 
         df_F = pd.read_csv(model_sel.replace('.sav', '.csv'), encoding='utf-8-sig')
-        # print(df_F)
 
         dic_of_input = {}
         with st.form('Form2'):
