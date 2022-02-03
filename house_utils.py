@@ -448,8 +448,8 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
             addr_coor = fn_get_coordinate(addr, slp)
             # print(addr, addr_coor)
         except:
-            print(f'find {addr} from database')
-            addr_coor = fn_get_coordinate(addr, slp)
+            chromedriver = os.path.join(dic_of_path['database'], 'chromedriver.exe')
+            print(f'find {addr} from database, is {chromedriver} existed = {os.path.exists(chromedriver)}')
             addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
             is_save = False
 
