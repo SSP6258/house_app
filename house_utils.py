@@ -442,12 +442,14 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         lat = round(df_addr_coor.loc[addr]['lat'], 5)
         lon = round(df_addr_coor.loc[addr]['lon'], 5)
         addr_coor = (lat, lon)
-        # print(addr, '--> known coor: ', addr_coor)
+        print(addr, '--> known coor: ', addr_coor)
     else:
         try:
             addr_coor = fn_get_coordinate(addr, slp)
             # print(addr, addr_coor)
         except:
+            print(f'find {addr} from database')
+            addr_coor = fn_get_coordinate(addr, slp)
             addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
             is_save = False
 
