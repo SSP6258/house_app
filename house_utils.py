@@ -23,7 +23,8 @@ dic_of_path = {
 def fn_get_coordinate(addr, slp=5):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
-    browser = webdriver.Chrome(options=options)
+    chromedriver = os.path.join(dic_of_path['database'], 'chromedriver.exe')
+    browser = webdriver.Chrome(executable_path=chromedriver, options=options)
     browser.get("http://www.map.com.tw/")
 
     # search = browser.find_element_by_id("searchword")
