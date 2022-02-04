@@ -1445,7 +1445,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
         date_str = str(date.month) if date.month > 9 else '0' + str(date.month)
         date_str += str(date.day) if date.day > 9 else '0' + str(date.day)
         # print(mse)
-        if mse < 6:
+        if mse < 5.5:
             model_typ = 'xgb' if ml_model == 'XGBRegressor' else 'rf'
             city = 'all_city'
             if len(df['台北市'].unique()) == 1:
