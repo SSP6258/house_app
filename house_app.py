@@ -1190,7 +1190,9 @@ def fn_gen_web_ml_train(df, path):
 
         col2.markdown('##### 模型選擇:')
         ml_model = col2.radio('模型選擇', ('RandomForestRegressor', 'XGBRegressor'), index=0)
-        tune = col2.radio('調校方式', ('Manually', 'GridSearch', 'RandomizedSearch'), index=0)
+        tune = col2.radio('調校方式', ('Manually', 'GridSearch 🐢', 'RandomizedSearch'), index=0)
+        threads = col2.radio('執行緒數量', ('Single-Thread', 'Multi-Threads'), index=0)
+        n_jobs = 1 if threads == 'Single-Thread' else -1
 
         col3.markdown('##### 超參數調校:')
 
@@ -1212,6 +1214,8 @@ def fn_gen_web_ml_train(df, path):
                 dft_eta = 0.02
 
             eta = col3.slider('學習率 (eta)', min_value=0.01, max_value=0.3, step=0.01, value=dft_eta)
+
+        mse_th = col3.slider('模型儲存門檻(MSE)', min_value=0., max_value=7., step=0.1, value=6.)
 
         st.write('')
         submitted = st.form_submit_button("上傳")
@@ -1364,7 +1368,7 @@ def fn_gen_web_ml_train(df, path):
                                 scoring='neg_mean_squared_error',
                                 return_train_score=True,
                                 refit=True,
-                                n_jobs=1)
+                                n_jobs=n_jobs)
         else:
             if ml_model == 'XGBRegressor':
                 regr = xgb.XGBRegressor(max_depth=max_depth,
@@ -1400,7 +1404,7 @@ def fn_gen_web_ml_train(df, path):
 
         st.session_state['Train'] = 'done'
 
-        fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df)
+        fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df, mse_th)
 
         # st.session_state['Train'] = 'done'
 
@@ -1409,7 +1413,7 @@ def fn_gen_web_ml_train(df, path):
     print(f'fn_gen_web_ml_train: {dur} 秒')
 
 
-def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df):
+def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df, mse_th):
     ts = time.time()
     # scores = cross_val_score(regr, x_train, y_train.values.ravel(),cv=5) # st.write(scores)
     pred_train = regr.predict(X_train)
@@ -1445,7 +1449,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
         date_str = str(date.month) if date.month > 9 else '0' + str(date.month)
         date_str += str(date.day) if date.day > 9 else '0' + str(date.day)
         # print(mse)
-        if mse < 5.5:
+        if mse < mse_th:
             model_typ = 'xgb' if ml_model == 'XGBRegressor' else 'rf'
             city = 'all_city'
             if len(df['台北市'].unique()) == 1:
