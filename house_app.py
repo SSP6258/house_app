@@ -133,7 +133,7 @@ def fn_cln_house_data(df):
     return df
 
 
-@st.cache
+@st.cache(allow_output_mutation=True)
 def fn_load_model(model_sel):
 
     try:
