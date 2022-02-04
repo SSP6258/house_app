@@ -176,7 +176,7 @@ def fn_set_color_by(by, df):
     return color_set, opacity
 
 
-@st.cache()
+@st.cache
 def fn_get_house_data(path):
     df = pd.read_csv(path)
     try:
@@ -1192,7 +1192,7 @@ def fn_gen_web_ml_train(df, path):
         ml_model = col2.radio('模型選擇', ('RandomForestRegressor', 'XGBRegressor'), index=0)
         tune = col2.radio('調校方式', ('Manually', 'GridSearch', 'RandomizedSearch'), index=0)
 
-        col3.markdown('##### 超參數調校: ')
+        col3.markdown('##### 超參數調校:')
 
         split = col3.slider('測試樣本比例', min_value=0.1, max_value=0.5, step=0.05, value=0.2)
 
@@ -1351,8 +1351,8 @@ def fn_gen_web_ml_train(df, path):
                 regr_sel = RandomForestRegressor()
 
                 param_grid = [
-                    {'n_estimators': [600, 700, 800, 900, 1000],
-                     'max_depth': [30, 50, 100, 150]},
+                    {'n_estimators': [600, 800, 1000],
+                     'max_depth': [50, 100, 150]},
                     # ('bootstrap': [False],
                     # 'n_estimators': [150,200,259].
                     # 'max_features': [10, X_train.shape[1]]),
@@ -1364,7 +1364,7 @@ def fn_gen_web_ml_train(df, path):
                                 scoring='neg_mean_squared_error',
                                 return_train_score=True,
                                 refit=True,
-                                n_jobs=-1)
+                                n_jobs=1)
         else:
             if ml_model == 'XGBRegressor':
                 regr = xgb.XGBRegressor(max_depth=max_depth,
@@ -1556,19 +1556,6 @@ def fn_gen_web_ml_inference(path, build_typ):
     if len(models) > 0:
         st.write('')
         st.subheader('模型推論')
-
-        # print(model_file)
-        # model_fdr = model_file.split('ml_model.sav')[0]
-        # models = []
-        # for i, j, files in os.walk(model_fdr):
-        #     for f in files:
-        #         if '.sav' in f and f not in models:
-        #             models.append(f)
-
-        # if len(models) == 0:
-        #     st.write(f'No models found in {model_fdr}')
-        #     st.write('請先進行 "模型訓練')
-        #     return
 
         model_sel = st.selectbox('模型選擇:', models)
         model_typ = model_sel.split('tpe')[-1].split('mse')[0].replace('_', '')
