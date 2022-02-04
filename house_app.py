@@ -1540,7 +1540,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 def fn_gen_web_ml_inference(path, build_typ):
     ts = time.time()
 
-    ml_model = os.path.join(path, r'output\model')
+    ml_model = os.path.join(path, r'output/model')
     if not os.path.exists(ml_model):
         os.makedirs(ml_model)
 
