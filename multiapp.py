@@ -1,6 +1,7 @@
 """Frameworks for running multiple Streamlit applications as a single app.
 """
 import streamlit as st
+from house_app import fn_chrome_96_workaround
 
 
 class MultiApp:
@@ -41,6 +42,7 @@ class MultiApp:
         })
 
     def run(self):
+        fn_chrome_96_workaround()
         st.set_page_config(page_title="尋找夢想家", page_icon="🏠")
         st.sidebar.title("隊名: 傑克潘 [(TD-81670023)](https://tdx-contest.tca.org.tw/)")
         st.sidebar.header('🧭 功能導航')
