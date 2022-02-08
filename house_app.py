@@ -179,12 +179,10 @@ def fn_set_color_by(by, df):
 @st.cache
 def fn_get_house_data(path):
     df = pd.read_csv(path)
-    try:
-        read_typ = path.split('\\')[-3]
-    except:
-        read_typ = path.split('/')[-3]
+    read_typ = path.replace('\\', '/').split('/')[-3]
+    is_merge_pre_own = False
 
-    if read_typ == 'pre_sold_house':
+    if read_typ == 'pre_sold_house' and is_merge_pre_own:
         pre_ownd_path = path.replace('pre_sold_house', 'pre_owned house')
         df.drop(columns=['棟及號'], inplace=True)
         if os.path.exists(pre_ownd_path):
