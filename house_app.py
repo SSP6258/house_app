@@ -1816,7 +1816,7 @@ def fn_gen_web_tools():
 
 
 def fn_chrome_96_workaround():
-    st.write('<style>div{font-weight: normal;}</style>', unsafe_allow_html=True)
+    # st.write('<style>div{font-weight: normal;}</style>', unsafe_allow_html=True)
     pass
 
 
