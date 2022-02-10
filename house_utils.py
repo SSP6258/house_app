@@ -15,8 +15,8 @@ from workalendar.asia import Taiwan
 dic_of_path = {
     # 'root': r'D:\05_Database\house_data',
     # 'database': r'D:\05_Database\house_data\database'
-    'root': r'house_data',
-    'database': r'house_data/database',
+    'root': 'house_data',
+    'database': 'house_data/database',
 }
 
 
@@ -280,16 +280,26 @@ def fn_get_coor_fr_db(addr, df_coor):
     sel = 0
     matched = False
     if df_coor.shape[0]:
-        for a in ['號', '弄', '巷', '路']:
+        for a in ['號', '弄', '巷']:
             if a in dic_of_dist.keys() and a in dic_of_dist[a] and not matched:
                 num = int(dic_of_dist[a].split(a)[0])
-                nums = df_coor[a].apply(
-                    lambda x: x if str(x) == 'nan' else int(str(x).split(a)[0].split('之')[0])).tolist()
+
+                try:
+                    nums = df_coor[a].apply(
+                        lambda x: x if str(x) == 'nan' else int(str(x)
+                                                                .split(a)[0]
+                                                                .split('之')[0]
+                                                                .split('-')[0]
+                                                                .split('，')[0])).tolist()
+                except:
+                    assert False, f'{a}, {df_coor[a]}'
+
                 diff = [abs(n - num) for n in nums if str(n) != 'nan']
-                sel = diff.index(min(diff))
-                matched = True
-                print(a, num, nums, sel, nums[sel], matched)
-                break
+                if len(diff):
+                    sel = diff.index(min(diff))
+                    matched = True
+                    print(a, num, nums, sel, nums[sel], matched, len(diff))
+                    break
 
     coor = df_coor[['lat', 'lon']].iloc[sel, :]
     coor = tuple(coor)
@@ -451,6 +461,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
             chromedriver = os.path.join(dic_of_path['database'], 'chromedriver.exe')
             print(f'find {addr} from database, is {chromedriver} existed = {os.path.exists(chromedriver)}')
             addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
+            # addr_coor = [0, 0]
             is_save = False
 
     coor_info = dict()

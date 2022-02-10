@@ -18,7 +18,7 @@ dic_of_transfer = {
     '土地移轉總面積平方公尺': '土地移轉坪數',
     '建物移轉總面積平方公尺': '建物移轉坪數',
     '車位移轉總面積平方公尺': '車位移轉坪數',
-    '車位移轉總面積(平方公尺)': '位移轉數',
+    '車位移轉總面積(平方公尺)': '車位移轉坪數',
 }
 
 dic_of_typ = {
@@ -65,7 +65,7 @@ def fn_sel_region(x):
 def fn_note_handle(x):
     bypass = ['親', '拆', '讓', '急', '減', '夾', '抵', '另']
     bypass += ['政府', '特殊', '利差', '和解', '無償', '裝潢', '家具', '家俱', '抽籤', '家電']
-    bypass += ['地上權', '無土地']
+    bypass += ['地上權', '無土地', '樓中樓']
     bypass += ['非屬整戶', '分次登記']
     result = True
 
@@ -167,7 +167,7 @@ def fn_data_cleaning(df):
     df['台北市'] = df['土地位置建物門牌'].apply(lambda x: 1 if '台北市' in x.replace('臺', '台') else 0)
     df['戶別'] = df['棟及號'] if '棟及號' in df.columns else df['土地位置建物門牌'].apply(fn_get_house_hold)
     df['建物+車位移轉數'] = df['建物移轉坪數']
-    df['建物移轉數'] = df['建物移轉坪數'] - df['車位移轉坪數']
+    df['建物移轉坪數'] = df['建物移轉坪數'] - df['車位移轉坪數']
     df['每坪單價'] = df['單價元平方公尺'].apply(lambda x: int(float(x) / 0.3025))
 
     df['主要建材'] = df['主要建材'].apply(lambda x: dic_of_typ[x] if x in dic_of_typ.keys() else x)
@@ -225,8 +225,8 @@ def fn_addr_handle(addr):
     a = addr.split('號')[0] + '號' if '號' in addr else addr
     a = a.split('棟')[0][0:-1] if '棟' in a else a
 
-    # for C in ['A', 'B', 'C', 'D']:
-    #     a = a.split(C)[0] if C in a else a
+    for C in ['Ａ', 'Ｂ', 'Ｃ', 'D', 'Ｆ']:
+        a = a.split(C)[0] if C in a else a
 
     A = re.findall(r'[A-Z][a-z]*', a)
     a = a.split(A[0])[0] if len(A) else a
@@ -234,6 +234,7 @@ def fn_addr_handle(addr):
 
     a = a.replace(' ', '')
     a = a.replace('公?路', '公館路') if '北投區公?路' in a else a
+    a = a.replace('公路', '公館路') if '北投區公路' in a else a
     a = a.replace('公 路', '公館路') if '北投區公 路' in a else a
     a = a.replace('臺北市', '台北市')
 
@@ -318,7 +319,7 @@ def fn_gen_ave(df):
         df.at[idx, 'MRT_ave'] = round(df_mrt_ave[mrt_1], 2)
 
         sku = df.loc[idx, 'sku_name']
-        df.at[idx, 'SKU_ave'] = round(df_sku_ave[sku],2)
+        df.at[idx, 'SKU_ave'] = round(df_sku_ave[sku], 2)
 
         coor = df.loc[idx, 'coor']
         df.at[idx, 'coor_ave'] = round(df_coor_ave[coor], 2)
@@ -408,17 +409,18 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
 
     coor_save = []
     for addr in list_of_addr_unique:
+        # if addr not in df_coor_read.index:
         try:
             dic_of_geo_info[addr], is_coor_save = fn_get_geo_info(addr, df_coor_read, slp)
             coor_save.append(is_coor_save)
         except:
-            print(addr, addr in df_coor_read.index)
-            print(df_coor_read.loc[addr, :])
-            assert False
+            # print(addr, addr in df_coor_read.index)
+            # print(df_coor_read.loc[addr, :])
+            assert False, f'fn_get_geo_info Fail: {addr} {addr in df_coor_read.index}'
 
-        if addr not in df_coor_read.index:
-            dic_of_coor[addr] = [dic_of_geo_info[addr]['coor']['lat'], dic_of_geo_info[addr]['coor']['log']]
-            print(addr, dic_of_coor[addr])
+        # if addr not in df_coor_read.index:
+        dic_of_coor[addr] = [dic_of_geo_info[addr]['coor']['lat'], dic_of_geo_info[addr]['coor']['log']]
+        print(f'{is_coor_save}, {list_of_addr_unique.index(addr)}/{len(list_of_addr_unique)}', addr, dic_of_coor[addr])
 
     if len(dic_of_coor.keys()):
         df_coor = pd.DataFrame(dic_of_coor, index=['lat', 'lon'])
@@ -429,9 +431,22 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
             for k in dic_of_dist.keys():
                 df_coor.at[idx, k] = dic_of_dist[k]
 
+        assert len(coor_save) == df_coor.shape[0], f'coor_save {len(coor_save)} df_coor rows {df_coor.shape[0]}'
+        drops = []
+        for i in range(len(coor_save)):
+            if coor_save[i] is False:
+                drops.append(i)
+                print(f'drop {df_coor.index[i]} since coor_save[{i}]={coor_save[i]}')
+
+        if len(drops):
+            drop_idx=[]
+            for d in drops:
+                drop_idx.append(df_coor.index[d])
+                print(f'drop df_coor.index[{d}] = {df_coor.index[d]}')
+            df_coor.drop(index=drop_idx, inplace=True)
+
         df_coor_save = df_coor_read.append(df_coor)
-        if False not in coor_save:
-            fn_house_coor_save(df_coor_save)
+        fn_house_coor_save(df_coor_save)
 
     for idx in df.index:
         addr = df['土地位置建物門牌'][idx]
@@ -451,22 +466,25 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
 
 def fn_gen_raw_data(path, slp=5, is_force=True):
     path_source = os.path.join(path, 'source')
-    path_output = os.path.join(path, 'output\\house_all.csv')
+    path_output = os.path.join(path, 'output/house_all.csv')
 
     if 'pre_owned_house' in path:
-        key = ' _lvr_land_a'
+        key = '_lvr_land_a'
     else:
         key = '_lvr_land_b'
 
     file_2_read = []
     for i, j, files in os.walk(path_source):
         for f in files:
+            print(f)
             if key in f.lower() and '.csv.bak' not in f:
                 post = f.lower().split(key)[-1].split('.csv')[0]
                 post = f.lower().split(key)[0] + post
                 file_2_read.append((f, post))
 
-    pprint.pprint(file_2_read)
+    if len(file_2_read) == 0:
+        pprint.pprint(file_2_read)
+        print(path_source)
 
     df_all = pd.DataFrame()
     if is_force is False and os.path.exists(path_output):
@@ -496,10 +514,10 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
 
 
 def fn_main():
-    # path = os.path.join(dic_of_path['root'], r'.\pre_owned_house')
-    path = os.path.join(dic_of_path['root'], r'.\pre_sold_house')
+    path = os.path.join(dic_of_path['root'], 'pre_owned_house')
+    # path = os.path.join(dic_of_path['root'], 'pre_sold_house')
 
-    fn_gen_raw_data(path, slp=5, is_force=True)
+    fn_gen_raw_data(path, slp=15, is_force=True)
 
     # fn_save_building_name(path)
 
