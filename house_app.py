@@ -123,7 +123,7 @@ def fn_anomaly_detection(df, n_comp, percent):
 
 def fn_cln_house_data(df):
     df['city'] = df['土地位置建物門牌'].apply(lambda x: x.split('市')[0].replace('臺', '台') + '市')
-    df['建物移轉坪數'] = df['建物移轉數'].apply(lambda x: round(x, 2))
+    df['建物移轉坪數'] = df['建物移轉坪數'].apply(lambda x: round(x, 2))
     df['建物型態'] = df['建物型態'].apply(lambda x: '華廈' if '華廈' in x else '大樓' if '大樓' in x else x)
     df.rename(columns={col: col.replace('移轉坪數', '坪數') for col in df.columns}, inplace=True)
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
