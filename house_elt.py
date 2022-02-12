@@ -98,7 +98,7 @@ def fn_house_filter(df):
 
     df = df[df['都市土地使用分區'].apply(lambda x: '商業區' not in str(x))]
     df = df[df['主要建材'].apply(lambda x: '見其他登記事項' not in str(x))]
-    df = df[df['移轉層次'].apply(lambda x: '，' not in str(x))]  # 十四層， 十五層， 十三層
+    df = df[df['移轉層次'].apply(lambda x: '，' not in str(x) and str(x) != 'nan')]  # 十四層， 十五層， 十三層
 
     df['交易年月日'] = df['交易年月日'].astype(int)
     file = df.loc[df.index[1], 'File'].lower()
@@ -193,8 +193,8 @@ def fn_data_cleaning(df):
                           '交易筆棟數',
                           '每坪單價'])
 
-    df['移轉層次'] = df['移轉層次'].apply(lambda x: cn2an.cn2an(x.replace('層', '')))
-    df['總樓層數'] = df['總樓層數'].apply(lambda x: cn2an.cn2an(x.replace('層', '')) if type(x) == str and '層' in x else x)
+    df['移轉層次'] = df['移轉層次'].apply(lambda x: cn2an.cn2an(str(x).replace('層', '')))
+    df['總樓層數'] = df['總樓層數'].apply(lambda x: cn2an.cn2an(str(x).replace('層', '')) if type(x) == str and '層' in x else x)
     df['交易年'] = df['交易年月日'].apply(lambda x: int(str(x)[:-4]))
     df['交易月'] = df['交易年月日'].apply(lambda x: int(str(x)[3:5]))
 

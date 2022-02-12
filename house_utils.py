@@ -283,9 +283,10 @@ def fn_get_coor_fr_db(addr, df_coor):
         for a in ['號', '弄', '巷']:
             if a in dic_of_dist.keys() and a in dic_of_dist[a] and not matched:
                 num = int(dic_of_dist[a].split(a)[0])
+                df_coor_sel = df_coor[df_coor[a].apply(lambda x: str(x) != 'nan' and str(x) != 'NA')]
 
                 try:
-                    nums = df_coor[a].apply(
+                    nums = df_coor_sel[a].apply(
                         lambda x: x if str(x) == 'nan' else int(str(x)
                                                                 .split(a)[0]
                                                                 .split('之')[0]
@@ -298,6 +299,7 @@ def fn_get_coor_fr_db(addr, df_coor):
                 if len(diff):
                     sel = diff.index(min(diff))
                     matched = True
+                    df_coor = df_coor_sel
                     print(a, num, nums, sel, nums[sel], matched, len(diff))
                     break
 
@@ -452,7 +454,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         lat = round(df_addr_coor.loc[addr]['lat'], 5)
         lon = round(df_addr_coor.loc[addr]['lon'], 5)
         addr_coor = (lat, lon)
-        print(addr, '--> known coor: ', addr_coor)
+        # print(addr, '--> known coor: ', addr_coor)
     else:
         try:
             addr_coor = fn_get_coordinate(addr, slp)
