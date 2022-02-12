@@ -1771,7 +1771,7 @@ def fn_gen_web_ref():
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
 
     st.write('')
-    st.subheader('競賽:')
+    st.subheader('相關競賽:')
     st.write("- 交通部: [交通數據創新應用競賽](https://tdx-contest.tca.org.tw) [TDX交通資料育成網](https://startup.transportdata.tw/)")
     st.write("- 玉山人工智慧公開挑戰賽2019夏季賽:[台灣不動產AI神預測](https://tbrain.trendmicro.com.tw/competitions/Details/6)")
     st.write("- 經濟部中小企業處:[2021城市數據實境賽](https://data.startupterrace.tw/data-contest)")
