@@ -236,7 +236,23 @@ def fn_get_admin_dist(addr):
         num = num.split(lane)[-1] if lane in num else num
         num = num.split(lane2)[-1] if lane2 in num else num
 
-    # special addr handle
+        if num.split('號')[0].isnumeric():
+            pass
+        else:
+            number = num.split('號')[0].split('之')[0].split('-')[0].split('~')[0]
+            if number.isnumeric():
+                num = number + '號'
+            else:
+                n = ''
+                for i, v in enumerate(num.split('號')[0]):
+                    n += v if v.isnumeric() else ''
+                num = n + '號'
+                print(num, '-->', num)
+
+    if section is not 'NA':
+        section = fn_cn_2_an(section)
+
+        # special addr handle
     if road == 'NA':
         if '大道' in num:
             road = num.split('道')[0] + '道'
