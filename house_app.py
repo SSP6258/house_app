@@ -931,12 +931,12 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                      f'📝 登錄: {deals} 筆'
                      f'💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-        r = st.radio('檢視選項:', options=['總價(萬)', '每坪單價(萬)', '建物坪數', '總價-車位(萬)', '車位總價(萬)', '交易日期'], index=0)
+        r = st.radio('檢視選項:', options=['總價(萬)', '每坪單價(萬)', '建物坪數', '車位坪數', '總價-車位(萬)', '車位總價(萬)', '交易日期'], index=0)
         fn_set_radio_2_hor()
 
         df_show = dic_df_show[r] if r in dic_df_show.keys() else None
         assert df_show is not None, f'{r} not in dic_df_show {dic_df_show.keys()}'
-        fmt = "{:.2f}" if r == '每坪單價(萬)' or r == '建物坪數' else None
+        fmt = "{:.2f}" if r in ['每坪單價(萬)', '建物坪數', '車位坪數'] else None
         df_show = df_show.astype(int) if r == '交易日期' else df_show
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color).highlight_max(axis=1, color='pink')
         df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None)
@@ -1015,38 +1015,47 @@ def fn_gen_web_eda(df):
         df_bc_t = df_bc.copy()
         df_bc_car = df_bc.copy()
         df_bc_s = df_bc.copy()
+        df_bc_ps = df_bc.copy()
         df_bc_d = df_bc.copy()
 
         df_sel_sort = df_sel.sort_values(by='交易年月日', ascending=True)
+        # print(f'{df_sel[["移轉層次", "建物坪數"]]}')
         for idx in df_sel_sort.index:
             flr = str(df_sel_sort.loc[idx, '移轉層次']) + 'F'
             num = df_sel_sort.loc[idx, 'house_num']
-            val, total, car, size, date = df_sel_sort.loc[idx, ['每坪單價(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '交易年月日']]
+            val, total, car, size, p_size, date = df_sel_sort.loc[idx, ['每坪單價(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易年月日']]
 
             df_bc.at[flr, num] = round(val, 2)
             df_bc_t.at[flr, num] = total
             df_bc_car.at[flr, num] = car
             df_bc_s.at[flr, num] = size
+            df_bc_ps.at[flr, num] = p_size
             df_bc_d.at[flr, num] = date
+            # print(f'{flr}, {p_size}, {size}')
 
         df_bc.fillna(round(0, 1), inplace=True)
         df_bc_t.fillna(round(0, 1), inplace=True)
         df_bc_car.fillna(round(0, 1), inplace=True)
         df_bc_s.fillna(round(0, 1), inplace=True)
+        df_bc_ps.fillna(round(0, 1), inplace=True)
         df_bc_d.fillna(round(0, 1), inplace=True)
         if floor != 0:
             df_bc = df_bc[df_bc.index == str(floor) + 'F']
             df_bc_t = df_bc_t[df_bc_t.index == str(floor) + 'F']
             df_bc_car = df_bc_car[df_bc_car.index == str(floor) + 'F']
             df_bc_s = df_bc_s[df_bc_s.index == str(floor) + 'F']
+            df_bc_ps = df_bc_ps[df_bc_ps.index == str(floor) + 'F']
             df_bc_d = df_bc_d[df_bc_d.index == str(floor) + 'F']
 
         dic_df_show['每坪單價(萬)'] = df_bc[df_bc.sum(axis=1) > 0]
         dic_df_show['總價(萬)'] = df_bc_t[df_bc_t.sum(axis=1) > 0]
         dic_df_show['車位總價(萬)'] = df_bc_car[df_bc_car.sum(axis=1) > 0]
         dic_df_show['建物坪數'] = df_bc_s[df_bc_s.sum(axis=1) > 0]
+        dic_df_show['車位坪數'] = df_bc_ps[df_bc_ps.sum(axis=1) > 0]
+        # dic_df_show['建物-車位(坪)'] = dic_df_show['建物坪數'] - dic_df_show['車位坪數']
         dic_df_show['總價-車位(萬)'] = dic_df_show['總價(萬)'] - dic_df_show['車位總價(萬)']
         dic_df_show['交易日期'] = df_bc_d[df_bc_d.sum(axis=1) > 0] / 100
+        # print(f'{dic_df_show["建物坪數"] }')
 
     floors = list(df_sel['移轉層次'].unique())
     floors.sort()
@@ -1112,7 +1121,7 @@ def fn_gen_web_eda(df):
     map_style = "carto-positron"  # "open-street-map"
     fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color)
 
-    latest_rel = '0201'
+    latest_rel = '0211'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
