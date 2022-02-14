@@ -133,7 +133,7 @@ def fn_cln_house_data(df):
     return df
 
 
-# @st.cache(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True)
 def fn_load_model(model_sel):
 
     try:
@@ -176,7 +176,7 @@ def fn_set_color_by(by, df):
     return color_set, opacity
 
 
-# @st.cache
+@st.cache
 def fn_get_house_data(path):
     df = pd.read_csv(path)
     read_typ = path.replace('\\', '/').split('/')[-3]
