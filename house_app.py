@@ -23,7 +23,6 @@ from dataprep.eda import plot_correlation
 from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
-from streamlit import caching
 
 # pip list --format=freeze > requirements.txt
 
@@ -1835,9 +1834,6 @@ def fn_chrome_96_workaround():
 def fn_app(page='data'):
     print(f'fn_app() start, page = {page}')
     fn_chrome_96_workaround()
-
-
-    caching.clear_cache()
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=111, value=(100, 111))
