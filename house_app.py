@@ -1224,7 +1224,7 @@ def fn_gen_web_ml_train(df, path):
 
             eta = col3.slider('學習率 (eta)', min_value=0.01, max_value=0.3, step=0.01, value=dft_eta)
 
-        mse_th = col3.slider('模型儲存門檻(MSE)', min_value=0., max_value=7., step=0.1, value=6.)
+        mse_th = col3.slider('模型儲存門檻(MSE)', min_value=0., max_value=9., step=0.1, value=5.)
 
         st.write('')
         submitted = st.form_submit_button("上傳")
