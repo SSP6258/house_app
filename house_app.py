@@ -1200,7 +1200,7 @@ def fn_gen_web_ml_train(df, path):
         ml_model = col2.radio('模型選擇', ('RandomForestRegressor', 'XGBRegressor'), index=0)
         tune = col2.radio('調校方式', ('Manually', 'GridSearch 🐢', 'RandomizedSearch 🚧'), index=0)
         tune = tune.split(' ')[0]
-        threads = col2.radio('執行緒數量', ('Single-Thread', 'Multi-Threads 🕱'), index=0)
+        threads = col2.radio('執行緒數量', ('Single-Thread', 'Multi-Threads 💀'), index=0)
         threads = threads.split(' ')[0]
         n_jobs = 1 if threads == 'Single-Thread' else -1
 
