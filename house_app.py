@@ -1834,6 +1834,7 @@ def fn_chrome_96_workaround():
 def fn_app(page='data'):
     print(f'fn_app() start, page = {page}')
     fn_chrome_96_workaround()
+    st.legacy_caching.clear_cache()
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=111, value=(100, 111))
