@@ -940,7 +940,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         df_show = df_show.astype(int) if r == '交易日期' else df_show
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color).highlight_max(axis=1, color='pink')
         df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None)
-        st.dataframe(df_show_fig, width=768, height=520)
+        st.dataframe(df_show_fig, width=768, height=540)
         dic_values = defaultdict(list)
         for col in df_show.columns:
             for idx in df_show.index:
