@@ -466,6 +466,8 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         print(addr, city, df_sku['city'].unique())
         assert False, f'{addr}, {city}, {df_sku["city"].unique()}'
 
+    is_match = False
+    add_fr_db = ''
     if addr in df_addr_coor.index:
         lat = round(df_addr_coor.loc[addr]['lat'], 5)
         lon = round(df_addr_coor.loc[addr]['lon'], 5)
