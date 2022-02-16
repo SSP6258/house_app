@@ -249,7 +249,7 @@ def fn_get_admin_dist(addr):
                 num = n + '號'
                 print(num, '-->', num)
 
-    if section is not 'NA':
+    if section != 'NA':
         section = fn_cn_2_an(section)
 
         # special addr handle
@@ -328,7 +328,7 @@ def fn_get_coor_fr_db(addr, df_coor):
     else:
         print(f'can NOT find similar addr of {addr}')
 
-    return coor
+    return coor, matched, addr_match
 
 
 def fn_get_mrt_travel_time(src, io, df_mrt, df_time):
@@ -478,7 +478,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         except:
             chromedriver = os.path.join(dic_of_path['database'], 'chromedriver.exe')
             print(f'find {addr} from database, is {chromedriver} existed = {os.path.exists(chromedriver)}')
-            addr_coor = fn_get_coor_fr_db(addr, df_addr_coor.copy())
+            addr_coor, is_match, add_fr_db = fn_get_coor_fr_db(addr, df_addr_coor.copy())
             # addr_coor = [0, 0]
             is_save = False
 
@@ -505,7 +505,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
     min_idx = list_of_mrt_dist.index(min_dist)
     mrt_s = df_mrt['Station'][min_idx]
     mrt_l = df_mrt['Line'][min_idx]
-    mrt = mrt_s.replace('站', '')
+    mrt = mrt_s.replace('站', '') if mrt_s != '台北車站' else mrt_s
     mrt_info = dict()
     mrt_info['MRT'] = mrt_l + '線_' + mrt_s
     mrt_info['MRT_DIST'] = min_dist
@@ -544,7 +544,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
     geo_info['sku'] = sku_info
     geo_info['coor'] = coor_info
 
-    return geo_info, is_save
+    return geo_info, is_save, is_match, add_fr_db
 
 
 def fn_gen_school_peoples(path, years):

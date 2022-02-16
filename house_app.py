@@ -85,7 +85,7 @@ def fn_addr_2_build_case(addr):
         build_case_str = str(df_coor_read.loc[addr, 'Build case'])
 
     if build_case == 'No_build_case_found':
-        geo, is_save = fn_get_geo_info(addr, df_coor_read)
+        geo, is_save, is_match, addr_fr_db = fn_get_geo_info(addr, df_coor_read)
         lat = geo['coor']['lat']
         lon = geo['coor']['log']
         print(lat, lon, addr)
@@ -135,7 +135,6 @@ def fn_cln_house_data(df):
 
 @st.cache(allow_output_mutation=True)
 def fn_load_model(model_sel):
-
     try:
         loaded_model = pickle.load(open(model_sel, 'rb'))
     except:
@@ -1023,7 +1022,8 @@ def fn_gen_web_eda(df):
         for idx in df_sel_sort.index:
             flr = str(df_sel_sort.loc[idx, '移轉層次']) + 'F'
             num = df_sel_sort.loc[idx, 'house_num']
-            val, total, car, size, p_size, date = df_sel_sort.loc[idx, ['每坪單價(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易年月日']]
+            val, total, car, size, p_size, date = df_sel_sort.loc[
+                idx, ['每坪單價(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易年月日']]
 
             df_bc.at[flr, num] = round(val, 2)
             df_bc_t.at[flr, num] = total
@@ -1592,7 +1592,9 @@ def fn_gen_web_ml_inference(path, build_typ):
 
             # build case = fn_addr_2_build_case(addr)
 
-            geo_info, is_coor_save = fn_get_geo_info(addr, df_coor_read, slp=5)
+            geo_info, is_coor_save, is_match, addr_fr_db = fn_get_geo_info(addr, df_coor_read, slp=5)
+
+            st.write(f'鄰近地址: {addr_fr_db}') if is_match else None
 
             # mrt_info, addr_coor, sku_info
             if addr not in df_coor_read.index:

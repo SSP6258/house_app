@@ -82,7 +82,7 @@ def fn_note_handle(x):
 
 def fn_house_age_sel(x):
     try:
-        result = int(x) > 950101
+        result = int(x) > 900101
     except:
         print(f'Bypass Invalid Date format in 建築完成年月:{x}')
         result = False
@@ -411,7 +411,7 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
     for addr in list_of_addr_unique:
         # if addr not in df_coor_read.index:
         try:
-            dic_of_geo_info[addr], is_coor_save = fn_get_geo_info(addr, df_coor_read, slp)
+            dic_of_geo_info[addr], is_coor_save, is_match, addr_fr_db = fn_get_geo_info(addr, df_coor_read, slp)
             coor_save.append(is_coor_save)
         except:
             print(addr, addr in df_coor_read.index)
@@ -514,10 +514,10 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
 
 
 def fn_main():
-    # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
-    path = os.path.join(dic_of_path['root'], 'pre_sold_house')
+    path = os.path.join(dic_of_path['root'], 'pre_owned_house')
+    # path = os.path.join(dic_of_path['root'], 'pre_sold_house')
 
-    fn_gen_raw_data(path, slp=5, is_force=False)
+    fn_gen_raw_data(path, slp=15, is_force=True)
 
     # fn_save_building_name(path)
 
