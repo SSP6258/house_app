@@ -18,3 +18,4 @@ xgboost==1.5.2
 urllib3==1.26.7
 lxml==4.6.1
 nltk==3.5
+Jinja2==3.0.3
