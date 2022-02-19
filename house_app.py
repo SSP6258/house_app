@@ -20,7 +20,7 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 
@@ -208,6 +208,25 @@ def fn_get_house_data(path):
     df.reset_index(drop=True, inplace=True)
     print(f'Read {read_typ} data from {path} !!!')
     return df
+
+
+def fn_get_neighbor(target, neighbors):
+    neighbors = list(neighbors)
+    path = dic_of_path['database']
+    path_db = os.path.join(path, 'School_info.csv')
+    df = pd.read_csv(path_db, encoding='utf-8-sig')
+    coor_t = tuple(df[df['schoolname'] == target][['lat', 'lon']].values[0])
+
+    distances = []
+    for n in neighbors:
+        coor_n = tuple(df[df['schoolname'] == n][['lat', 'lon']].values[0])
+        distances.append(int(geodesic(coor_t, coor_n).meters))
+
+    closest = neighbors[distances.index(min(distances))]
+
+    st.write(f'鄰近小學: {target}, 均價參考: {closest}')
+
+    return closest
 
 
 def fn_get_sku_people_by_year(df):
@@ -1621,8 +1640,12 @@ def fn_gen_web_ml_inference(path, build_typ):
             df_mrt_ave = pd.read_csv(os.path.join(ave_path, 'MRT_ave.csv'), index_col='MRT')
             df_dist_ave = pd.read_csv(os.path.join(ave_path, 'DIST_ave.csv'), index_col='鄉鎮市區')
 
-            dic_of_input['MRT_ave'] = df_mrt_ave.loc[dic_of_input['MRT'], '每坪單價(萬)']
-            dic_of_input['SKU_ave'] = df_sku_ave.loc[dic_of_input['sku_name'], '每坪單價(萬)']
+            mrt = dic_of_input['MRT']
+            dic_of_input['MRT_ave'] = df_mrt_ave.loc[mrt, '每坪單價(萬)']
+
+            sku = dic_of_input['sku_name']
+            sku = sku if sku in df_sku_ave.index else fn_get_neighbor(sku, df_sku_ave.index)
+            dic_of_input['SKU_ave'] = df_sku_ave.loc[sku, '每坪單價(萬)']
             dist = addr.split('市')[-1].split('區')[0] + '區'
             dic_of_input['DIST_ave'] = df_dist_ave.loc[dist, '每坪單價(萬)']
 

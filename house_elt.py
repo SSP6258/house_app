@@ -299,21 +299,28 @@ def fn_save_building_name(path):
 
 def fn_gen_ave(df):
     df['coor'] = df['log'].astype(str) + '_' + df['lat'].astype(str)
-    df_mrt_ave = df.groupby(['MRT'], as_index=True)['每坪單價(萬)'].mean()
-    df_sku_ave = df.groupby(['sku_name'], as_index=True)['每坪單價(萬)'].mean()
-    df_coor_ave = df.groupby(['coor'], as_index=True)['每坪單價(萬)'].mean()
-    df_dist_ave = df.groupby(['鄉鎮市區'], as_index=True)['每坪單價(萬)'].mean()
+    ave_by = '每坪單價(萬)'
+    df_mrt_ave = df.groupby(['MRT'], as_index=True)[ave_by].mean()
+    df_sku_ave = df.groupby(['sku_name'], as_index=True)[ave_by].mean()
+    df_coor_ave = df.groupby(['coor'], as_index=True)[ave_by].mean()
+    df_dist_ave = df.groupby(['鄉鎮市區'], as_index=True)[ave_by].mean()
 
     path = os.path.join(dic_of_path['database'], 'SKU_ave.csv')
+    df_sku_ave = df_sku_ave.round(2)
+    df_sku_ave.sort_values(inplace=True)
     df_sku_ave.to_csv(path, encoding='utf-8-sig')
 
     path = os.path.join(dic_of_path['database'], 'MRT_ave.csv')
+    df_mrt_ave = df_mrt_ave.round(2)
+    df_mrt_ave.sort_values(inplace=True)
     df_mrt_ave.to_csv(path, encoding='utf-8-sig')
 
     path = os.path.join(dic_of_path['database'], 'DIST_ave.csv')
+    df_dist_ave = df_dist_ave.round(2)
+    df_dist_ave.sort_values(inplace=True)
     df_dist_ave.to_csv(path, encoding='utf-8-sig')
 
-    latest_rel = '0121'
+    latest_rel = '111_0211'
     for idx in df.index:
         mrt_1 = df.loc[idx, 'MRT']
         df.at[idx, 'MRT_ave'] = round(df_mrt_ave[mrt_1], 2)
@@ -514,10 +521,10 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
 
 
 def fn_main():
-    path = os.path.join(dic_of_path['root'], 'pre_owned_house')
-    # path = os.path.join(dic_of_path['root'], 'pre_sold_house')
+    # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
+    path = os.path.join(dic_of_path['root'], 'pre_sold_house')
 
-    fn_gen_raw_data(path, slp=15, is_force=True)
+    fn_gen_raw_data(path, slp=15, is_force=False)
 
     # fn_save_building_name(path)
 
