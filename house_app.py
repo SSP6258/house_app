@@ -1582,10 +1582,17 @@ def fn_gen_web_ml_inference(path, build_typ):
 
     model_fdr = ml_model
     models = []
+    dates = []
     for i, j, files in os.walk(ml_model):
         for f in files:
             if '.sav' in f and f not in models:
                 models.append(f)
+                dates.append(int(f.split('_')[-1]))
+
+    keep = dates.index(max(dates))
+    for m in models:
+        drop = os.path.join(model_fdr, m)
+        os.remove(drop) if models.index(m) != keep else None
 
     if len(models) > 0:
         st.write('')
