@@ -1591,8 +1591,9 @@ def fn_gen_web_ml_inference(path, build_typ):
 
     keep = dates.index(max(dates))
     for m in models:
-        drop = os.path.join(model_fdr, m)
+        drop = os.path.join(ml_model, m)
         os.remove(drop) if models.index(m) != keep else None
+        print( models.index(m) != keep, m, keep, dates[keep], drop, dates, models)
 
     if len(models) > 0:
         st.write('')
