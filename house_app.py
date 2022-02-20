@@ -205,7 +205,7 @@ def fn_get_house_data(path):
                 df.to_csv(path.replace('.csv', f'_add_{df_ownd.shape[0]}.csv'), encoding='utf-8-sig', index=False)
                 print(f'Append {df_ownd.shape[0]} data from pre_ownd to {read_typ} and total is {df.shape[0]}')
 
-    df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數', '總價(萬)'], inplace=True)
+    df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數', '總價(萬)', '車位總價(萬)'], inplace=True)
     df.reset_index(drop=True, inplace=True)
     print(f'Read {read_typ} data from {path} !!!')
     return df
