@@ -1587,7 +1587,7 @@ def fn_gen_web_ml_inference(path, build_typ):
         for f in files:
             if '.sav' in f and f not in models:
                 models.append(f)
-                dates.append(int(f.split('_')[-1]))
+                dates.append(int(f.split('_')[-1].split('.sav')[0]))
 
     keep = dates.index(max(dates))
     for m in models:
