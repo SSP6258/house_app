@@ -10,7 +10,6 @@ streamlit-aggrid==0.2.2.post4
 workalendar==16.2.0
 waterfallcharts==3.8
 geopy==2.2.0
-dataprep==0.4.1
 Pillow==9.0.0
 pickleshare==0.7.5
 scikit_learn==1.0.2
@@ -18,4 +17,4 @@ xgboost==1.5.2
 urllib3==1.26.7
 lxml==4.6.1
 nltk==3.5
-jinja2==2.11.3
+jinja2==3.0.3
