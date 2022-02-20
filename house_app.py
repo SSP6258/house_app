@@ -8,6 +8,7 @@ import plotly.graph_objs as go
 import plotly.express as px
 import xgboost as xgb
 import pickle
+import jinja2
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
