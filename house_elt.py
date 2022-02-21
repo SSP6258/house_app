@@ -240,6 +240,12 @@ def fn_addr_handle(addr):
 
     a = '台北市南港區興南街98號' if a == '台北市南港區98號' else a
     a = '台北市北投區公館路243號' if a == '台北市北投區公?路' else a
+
+    a = '台北市北投區中央北路一段88號' if a == '台北市北投區中央北路一段' else a  # 達永豐盛學
+    a = '台北市北投區東華街一段550號' if a == '台北市北投區振華里東華街一段' else a  # 天母常玉
+    a = '台北市北投區大度路三段301巷67號' if a == '台北市北投區關渡里大度路三段301巷' else a  # 康寶日出印象
+    a = '台北市北投區大度路三段301巷67號' if a == '台北市北投區大度路三段301巷' else a  # 康寶日出印象
+
     return a
 
 
@@ -524,7 +530,7 @@ def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
 
-    fn_gen_raw_data(path, slp=15, is_force=False)
+    fn_gen_raw_data(path, slp=15, is_force=True)
 
     # fn_save_building_name(path)
 

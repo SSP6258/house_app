@@ -44,7 +44,7 @@ class MultiApp:
     def run(self):
         fn_chrome_96_workaround()
         st.set_page_config(page_title="尋找夢想家", page_icon="🏠")
-        st.sidebar.title("Jack.Pan's 房市看板")
+        st.sidebar.title("👨‍🏫 Jack.Pan's 房市看板")
         st.sidebar.header('🧭 功能導航')
         app = st.sidebar.selectbox(
             '應用選單',
