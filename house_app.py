@@ -139,6 +139,7 @@ def fn_load_model(model_sel):
     try:
         loaded_model = pickle.load(open(model_sel, 'rb'))
     except:
+        st.write(f'fn_load_model Fail: {model_sel}')
         assert False, f'fn_load_model() fail, from {model_sel}'
 
     return loaded_model
@@ -1595,7 +1596,7 @@ def fn_gen_web_ml_inference(path, build_typ):
     for m in models:
         drop = os.path.join(ml_model, m)
         os.remove(drop) if models.index(m) != keep else None
-        print( models.index(m) != keep, m, keep, dates[keep], drop, dates, models)
+        print(models.index(m) != keep, m, keep, dates[keep], drop, dates, models)
 
     if len(models) > 0:
         st.write('')
