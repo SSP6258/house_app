@@ -948,8 +948,8 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
         st.write('')
         st.subheader(f'🏡 建案: {build_case}'
-                     f'📝 登錄: {deals} 筆'
-                     f'💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+                     f' 📝 登錄: {deals} 筆'
+                     f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
         r = st.radio('檢視選項:', options=['總價(萬)', '每坪單價(萬)', '建物坪數', '車位坪數', '總價-車位(萬)', '車位總價(萬)', '交易日期'], index=0)
         fn_set_radio_2_hor()
@@ -1589,8 +1589,10 @@ def fn_gen_web_ml_inference(path, build_typ):
             if '.sav' in f and f not in models:
                 models.append(f)
                 latest = f.split('.sav')[0].split('_')[-1]
-                print(latest)
-                dates.append(int(latest))
+                try:
+                    dates.append(int(latest))
+                except:
+                    print(f'date parsing fail ! -->  {latest}')
 
     keep = dates.index(max(dates))
     for m in models:
@@ -1864,6 +1866,12 @@ def fn_gen_web_tools():
     st.write("- 圖轉CSV: [誠華OCR](https://zhtw.109876543210.com/)")
 
 
+def fn_gen_web_projs():
+    st.write('')
+    st.subheader('📌 專案: [利用座標查詢行政區](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
+    st.subheader('📌 專案: 離散事件模擬器 🛠️')
+
+
 def fn_chrome_96_workaround():
     # st.write('<style>div{font-weight: normal;}</style>', unsafe_allow_html=True)
     pass
@@ -1874,8 +1882,10 @@ def fn_app(page='data'):
     fn_chrome_96_workaround()
     # st.legacy_caching.clear_cache()
 
+    this_yr = datetime.datetime.now().year - 1911
+
     st.sidebar.header(f'🔍 資訊篩選:\n')
-    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=111, value=(100, 111))
+    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(100, this_yr))
     c1, c2 = st.sidebar.columns(2)
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
     root = dic_of_path['root']
@@ -1925,6 +1935,9 @@ def fn_app(page='data'):
 
     elif page == 'tools':
         fn_gen_web_tools()
+
+    elif page == 'projects':
+        fn_gen_web_projs()
 
     else:
         st.write(f' page: {page} unhandle yet !!!')
