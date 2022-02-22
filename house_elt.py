@@ -215,7 +215,7 @@ def fn_str_2_num(string):
             str_2_num += str(a)
         return str_2_num
     else:
-        print(f'Invalid type ! expect str but input ftype(string))')
+        print(f'Invalid type ! expect str but input {type(string)}')
         return string
 
 
