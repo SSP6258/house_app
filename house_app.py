@@ -1020,15 +1020,15 @@ def fn_gen_web_eda(df):
     for i in df_tm.index:
         df_d = df[df['建案名稱'] == i]
         df_tm.at[i, '城市'] = '台北市'
-        df_tm.at[i, '鄉鎮市區'] = df_d['鄉鎮市區'].values[0]
-        df_tm.at[i, '捷運站'] = df_d['MRT'].values[0]
+        df_tm.at[i, '行政區'] = df_d['鄉鎮市區'].values[0]
+        df_tm.at[i, '捷運'] = df_d['MRT'].values[0]
         df_tm.at[i, '小學'] = df_d['sku_name'].values[0]
         df_tm.at[i, '交易年'] = df_d['交易年'].values[0]
 
     df_tm.rename(columns={'建案名稱': '交易筆數'}, inplace=True)
     df_tm.reset_index(inplace=True)
     df_tm.rename(columns={'index': '建案名稱', '每坪單價(萬)': '每坪均價(萬)'}, inplace=True)
-    fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '鄉鎮市區', '建案名稱'], values='交易筆數',
+    fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
                                    color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
