@@ -206,7 +206,8 @@ def fn_get_house_data(path):
                 df.to_csv(path.replace('.csv', f'_add_{df_ownd.shape[0]}.csv'), encoding='utf-8-sig', index=False)
                 print(f'Append {df_ownd.shape[0]} data from pre_ownd to {read_typ} and total is {df.shape[0]}')
 
-    df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數', '總價(萬)', '車位總價(萬)', '戶別'], inplace=True)
+    df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數', '總價(萬)', '車位總價(萬)', '戶別'],
+                       inplace=True)
     df.reset_index(drop=True, inplace=True)
     print(f'Read {read_typ} data from {path} !!!')
     return df
@@ -619,6 +620,17 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
     return fig
 
 
+def fn_gen_plotly_treemap(df, path=None, values=None, color=None, hover=None, mid=None):
+    fig = px.treemap(df, path=path, values=values,
+                     color=color, hover_data=hover,
+                     color_continuous_scale='RdBu',
+                     color_continuous_midpoint=mid)
+
+    fig.update_layout(margin=dict(t=20, l=0, r=0, b=20))
+
+    return fig
+
+
 def fn_gen_df_color(val):
     color = 'greenyellow' if val else 'lightgray'
 
@@ -996,6 +1008,30 @@ def fn_gen_model_confidence(loaded_model, X):
 def fn_gen_web_eda(df):
     t_s = time.time()
 
+    df_tm = df[['台北市', '鄉鎮市區', '每坪單價(萬)', '建案名稱']]
+    df_tm = df_tm[df_tm['台北市'] == 1]
+    df_tm = df_tm[df_tm['建案名稱'].apply(lambda x: str(x) != 'nan')]
+    df_tm_v = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['每坪單價(萬)'].mean())
+    df_tm_c = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建案名稱'].count())
+    df_tm_v = df_tm_v['每坪單價(萬)'].apply(lambda x: round(x, 2))
+    df_tm = pd.concat([df_tm_v, df_tm_c], axis=1)
+    df_tm.sort_values(by='每坪單價(萬)', inplace=True)
+
+    for i in df_tm.index:
+        df_d = df[df['建案名稱'] == i]
+        df_tm.at[i, '城市'] = '台北市'
+        df_tm.at[i, '鄉鎮市區'] = df_d['鄉鎮市區'].values[0]
+        df_tm.at[i, '捷運站'] = df_d['MRT'].values[0]
+        df_tm.at[i, '小學'] = df_d['sku_name'].values[0]
+        df_tm.at[i, '交易年'] = df_d['交易年'].values[0]
+
+    df_tm.rename(columns={'建案名稱': '交易筆數'}, inplace=True)
+    df_tm.reset_index(inplace=True)
+    df_tm.rename(columns={'index': '建案名稱', '每坪單價(萬)': '每坪均價(萬)'}, inplace=True)
+    fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '鄉鎮市區', '建案名稱'], values='交易筆數',
+                                   color='每坪均價(萬)', hover=['交易年', '捷運站', '小學'],
+                                   mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+
     df_sel = df.copy()
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
     idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
@@ -1154,6 +1190,7 @@ def fn_gen_web_eda(df):
 
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析')
     st.plotly_chart(fig_map_all)
+    st.plotly_chart(fig_tm)
 
     st.write('')
     st.subheader(f'📊 數據分析')
@@ -1823,7 +1860,8 @@ def fn_gen_web_ref():
 
     st.write('')
     st.subheader('相關競賽:')
-    st.write("- 交通部: [交通數據創新應用競賽](https://tdx-contest.tca.org.tw) [TDX交通資料育成網](https://startup.transportdata.tw/) [隊名: 傑克潘 (TD-81670023)](https://tdx-contest.tca.org.tw/)")
+    st.write(
+        "- 交通部: [交通數據創新應用競賽](https://tdx-contest.tca.org.tw) [TDX交通資料育成網](https://startup.transportdata.tw/) [隊名: 傑克潘 (TD-81670023)](https://tdx-contest.tca.org.tw/)")
     st.write("- 玉山人工智慧公開挑戰賽2019夏季賽:[台灣不動產AI神預測](https://tbrain.trendmicro.com.tw/competitions/Details/6)")
     st.write("- 經濟部中小企業處:[2021城市數據實境賽](https://data.startupterrace.tw/data-contest)")
 
