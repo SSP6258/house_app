@@ -1029,7 +1029,7 @@ def fn_gen_web_eda(df):
     df_tm.reset_index(inplace=True)
     df_tm.rename(columns={'index': '建案名稱', '每坪單價(萬)': '每坪均價(萬)'}, inplace=True)
     fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '鄉鎮市區', '建案名稱'], values='交易筆數',
-                                   color='每坪均價(萬)', hover=['交易年', '捷運站', '小學'],
+                                   color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     df_sel = df.copy()
