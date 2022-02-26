@@ -579,15 +579,19 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
     assert lat != 'na' and lon != 'na', f'This df have no coor col: {df.columns}'
 
+    # color_mid = np.average(df['每坪單價(萬)'])
     fig = px.scatter_mapbox(df,
                             lat=lat, lon=lon, title=title,
                             hover_name=hover_name, hover_data=hover_data,
                             color_discrete_sequence=["fuchsia"],
+                            color_continuous_scale='portland',  # jet
+                            # color_continuous_midpoint=color_mid,
                             zoom=zoom, height=height, color=color,
                             text=text)
 
-    fig.update_layout(mapbox_style=map_style, margin=margin)
+    fig.update_layout(mapbox_style=map_style, margin=margin) # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
+
     return fig
 
 
@@ -598,7 +602,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                                  opacity=opacity,
                                  line={'color': 'White', 'width': 0.4},
                                  color=color,
-                                 colorscale='Bluered')  # "Viridis")
+                                 colorscale='Bluered')  # "Viridis"
                              ), row=row, col=col)
 
     if margin is not None:
@@ -623,7 +627,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
 def fn_gen_plotly_treemap(df, path=None, values=None, color=None, hover=None, mid=None):
     fig = px.treemap(df, path=path, values=values,
                      color=color, hover_data=hover,
-                     color_continuous_scale='RdBu',
+                     color_continuous_scale='balance',  # balance RdBu
                      color_continuous_midpoint=mid)
 
     fig.update_layout(margin=dict(t=20, l=0, r=0, b=20))
