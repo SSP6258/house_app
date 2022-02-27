@@ -1788,16 +1788,23 @@ def fn_gen_web_ml_inference(path, build_typ):
 
         is_rf = model_typ == 'rf'
         fn_gen_pred(path, loaded_model, model_sel, df_F, build_typ, is_rf)
+
+
     else:
         st.write(f'No models found in {model_fdr}')
         st.write('請先進行"模型訓練')
+
+    st.write(" ")
+    st.subheader(f'其它房價預測平台:')
+    st.markdown(f'{"#" * 4} 🔮 [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)')
+    st.markdown(f'{"#" * 4} 🔮 [好時價House+](https://www.houseplus.tw/)')
 
     te = time.time()
     dur = round(te - ts, 5)
     print(f'fn_gen_web_inference: {dur} 秒')
 
 
-def fn_gen_web_init(path, page=None):
+def    fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
     path_output = os.path.join(path, r'output')
     path_output = os.path.join(path_output, r'house_all.csv')
@@ -1858,7 +1865,7 @@ def fn_gen_web_ref():
     st.subheader('參考網站:')
     st.write("- 實價登錄網站: [樂居](https://www.leju.com.tw/)")
     st.write("- 實價登錄網站: [實價登錄比價王](https://community.houseprice.tw/building/118031)")
-    st.write("- 房價預測網站: [中信銀行 智慧價平台](https://www.ctbcbank.com/contet/dam/minisite/long/loan/ctbc-mortgage/index.html)")
+    st.write("- 房價預測網站: [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)")
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
 
