@@ -1018,11 +1018,15 @@ def fn_gen_web_eda(df):
     df_tm = df_tm[df_tm['建案名稱'].apply(lambda x: str(x) != 'nan')]
     df_tm_v = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['每坪單價(萬)'].mean())
     df_tm_s = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建物坪數'].mean())
+    df_tm_m = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建物坪數'].max())
+    df_tm_m.rename(columns={'建物坪數': '最大坪數'}, inplace=True)
+    df_tm_n = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建物坪數'].min())
+    df_tm_n.rename(columns={'建物坪數': '最小坪數'}, inplace=True)
     df_tm_c = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建案名稱'].count())
     df_tm_v = df_tm_v['每坪單價(萬)'].apply(lambda x: round(x, 2))
     df_tm_s = df_tm_s['建物坪數'].apply(lambda x: round(x, 2))
     df_tm = pd.concat([df_tm_v, df_tm_c], axis=1)
-    df_tm = pd.concat([df_tm, df_tm_s], axis=1)
+    df_tm = pd.concat([df_tm, df_tm_s, df_tm_m, df_tm_n], axis=1)
     df_tm.sort_values(by='每坪單價(萬)', inplace=True)
 
     for i in df_tm.index:
@@ -1041,6 +1045,14 @@ def fn_gen_web_eda(df):
                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     fig_tm_2 = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='建物坪數',
+                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+
+    fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
+                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+
+    fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
                                      color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                      mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
@@ -1203,9 +1215,13 @@ def fn_gen_web_eda(df):
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析')
     st.plotly_chart(fig_map_all)
     st.write('')
-    area = st.radio('樹狀圖的面積代表:', ('交易筆數', '建物坪數(成交物件的平均坪數)'), index=0)
+    area = st.radio('樹狀圖的面積代表:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(成交物件的平均坪數)'), index=0)
     if area == '交易筆數':
         st.plotly_chart(fig_tm)
+    elif area == '最小坪數':
+        st.plotly_chart(fig_tm_n)
+    elif area == '最大坪數':
+        st.plotly_chart(fig_tm_m)
     else:
         st.plotly_chart(fig_tm_2)
 
