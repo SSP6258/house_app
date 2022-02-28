@@ -602,7 +602,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                                  opacity=opacity,
                                  line={'color': 'White', 'width': 0.4},
                                  color=color,
-                                 colorscale='Bluered')  # "Viridis"
+                                 colorscale='Bluered')  # "Viridis" portland Bluered
                              ), row=row, col=col)
 
     if margin is not None:
@@ -860,13 +860,13 @@ def fn_gen_analysis(df, latest_records, build_case):
     with st.expander(f'👓 檢視 每坪單價 的 分佈狀況'):
         fig_3d = px.scatter_3d(df, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
-                               opacity=0.8)
+                               opacity=0.8, color_continuous_scale='portland')
         fig_3d.update_layout(title='每坪單價 的 分佈狀況', autosize=True,
                              width=700, height=500,
                              margin={'l': 0, 'r': 0, 't': 30, 'b': 20})
         st.plotly_chart(fig_3d)
 
-        fig_c = go.Figure(data=go.Contour(x=df['經度'], y=df['緯度'], z=df['coor_ave'], line_smoothing=1.2))
+        fig_c = go.Figure(data=go.Contour(x=df['經度'], y=df['緯度'], z=df['coor_ave'], line_smoothing=1.2, colorscale='portland'))
         fig_c.update_layout(title='每坪單價的分佈狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
