@@ -1200,7 +1200,7 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", "建案名稱"]
     color = '每坪單價(萬)'
     map_style = "carto-positron"  # "open-street-map"
-    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.2)
+    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25)
 
     latest_rel = '0211'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
