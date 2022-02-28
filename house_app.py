@@ -589,7 +589,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             zoom=zoom, height=height, color=color,
                             text=text)
 
-    fig.update_layout(mapbox_style=map_style, margin=margin) # 'mapbox_style=map_style'
+    fig.update_layout(mapbox_style=map_style, margin=margin)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
 
     return fig
@@ -866,7 +866,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                              margin={'l': 0, 'r': 0, 't': 30, 'b': 20})
         st.plotly_chart(fig_3d)
 
-        fig_c = go.Figure(data=go.Contour(x=df['經度'], y=df['緯度'], z=df['coor_ave'], line_smoothing=1.2, colorscale='portland'))
+        fig_c = go.Figure(
+            data=go.Contour(x=df['經度'], y=df['緯度'], z=df['coor_ave'], line_smoothing=1.2, colorscale='portland'))
         fig_c.update_layout(title='每坪單價的分佈狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
@@ -1012,13 +1013,16 @@ def fn_gen_model_confidence(loaded_model, X):
 def fn_gen_web_eda(df):
     t_s = time.time()
 
-    df_tm = df[['台北市', '鄉鎮市區', '每坪單價(萬)', '建案名稱']]
+    df_tm = df[['台北市', '鄉鎮市區', '每坪單價(萬)', '建案名稱', '建物坪數']]
     df_tm = df_tm[df_tm['台北市'] == 1]
     df_tm = df_tm[df_tm['建案名稱'].apply(lambda x: str(x) != 'nan')]
     df_tm_v = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['每坪單價(萬)'].mean())
+    df_tm_s = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建物坪數'].mean())
     df_tm_c = pd.DataFrame(df_tm.groupby('建案名稱', as_index=True)['建案名稱'].count())
     df_tm_v = df_tm_v['每坪單價(萬)'].apply(lambda x: round(x, 2))
+    df_tm_s = df_tm_s['建物坪數'].apply(lambda x: round(x, 2))
     df_tm = pd.concat([df_tm_v, df_tm_c], axis=1)
+    df_tm = pd.concat([df_tm, df_tm_s], axis=1)
     df_tm.sort_values(by='每坪單價(萬)', inplace=True)
 
     for i in df_tm.index:
@@ -1035,6 +1039,10 @@ def fn_gen_web_eda(df):
     fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
                                    color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+
+    fig_tm_2 = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='建物坪數',
+                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     df_sel = df.copy()
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
@@ -1180,7 +1188,7 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", "建案名稱"]
     color = '每坪單價(萬)'
     map_style = "carto-positron"  # "open-street-map"
-    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color)
+    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.2)
 
     latest_rel = '0211'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
@@ -1194,7 +1202,12 @@ def fn_gen_web_eda(df):
 
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析')
     st.plotly_chart(fig_map_all)
-    st.plotly_chart(fig_tm)
+    st.write('')
+    area = st.radio('樹狀圖的面積代表:', ('交易筆數', '建物坪數(成交物件的平均坪數)'), index=0)
+    if area == '交易筆數':
+        st.plotly_chart(fig_tm)
+    else:
+        st.plotly_chart(fig_tm_2)
 
     st.write('')
     st.subheader(f'📊 數據分析')
@@ -1796,7 +1809,8 @@ def fn_gen_web_ml_inference(path, build_typ):
 
     st.write(" ")
     st.subheader(f'其它房價預測平台:')
-    st.markdown(f'{"#" * 4} 🔮 [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)')
+    st.markdown(
+        f'{"#" * 4} 🔮 [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)')
     st.markdown(f'{"#" * 4} 🔮 [好時價House+](https://www.houseplus.tw/)')
 
     te = time.time()
@@ -1804,7 +1818,7 @@ def fn_gen_web_ml_inference(path, build_typ):
     print(f'fn_gen_web_inference: {dur} 秒')
 
 
-def    fn_gen_web_init(path, page=None):
+def fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
     path_output = os.path.join(path, r'output')
     path_output = os.path.join(path_output, r'house_all.csv')
@@ -1865,7 +1879,8 @@ def fn_gen_web_ref():
     st.subheader('參考網站:')
     st.write("- 實價登錄網站: [樂居](https://www.leju.com.tw/)")
     st.write("- 實價登錄網站: [實價登錄比價王](https://community.houseprice.tw/building/118031)")
-    st.write("- 房價預測網站: [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)")
+    st.write(
+        "- 房價預測網站: [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)")
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
 
