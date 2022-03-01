@@ -1219,7 +1219,7 @@ def fn_gen_web_eda(df):
 
     # rendering web view
 
-    st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析')
+    st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析 (更新至: {To})')
     st.plotly_chart(fig_map_all)
     st.write('')
     area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=0)
