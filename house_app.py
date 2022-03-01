@@ -248,7 +248,9 @@ def fn_get_sku_people_by_year(df):
             assert df_sku_sel.shape[0] == 1, f'{city, school, df_sku_sel.shape[0]}'
 
             for y in range(10):
-                year_total = f'{y + year}_Total'
+                total = 'nan'
+                year_total = f'{year-y}_Total'
+
                 if year_total in df_sku_sel.columns:
                     total = df_sku_sel[year_total].values[0]
 
@@ -968,7 +970,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                      f' 📝 登錄: {deals} 筆'
                      f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-        r = st.radio('檢視選項:', options=['總價(萬)', '每坪單價(萬)', '建物坪數', '車位坪數', '總價-車位(萬)', '車位總價(萬)', '交易日期'], index=0)
+        r = st.radio('檢視選項:', options=['每坪單價(萬)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'], index=0)
         fn_set_radio_2_hor()
 
         df_show = dic_df_show[r] if r in dic_df_show.keys() else None
@@ -984,6 +986,10 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                 v = df_show.loc[idx, col]
                 a = dic_df_show['建物坪數'].loc[idx, col]
                 if v > 0:
+                    if r == '交易日期':
+                        year = int(v/100)
+                        month = v - 100*year
+                        v = datetime.date(year=year, month=month, day=1)
                     dic_values[a].append(v)
 
         fig = make_subplots(rows=1, cols=1,
@@ -1200,6 +1206,7 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", "建案名稱"]
     color = '每坪單價(萬)'
     map_style = "carto-positron"  # "open-street-map"
+    df = df.sort_values(by=['交易年月日'])
     fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25)
 
     latest_rel = '0211'
@@ -1215,7 +1222,7 @@ def fn_gen_web_eda(df):
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析')
     st.plotly_chart(fig_map_all)
     st.write('')
-    area = st.radio('樹狀圖的面積代表:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(成交物件的平均坪數)'), index=0)
+    area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=0)
     if area == '交易筆數':
         st.plotly_chart(fig_tm)
     elif area == '最小坪數':
