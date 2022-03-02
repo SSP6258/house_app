@@ -1902,6 +1902,7 @@ def fn_gen_web_ref():
     st.subheader('參考網站:')
     st.write("- 實價登錄網站: [樂居](https://www.leju.com.tw/)")
     st.write("- 實價登錄網站: [實價登錄比價王](https://community.houseprice.tw/building/118031)")
+    st.write("- 實價登錄網站: [PLEX 專注大台北大廈的房屋網](https://www.plex.com.tw/)")
     st.write(
         "- 房價預測網站: [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)")
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
