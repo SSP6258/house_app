@@ -127,9 +127,9 @@ def fn_cln_house_data(df):
     df['建物移轉坪數'] = df['建物移轉坪數'].apply(lambda x: round(x, 2))
     df['建物型態'] = df['建物型態'].apply(lambda x: '華廈' if '華廈' in x else '大樓' if '大樓' in x else x)
     df.rename(columns={col: col.replace('移轉坪數', '坪數') for col in df.columns}, inplace=True)
+
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
-    if '里' in df.columns:
-        df = df[df['里'].apply(lambda x: str(x).endswith('里'))]
+    df = df[df['里'].apply(lambda x: str(x).endswith('里'))] if '里' in df.columns else df
 
     df = fn_gen_build_case(df)
     df[['經度', '緯度']] = df[['log', 'lat']]
