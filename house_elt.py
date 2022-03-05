@@ -557,7 +557,7 @@ def fn_gen_vill(path):
             lat = df_all.loc[i, 'lat']
             vill_info = fn_search_vill(lon, lat, shapes, properties)
 
-            city = vill_info.split(',')[0].replace(' ', '')
+            # city = vill_info.split(',')[0].replace(' ', '')
             dist = vill_info.split(',')[1].replace(' ', '')
             vill = vill_info.split(',')[2].replace(' ', '')
 

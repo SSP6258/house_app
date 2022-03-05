@@ -130,6 +130,7 @@ def fn_cln_house_data(df):
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
     if '里' in df.columns:
         df = df[df['里'].apply(lambda x: str(x).endswith('里'))]
+
     df = fn_gen_build_case(df)
     df[['經度', '緯度']] = df[['log', 'lat']]
 

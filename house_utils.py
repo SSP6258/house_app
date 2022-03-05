@@ -752,8 +752,6 @@ def fn_search_vill(lon, lat, shapes, properties):
             # plt.plot(lon, lat, c="red", marker='X')
             break
 
-    # print(coor_2_vill)
-
     return vill
 
 
