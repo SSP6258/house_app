@@ -6,7 +6,7 @@ import datetime
 import time
 import pandas as pd
 import pprint
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, fn_read_shp, fn_search_vill
 
 dic_of_filter = {
     '交易標的': '房地(土地+建物)+車位',
@@ -540,13 +540,49 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
         print(df_all['備註'].value_counts())
 
 
+def fn_gen_vill(path):
+    shapes, properties = fn_read_shp()
+
+    house_all = os.path.join(path, 'output/house_all.csv')
+    df_all = pd.read_csv(house_all)
+
+    # add vill from coor
+    is_update = False
+
+    for i in df_all.index:
+        if str(df_all.loc[i, '里']).endswith('里'):
+            pass
+        else:
+            lon = df_all.loc[i, 'log']
+            lat = df_all.loc[i, 'lat']
+            vill_info = fn_search_vill(lon, lat, shapes, properties)
+
+            city = vill_info.split(',')[0].replace(' ', '')
+            dist = vill_info.split(',')[1].replace(' ', '')
+            vill = vill_info.split(',')[2].replace(' ', '')
+
+            if df_all.loc[i, '鄉鎮市區'] == dist:
+                df_all.at[i, '里'] = vill
+                is_update = True
+                # print(f'{i}/{df_all.shape[0]}', vill, dist, df_all.loc[i, '地址'])
+
+            else:
+                print(f'Error {i}/{df_all.shape[0]}, {vill}, {dist}, ({lon}, {lat}), {df_all.loc[i, "鄉鎮市區"]}, {df_all.loc[i, "地址"]}')
+
+    if is_update:
+        df_all.to_csv(house_all, encoding='utf_8_sig', index=False)
+
+
+
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
 
-    fn_gen_raw_data(path, slp=15, is_force=True)
+    # fn_gen_raw_data(path, slp=15, is_force=True)
 
     # fn_save_building_name(path)
+
+    fn_gen_vill(path)
 
 
 if __name__ == '__main__':

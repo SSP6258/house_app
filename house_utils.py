@@ -5,12 +5,14 @@ import numpy as np
 import pandas as pd
 import cn2an
 import random
+import geopandas as gpd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from geopy.distance import geodesic
 from collections import defaultdict
 from workalendar.asia import Taiwan
+from shapely.geometry import shape, Point
 
 dic_of_path = {
     # 'root': r'D:\05_Database\house_data',
@@ -710,6 +712,57 @@ def fn_gen_school_data():
     fn_gen_school_peoples(path, years)
     fn_gen_school_filter(path)
     fn_gen_school_info(path, years)
+
+
+def fn_read_shp():
+    path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
+    file = r'VILLAGE_MOI_1101214.shp'
+    g = os.path.join(path, file)
+    gis_v = gpd.read_file(g, encoding='utf-8')
+
+    gis = gis_v
+    shapes = {}
+    properties = {}
+    for idx in gis.index:
+        county = gis.loc[idx, 'COUNTYNAME']
+        town = gis.loc[idx, 'TOWNNAME']
+        vill = gis.loc[idx, 'VILLNAME'] if 'VILLNAME' in gis.columns else 'NA'
+        s = gis[gis.index == idx]
+
+        if county == '臺北市':
+            shapes[idx] = shape(gis.loc[idx, 'geometry'])
+            properties[idx] = f'{county}, {town}, {vill}'
+
+    return shapes, properties
+
+
+def fn_search_vill(lon, lat, shapes, properties):
+    # coor_2_vill = 'Uknown1'
+    vill = 'Unknown'
+
+    for k in shapes.keys():
+        # print(k, properties[k])
+        if shapes[k].contains(Point(lon, lat)):
+            vill = properties[k]
+            # coor_2_vill = f'{lon}, {lat} is in {vill}'
+
+            # x, y = shapes[k].exterior.xy
+            # fig = plt.figure()
+            # plt.plot(x, y, c="green")
+            # plt.plot(lon, lat, c="red", marker='X')
+            break
+
+    # print(coor_2_vill)
+
+    return vill
+
+
+def fn_coor_2_vill(lon, lat):
+    shapes, properties = fn_read_shp()
+
+    vill = fn_search_vill(lon, lat, shapes, properties)
+
+    return vill
 
 
 def fn_main():

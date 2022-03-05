@@ -128,6 +128,8 @@ def fn_cln_house_data(df):
     df['建物型態'] = df['建物型態'].apply(lambda x: '華廈' if '華廈' in x else '大樓' if '大樓' in x else x)
     df.rename(columns={col: col.replace('移轉坪數', '坪數') for col in df.columns}, inplace=True)
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
+    if '里' in df.columns:
+        df = df[df['里'].apply(lambda x: str(x).endswith('里'))]
     df = fn_gen_build_case(df)
     df[['經度', '緯度']] = df[['log', 'lat']]
 
@@ -564,7 +566,7 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
 
 
 def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
-                      color=None, zoom=10, height=400, text=None, margin=None):
+                      color=None, zoom=10, height=400, text=None, margin=None, op=None):
     margin = {"r": 0, "t": 40, "l": 0, "b": 0} if margin is None else margin
 
     lat, lon = 'na', 'na'
@@ -589,7 +591,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             color_continuous_scale='portland',  # jet
                             # color_continuous_midpoint=color_mid,
                             zoom=zoom, height=height, color=color,
-                            text=text)
+                            text=text, opacity=op)
 
     fig.update_layout(mapbox_style=map_style, margin=margin)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
@@ -1207,7 +1209,7 @@ def fn_gen_web_eda(df):
     color = '每坪單價(萬)'
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
-    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25)
+    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=1)
 
     latest_rel = '0211'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
