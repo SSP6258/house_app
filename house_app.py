@@ -252,7 +252,7 @@ def fn_get_sku_people_by_year(df):
 
             for y in range(10):
                 total = 'nan'
-                year_total = f'{year-y}_Total'
+                year_total = f'{year - y}_Total'
 
                 if year_total in df_sku_sel.columns:
                     total = df_sku_sel[year_total].values[0]
@@ -646,6 +646,61 @@ def fn_gen_df_color(val):
     return f'background-color: fcolor]'
 
 
+def fn_gen_analysis_admin(df, margin=None, bc_name=None):
+    color_by = '無'
+    c1, c2 = st.columns(2)
+
+    dist = c1.selectbox('行政區', options=['不限'] + list(df['鄉鎮市區'].unique()), index=0)
+    op = c2.slider('透明度', min_value=0.01, max_value=0.1, value=0.05)
+
+    if bc_name is None:
+        bc_name = ['康寶日出印象']
+    margin = {'l': 0, 'r': 30, 't': 30, 'b': 20} if margin is None else margin
+    admin_dists = len(df['鄉鎮市區'].unique())
+
+    df_dist = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
+    df_dist = pd.DataFrame(df_dist.groupby('里', as_index=True)['每坪單價(萬)'].mean())
+    df_dist.reset_index(inplace=True)
+    df_dist.rename(columns={'index': '里'})
+    admin_vills = len(df_dist['里'].unique())
+
+    fig_sct = make_subplots(rows=2, cols=1,
+                            # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
+                            subplot_titles=(f'台北市 {admin_dists}個 行政區 V.S. 每坪單價(萬)',
+                                            f'{dist.replace("不限", "台北市")} {admin_vills}個 里 V.S. 每坪單價(萬)'))
+
+    df_sort = df.sort_values(by='DIST_ave', ascending=False)
+    df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
+
+    hover_text = fn_get_hover_text(df_sort)
+
+    color_set, opacity = fn_set_color_by(color_by, df_sort)
+
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['鄉鎮市區'], df_sort['每坪單價(萬)'],
+                                    margin=margin, color=color_set, text=hover_text, opacity=op, row=1)
+
+    hover_txt1 = fn_get_hover_text(df_hl)
+
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_hl['鄉鎮市區'], df_hl['每坪單價(萬)'],
+                                    margin=margin, color='red', text=hover_txt1, opacity=1, row=1)
+
+    df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
+    # df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
+
+    df_vill = pd.DataFrame()
+    for vill in df_sort['里'].values:
+        df_vill = pd.concat([df_vill, df[df['里'] == vill]], axis=0)
+
+    del df
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['里'], df_vill['每坪單價(萬)'],
+                                    margin=margin, color=color_set, text=hover_text, opacity=op*3, row=2)
+
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
+                                    margin=margin, color=color_set, text=hover_text, opacity=1, row=2)
+
+    return fig_sct
+
+
 def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
     if bc_name is None:
         bc_name = ['康寶日出印象']
@@ -884,7 +939,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar_3, config=config)
         st.plotly_chart(fig_bar_4, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "各項"指標 的關係'):
+    with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         # fig= plot_correlation(df,'每坪單價(萬))
         # st.write(fig)
         title = '每坪單價 與 "各項指標" 的關係'
@@ -937,27 +992,34 @@ def fn_gen_analysis(df, latest_records, build_case):
 
             st.plotly_chart(fig, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "捷運"指標 的關係'):
+    with st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
+        # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
+        fn_set_radio_2_hor()
+        fig_sct = fn_gen_analysis_admin(df, bc_name=[build_case])
+        st.plotly_chart(fig_sct, config=config)
+        # st.plotly_chart(fig_sct_1, config=config)
+
+    with st.expander(f'👓 檢視 每坪單價 與 "捷運" 指標 的關係'):
         color_by = st.radio('著色條件:', options=['無', '依捷運距離', '依通勤時間', f'依最新登錄({latest_records})'], index=0)
         fn_set_radio_2_hor()
         fig_sct, fig_sct_1 = fn_gen_analysis_mrt(df, color_by, bc_name=[build_case])
         st.plotly_chart(fig_sct, config=config)
         st.plotly_chart(fig_sct_1, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "小學"指標 的關係'):
+    with st.expander(f'👓 檢視 每坪單價 與 "小學" 指標 的關係'):
         color_by = st.radio('著色條件:', options=['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})'], index=0)
         fn_set_radio_2_hor()
         fig_sku_1, fig_sku_2 = fn_gen_analysis_sku(df, color_by, bc_name=[build_case])
         st.plotly_chart(fig_sku_1, config=config)
         st.plotly_chart(fig_sku_2, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "建物"指標 的關係'):
+    with st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
         color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
         fn_set_radio_2_hor()
         fig_sct_3 = fn_gen_analysis_building(df, '每坪單價(萬)', color_by, bc_name=[build_case])
         st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 物件總價 與 "建物"指標 的關係'):
+    with st.expander(f'👓 檢視 物件總價 與 "建物" 指標 的關係'):
         color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登錄({latest_records})'], index=0,
                             key=1)
         fn_set_radio_2_hor()
@@ -990,8 +1052,8 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                 a = dic_df_show['建物坪數'].loc[idx, col]
                 if v > 0:
                     if r == '交易日期':
-                        year = int(v/100)
-                        month = v - 100*year
+                        year = int(v / 100)
+                        month = v - 100 * year
                         v = datetime.date(year=year, month=month, day=1)
                     dic_values[a].append(v)
 
