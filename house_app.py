@@ -685,7 +685,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                     margin=margin, color='red', text=hover_txt1, opacity=1, row=1)
 
     df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
-    # df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
     df_vill = pd.DataFrame()
     for vill in df_sort['里'].values:
