@@ -666,8 +666,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     fig_sct = make_subplots(rows=2, cols=1,
                             # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
-                            subplot_titles=(f'台北市 {admin_dists}個 行政區 V.S. 每坪單價(萬)',
-                                            f'{dist.replace("不限", "台北市")} {admin_vills}個 里 V.S. 每坪單價(萬)'))
+                            subplot_titles=(f'台北市 {admin_dists}個 行政區 v.s. 每坪單價(萬)',
+                                            f'{dist.replace("不限", "台北市")} {admin_vills}個 里 v.s. 每坪單價(萬)'))
 
     df_sort = df.sort_values(by='DIST_ave', ascending=False)
     df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
