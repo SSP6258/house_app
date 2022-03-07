@@ -650,13 +650,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2 = st.columns(2)
 
-    dist_dft = '不限' if bc_name is None else df[df['建案名稱'] == bc_name]['鄉鎮市區'].values[0]
+    dist_of_bc = '不限' if bc_name is None else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
-    dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_dft))
+    dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
     op = c2.slider('透明度', min_value=0.01, max_value=0.2, value=0.1)
 
-    if bc_name is None:
-        bc_name = ['康寶日出印象']
+    # if bc_name is None:
+    #     bc_name = ['康寶日出印象']
     margin = {'l': 0, 'r': 30, 't': 30, 'b': 20} if margin is None else margin
     admin_dists = len(df['鄉鎮市區'].unique())
 
