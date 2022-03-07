@@ -650,8 +650,10 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2 = st.columns(2)
 
-    dist = c1.selectbox('行政區', options=['不限'] + list(df['鄉鎮市區'].unique()), index=0)
-    op = c2.slider('透明度', min_value=0.01, max_value=0.1, value=0.05)
+    dist_dft = '不限' if bc_name is None else df[df['建案名稱'] == bc_name]['鄉鎮市區'].values[0]
+    dists = ['不限'] + list(df['鄉鎮市區'].unique())
+    dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_dft))
+    op = c2.slider('透明度', min_value=0.01, max_value=0.2, value=0.1)
 
     if bc_name is None:
         bc_name = ['康寶日出印象']
@@ -692,7 +694,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     del df
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['里'], df_vill['每坪單價(萬)'],
-                                    margin=margin, color=color_set, text=hover_text, opacity=op*3, row=2)
+                                    margin=margin, color=color_set, text=hover_text, opacity=op * 3, row=2)
 
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=1, row=2)
@@ -2037,7 +2039,7 @@ def fn_app(page='data'):
     this_yr = datetime.datetime.now().year - 1911
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
-    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr-2, this_yr))
+    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     c1, c2 = st.sidebar.columns(2)
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
     root = dic_of_path['root']
