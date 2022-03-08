@@ -321,6 +321,12 @@ def fn_get_hover_text(df):
         bc = bc.apply(lambda x: '' if 'nan' in x else x)
         txt += bc + '<br>'
 
+    if '移轉層次' in cols:
+        txt += df['移轉層次'].astype(int).astype(str) + 'F / '
+
+    if '建物坪數' in cols:
+        txt += df['建物坪數'].astype(int).astype(str) + '坪<br>'
+
     if 'MRT DIST' in cols:
         txt += df['MRT_DIST'].astype(int).astype(str) + '公尺<br>'
 
