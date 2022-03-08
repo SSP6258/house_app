@@ -322,7 +322,10 @@ def fn_get_hover_text(df):
         txt += bc + '<br>'
 
     if '移轉層次' in cols:
-        txt += df['移轉層次'].astype(int).astype(str) + 'F / '
+        txt += df['移轉層次'].astype(int).astype(str) + ' / '
+
+    if '總樓層數' in cols:
+        txt += df['總樓層數'].astype(int).astype(str) + 'F<br>'
 
     if '建物坪數' in cols:
         txt += df['建物坪數'].astype(int).astype(str) + '坪<br>'
@@ -674,7 +677,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     margin = {'l': 0, 'r': 30, 't': 30, 'b': 20} if margin is None else margin
     admin_dists = len(df['鄉鎮市區'].unique())
 
-    df_dist = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
+    df_dist = df.copy() if dist == '不限' else df[df['鄉鎮市區'] == dist]
+    df_dist['里'] = df_dist['鄉鎮市區'] + '_' + df_dist['里']
     df_dist = pd.DataFrame(df_dist.groupby('里', as_index=True)['每坪單價(萬)'].mean())
     df_dist = df_dist[['每坪單價(萬)']].apply(lambda x: round(x, 2))
     df_dist.reset_index(inplace=True)
@@ -704,12 +708,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
 
     df_vill = pd.DataFrame()
+    df['dist_vill'] = df['鄉鎮市區']+'_'+df['里']
     for vill in df_sort['里'].values:
-        df_vill = pd.concat([df_vill, df[df['里'] == vill]], axis=0)
+        df_vill = pd.concat([df_vill, df[df['dist_vill'] == vill]], axis=0)
 
     del df
     hover_text = fn_get_hover_text(df_vill)
-    fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['里'], df_vill['每坪單價(萬)'],
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=op * 3, row=2)
 
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
