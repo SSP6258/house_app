@@ -311,19 +311,21 @@ def fn_get_hover_text(df):
     cols = df.columns
 
     if '鄉鎮市區' in cols:
-        txt += df['鄉鎮市區']
+        txt += df['鄉鎮市區'] + ' '
 
     if '建案名稱' in cols:
-        txt += df['建案名稱'].astype(str)
+        bc = df['建案名稱'].astype(str)
+        bc = bc.apply(lambda x: '' if 'nan' in x else x+' ')
+        txt += bc
 
     if '交易年' in cols:
-        txt += df['交易年'].astype(str) + '年, '
+        txt += df['交易年'].astype(str) + '年 '
 
     if 'MRT DIST' in cols:
-        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺, '
+        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺 '
 
     if 'MRT_Commute_Time_UL' in cols:
-        txt += df['MRT_Commute_Time_UL'].astype(str) + '分鐘'
+        txt += '通勤'+df['MRT_Commute_Time_UL'].astype(str) + '分'
 
     return txt
 
@@ -602,7 +604,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None):
-    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=False,
+    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=False, hovertext=text,
                              marker=dict(
                                  opacity=opacity,
                                  line={'color': 'White', 'width': 0.4},
@@ -662,6 +664,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     df_dist = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
     df_dist = pd.DataFrame(df_dist.groupby('里', as_index=True)['每坪單價(萬)'].mean())
+    df_dist = df_dist[['每坪單價(萬)']].apply(lambda x: round(x, 2))
     df_dist.reset_index(inplace=True)
     df_dist.rename(columns={'index': '里'})
     admin_vills = len(df_dist['里'].unique())
@@ -693,6 +696,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         df_vill = pd.concat([df_vill, df[df['里'] == vill]], axis=0)
 
     del df
+    hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['里'], df_vill['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=op * 3, row=2)
 
