@@ -180,7 +180,7 @@ def fn_set_color_by(by, df):
     return color_set, opacity
 
 
-@st.cache
+# @st.cache
 def fn_get_house_data(path):
     df = pd.read_csv(path)
     read_typ = path.replace('\\', '/').split('/')[-3]
