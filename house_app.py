@@ -310,22 +310,28 @@ def fn_get_hover_text(df):
     txt = ''
     cols = df.columns
 
+    if '交易年' in cols:
+        txt += df['交易年'].astype(str) + '年<br>'
+
     if '鄉鎮市區' in cols:
-        txt += df['鄉鎮市區'] + ' '
+        txt += df['鄉鎮市區'] + '<br>'
 
     if '建案名稱' in cols:
         bc = df['建案名稱'].astype(str)
-        bc = bc.apply(lambda x: '' if 'nan' in x else x+' ')
-        txt += bc
-
-    if '交易年' in cols:
-        txt += df['交易年'].astype(str) + '年 '
+        bc = bc.apply(lambda x: '' if 'nan' in x else x)
+        txt += bc + '<br>'
 
     if 'MRT DIST' in cols:
-        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺 '
+        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺<br>'
+
+    if 'MRT' in cols:
+        txt += df['MRT'].astype(str) + '<br>'
 
     if 'MRT_Commute_Time_UL' in cols:
-        txt += '通勤'+df['MRT_Commute_Time_UL'].astype(str) + '分'
+        txt += '通勤'+df['MRT_Commute_Time_UL'].astype(str) + '分<br>'
+
+    if 'sku_name' in cols:
+        txt += df['sku_name'].astype(str) + ' '
 
     return txt
 
