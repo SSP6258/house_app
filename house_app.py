@@ -670,7 +670,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2 = st.columns(2)
     # print(str(bc_name))
-    dist_of_bc = '不限' if bc_name is None or '不限' else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
+    dist_of_bc = '不限' if bc_name is None or bc_name == '不限' else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
     op = c2.slider('透明度', min_value=0.01, max_value=0.2, value=0.1)
