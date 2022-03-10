@@ -57,10 +57,13 @@ dic_of_cn_2_en = {'經度': 'longitude',
                   }
 
 
-def fn_show_img(IMG_path, IMG_file):
+def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
     png = os.path.join(IMG_path, IMG_file)
     img = Image.open(png)
-    st.image(img)
+    if is_sidebar:
+        st.sidebar.image(img, width=width, caption=caption)
+    else:
+        st.image(img, width=width, caption=caption)
 
 
 def fn_addr_2_house_num(x):
