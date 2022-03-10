@@ -550,7 +550,7 @@ def fn_gen_vill(path):
     is_update = False
 
     for i in df_all.index:
-        if str(df_all.loc[i, '里']).endswith('里'):
+        if '里' in df_all.columns and str(df_all.loc[i, '里']).endswith('里'):
             pass
         else:
             lon = df_all.loc[i, 'log']
@@ -573,11 +573,9 @@ def fn_gen_vill(path):
         df_all.to_csv(house_all, encoding='utf_8_sig', index=False)
 
 
-
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-
     # fn_gen_raw_data(path, slp=15, is_force=True)
 
     # fn_save_building_name(path)
