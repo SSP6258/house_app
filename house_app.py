@@ -1993,7 +1993,7 @@ def fn_gen_web_ref():
     st.write("- 單點坐標回傳行政區: [政府資料開放平台 - 坐標回傳行政區API](https://data.gov.tw/dataset/101898)")
     st.write("- 鄉鎮市區界線: [政府資料開放平台 - 我國各鄉(鎮、市、區)行政區城界線圖資](https://data.gov.tw/dataset/441)")
     st.write("- 村里界圖: [政府資料開放平台 - 各縣市村(里)界](https://data.gov.tw/dataset/7438)")
-    st.write("- 所得分析: [政府資料開放平台 - 綜稅所得鄉鎮村里統計分析表](https://data.gov.tw/dataset/7438)")
+    st.write("- 所得分析: [政府資料開放平台 - 綜稅所得鄉鎮村里統計分析表](https://data.gov.tw/dataset/17983)")
 
 
     st.write("")
