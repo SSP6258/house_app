@@ -543,7 +543,11 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
 def fn_gen_vill(file):
     shapes, properties = fn_read_shp()
 
-    df_all = pd.read_csv(file)
+    if '_coor.csv' in file:
+        df_all = pd.read_csv(file, index_col=0)
+        df_all = df_all.reset_index().drop_duplicates(subset='index', keep='first').set_index('index').sort_index()
+    else:
+        df_all = pd.read_csv(file)
 
     # add vill from coor
     is_update = False
@@ -554,7 +558,11 @@ def fn_gen_vill(file):
         else:
             lon = df_all.loc[i, 'log'] if 'log' in df_all.columns else df_all.loc[i, 'lon']
             lat = df_all.loc[i, 'lat'] if 'lat' in df_all.columns else df_all.loc[i, '緯度']
-            vill_info = fn_search_vill(lon, lat, shapes, properties)
+
+            try:
+                vill_info = fn_search_vill(lon, lat, shapes, properties)
+            except:
+                assert False, f'lon: {lon} lat: {lat}, {i}'
 
             if vill_info != 'Unknown':
                 # city = vill_info.split(',')[0].replace(' ', '')
@@ -566,25 +574,29 @@ def fn_gen_vill(file):
                 df_all.at[i, '里'] = vill
                 is_update = True
                 # print(f'{i}/{df_all.shape[0]}', vill, dist, df_all.loc[i, '地址'])
-
             else:
-                addr = df_all.loc[i, "地址"] if "地址" in df_all.columns else df_all.index[i]
+                addr = df_all.loc[i, "地址"] if "地址" in df_all.columns else i
                 print(f'Error {i}/{df_all.shape[0]}, {vill}, {dist}, ({lon}, {lat}), {df_all.loc[i, col]}, {addr}')
 
     if is_update:
-        df_all.to_csv(file, encoding='utf_8_sig', index=False)
+       if '_coor.csv' in file:
+           df_all.to_csv(file, encoding='utf_8_sig')
+       else:
+           df_all.to_csv(file, encoding='utf_8_sig', index=False)
+
+       print(f'Vill updated !')
 
 
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    # fn_gen_raw_data(path, slp=15, is_force=True)
+    fn_gen_raw_data(path, slp=5, is_force=True)
 
     # fn_save_building_name(path)
 
     # file = os.path.join(path, 'output/house_all.csv')
-    file = os.path.join(dic_of_path['database'], 'House_coor.csv')
-    fn_gen_vill(file)
+    # file = os.path.join(dic_of_path['database'], 'House_coor.csv')
+    # fn_gen_vill(file)
 
 
 if __name__ == '__main__':
