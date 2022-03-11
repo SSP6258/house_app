@@ -340,7 +340,7 @@ def fn_get_hover_text(df):
         txt += df['MRT'].astype(str) + '<br>'
 
     if 'MRT_Commute_Time_UL' in cols:
-        txt += '通勤'+df['MRT_Commute_Time_UL'].astype(str) + '分<br>'
+        txt += '通勤' + df['MRT_Commute_Time_UL'].astype(str) + '分<br>'
 
     if 'sku_name' in cols:
         txt += df['sku_name'].astype(str) + ' '
@@ -711,7 +711,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
 
     df_vill = pd.DataFrame()
-    df['dist_vill'] = df['鄉鎮市區']+'_'+df['里']
+    df['dist_vill'] = df['鄉鎮市區'] + '_' + df['里']
     for vill in df_sort['里'].values:
         df_vill = pd.concat([df_vill, df[df['dist_vill'] == vill]], axis=0)
 
@@ -727,8 +727,12 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
 
 def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
-    if bc_name is None:
-        bc_name = ['康寶日出印象']
+    # if bc_name is None:
+    #     bc_name = ['康寶日出印象']
+
+    # dist_of_bc = '不限' if bc_name is None or bc_name == '不限' else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
+    # df = df[df['鄉鎮市區'] == dist_of_bc] if dist_of_bc != '不限' else df
+
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
     mrts = len(df['MRT'].unique())
 
@@ -1074,7 +1078,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         for col in df_show.columns:
             for idx in df_show.index:
                 v = df_show.loc[idx, col]
-                a = dic_df_show['建物坪數'].loc[idx, col]
+                a = int(dic_df_show['建物坪數'].loc[idx, col])
                 if v > 0:
                     if r == '交易日期':
                         year = int(v / 100)
@@ -1086,9 +1090,11 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                             subplot_titles=(
                                 f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
 
+        dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
+
         margin = {'l': 40}
-        for k in dic_values.keys():
-            fig = fn_gen_plotly_hist(fig, dic_values[k], f'{str(k)}坪{r}', bins=50, margin=margin,
+        for k in dic_values_sort.keys():
+            fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
                                      line_color='black', showlegend=True)
         st.plotly_chart(fig)
 
@@ -1253,7 +1259,7 @@ def fn_gen_web_eda(df):
 
     fig_bar2.update_layout(barmode='group',  # One of 'group', 'overlay' or 'relative'
                            margin=dict(l=30, r=20, t=60, b=40),
-                           paper_bgcolor="LightsteelBlue",
+                           # paper_bgcolor="LightsteelBlue",
                            font=dict(size=16))
 
     df_sel.rename(columns={'log': 'lon'}, inplace=True)  # rename for st.map
