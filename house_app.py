@@ -860,8 +860,9 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
 
 
 def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
-    if bc_name is None:
-        bc_name = ['康寶日出印象']
+    # if bc_name is None:
+    #     bc_name = ['康寶日出印象']
+
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
     y_data = df[target]
 
@@ -873,7 +874,7 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
                  df['建物坪數'].astype(int).astype(str) + '坪, ' + \
                  df['總樓層數'].astype(int).astype(str) + '樓'
 
-    df_hl = df[df['建案名稱'].apply(lambda x: x in bc_name)]  # <--
+    df_hl = df if bc_name is None else df[df['建案名稱'].apply(lambda x: x in bc_name)]  # <--
 
     fig_sct_3 = make_subplots(rows=2, cols=2,
                               subplot_titles=(f'交易年 v.s. {target}', f'建物坪數 v.s. {target}',
@@ -1047,8 +1048,23 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_sku_2, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
-        color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
-        fn_set_radio_2_hor()
+        # color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
+        # fn_set_radio_2_hor()
+
+        c1, c2, c3 = st.columns(3)
+        dists = ['不限']+list(df['鄉鎮市區'].unique())
+        dist_dft = 0
+        if build_case is not None:
+            df_bc = df[df['建案名稱']==build_case]
+            dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
+            dist_dft = dists.index(dist_dft)
+
+        print(dist_dft, dists)
+        dist = c1.selectbox('行政區', options=dists, index=dist_dft, key='dist')
+        color_by = c2.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
+
+        df = df if dist == '不限' else df[df['鄉鎮市區']==dist]
+
         fig_sct_3 = fn_gen_analysis_building(df, '每坪單價(萬)', color_by, bc_name=[build_case])
         st.plotly_chart(fig_sct_3, config=config)
 
@@ -1309,7 +1325,7 @@ def fn_gen_web_eda(df):
     df = df.sort_values(by=['交易年月日'])
     fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=1)
 
-    latest_rel = '0211'
+    latest_rel = '0311'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
