@@ -963,7 +963,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k'):
     build_cases = ['不限'] + list(df['建案名稱'].unique())
     build_cases = [b for b in build_cases if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
-    bc = c2.selectbox(f'建案({len(build_cases)-1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
+    bc = c2.selectbox(f'建案(共{len(build_cases)-1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
     color_by = c3.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0, key=f'{key}+color')
 
     return df, bc, color_by
