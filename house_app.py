@@ -1009,8 +1009,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar_4, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
-        # fig= plot_correlation(df,'每坪單價(萬))
-        # st.write(fig)
 
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
 
