@@ -983,7 +983,9 @@ def fn_gen_analysis(df, latest_records, build_case):
               'toImageButtonOptions': {'height': None, 'width': None}}
 
     with st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
-        fig_3d = px.scatter_3d(df, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr')
+
+        fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
                                opacity=0.8, color_continuous_scale='portland')
         fig_3d.update_layout(title='每坪單價 的 分佈狀況', autosize=True,
@@ -992,13 +994,15 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_3d)
 
         fig_c = go.Figure(
-            data=go.Contour(x=df['經度'], y=df['緯度'], z=df['coor_ave'], line_smoothing=1.2, colorscale='portland'))
+            data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland'))
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
 
     with st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
-        fig_bar, fig_bar_2, fig_bar_3, fig_bar_4 = fn_gen_analysis_statistic(df)
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch')
+
+        fig_bar, fig_bar_2, fig_bar_3, fig_bar_4 = fn_gen_analysis_statistic(df_1)
         st.plotly_chart(fig_bar, config=config)
         st.plotly_chart(fig_bar_2, config=config)
         st.plotly_chart(fig_bar_3, config=config)
