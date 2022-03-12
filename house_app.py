@@ -1007,29 +1007,32 @@ def fn_gen_analysis(df, latest_records, build_case):
     with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         # fig= plot_correlation(df,'每坪單價(萬))
         # st.write(fig)
+
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
+
         title = '每坪單價 與 "各項指標" 的關係'
-        target = [dict(label='每坪單價', values=df['每坪單價(萬)'])]
+        target = [dict(label='每坪單價', values=df_1['每坪單價(萬)'])]
 
         dimensions = [
-            dict(label='通勤時間', values=df['MRT_Commute_Time_UL']),
-            dict(label='捷運距離', values=df['MRT_DIST']),
-            dict(label='進站人數', values=df['MRT_Tput_UL']),
-            dict(label='出站人數', values=df['MRT_Tput_DL']),
+            dict(label='通勤時間', values=df_1['MRT_Commute_Time_UL']),
+            dict(label='捷運距離', values=df_1['MRT_DIST']),
+            dict(label='進站人數', values=df_1['MRT_Tput_UL']),
+            dict(label='出站人數', values=df_1['MRT_Tput_DL']),
 
-            dict(label='小學距離', values=df['sku_dist']),
-            dict(label='小學人數', values=df['sku_109_total']),
-            dict(label='交易樓層', values=df['移轉層次']),
-            dict(label='總樓層數', values=df['總樓層數']),
+            dict(label='小學距離', values=df_1['sku_dist']),
+            dict(label='小學人數', values=df_1['sku_109_total']),
+            dict(label='交易樓層', values=df_1['移轉層次']),
+            dict(label='總樓層數', values=df_1['總樓層數']),
 
-            dict(label='交易年度', values=df['交易年']),
-            dict(label='建物坪數', values=df['建物坪數']),
-            dict(label='經度', values=df['經度']),
-            dict(label='緯度', values=df['緯度']),
+            dict(label='交易年度', values=df_1['交易年']),
+            dict(label='建物坪數', values=df_1['建物坪數']),
+            dict(label='經度', values=df_1['經度']),
+            dict(label='緯度', values=df_1['緯度']),
 
-            dict(label='座標平均', values=df['coor_ave']),
-            dict(label='學區平均', values=df['SKU_ave']),
-            dict(label='捷運平均', values=df['MRT_ave']),
-            dict(label='行政區平均', values=df['DIST_ave']),
+            dict(label='座標平均', values=df_1['coor_ave']),
+            dict(label='學區平均', values=df_1['SKU_ave']),
+            dict(label='捷運平均', values=df_1['MRT_ave']),
+            dict(label='行政區平均', values=df_1['DIST_ave']),
         ]
 
         figs = 4
@@ -1038,12 +1041,14 @@ def fn_gen_analysis(df, latest_records, build_case):
         d3 = dimensions[2 * figs: 3 * figs]
         d4 = dimensions[3 * figs: 4 * figs]
 
+        hovertext = fn_get_hover_text(df_1)
         for d in [d1, d2, d3, d4]:
             fig = go.Figure(data=go.Splom(
                 dimensions=d + target,
                 diagonal=dict(visible=False),
+                hovertext=hovertext,
                 showupperhalf=False,
-                marker=dict(color=df['每坪單價(萬)'],
+                marker=dict(color=df_1['每坪單價(萬)'],
                             size=6,
                             colorscale='Bluered',
                             line=dict(width=0.5,
