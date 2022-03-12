@@ -1059,7 +1059,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
             dist_dft = dists.index(dist_dft)
 
-        print(dist_dft, dists)
+        # print(dist_dft, dists)
         dist = c1.selectbox('行政區', options=dists, index=dist_dft, key='dist')
         color_by = c2.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
 
