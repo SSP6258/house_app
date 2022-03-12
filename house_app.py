@@ -843,7 +843,7 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
 
     fig_sku_2 = make_subplots(rows=2, cols=2,
                               specs=[[{}, {}], [{}, {}]],
-                              subplot_titles=('鄰近小學距離(公尺) v.s.坪單價(萬)',
+                              subplot_titles=('鄰近小學距離(公尺) v.s. 每坪單價(萬)',
                                               '鄰近小學人數(人) v.s. 每坪單價(萬)'))
 
     fig_sku_2 = fn_gen_plotly_scatter(fig_sku_2, df_sort['sku_dist'], y_data, row=1, col=1, margin=margin,
