@@ -672,7 +672,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     # print(str(bc_name))
 
     # IndexError: index 0 is out of bounds for axis 0 with size 0
-    print(bc_name)
+    # print(bc_name)
     dist_of_bc = '不限' if bc_name is None or '不限' in bc_name else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
 
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
@@ -685,7 +685,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     admin_dists = len(df['鄉鎮市區'].unique())
 
     df_dist = df.copy() if dist == '不限' else df[df['鄉鎮市區'] == dist]
-    df_dist['里'] = df_dist['鄉鎮市區'] + '_' + df_dist['里']
+    df_dist.at[:, '里'] = df_dist.loc[:, '鄉鎮市區'] + '_' + df_dist.loc[:, '里']
     df_dist = pd.DataFrame(df_dist.groupby('里', as_index=True)['每坪單價(萬)'].mean())
     df_dist = df_dist[['每坪單價(萬)']].apply(lambda x: round(x, 2))
     df_dist.reset_index(inplace=True)
@@ -947,6 +947,28 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
 
 
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k'):
+    c1, c2, c3 = st.columns(3)
+    dists = ['不限'] + list(df['鄉鎮市區'].unique())
+    dist_dft = 0
+
+    if build_case is not None:
+        df_bc = df[df['建案名稱'] == build_case]
+        dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
+        dist_dft = dists.index(dist_dft)
+
+    dist = c1.selectbox('行政區', options=dists, index=dist_dft, key=f'{key}+dist')
+    df = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
+
+    build_cases = ['不限'] + list(df['建案名稱'].unique())
+    build_cases = [b for b in build_cases if str(b) != 'nan']
+    bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
+    bc = c2.selectbox(f'建案({len(build_cases)-1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
+    color_by = c3.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0, key=f'{key}+color')
+
+    return df, bc, color_by
+
+
 def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
@@ -1048,31 +1070,13 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_sku_2, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
-        # color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
-        # fn_set_radio_2_hor()
-
-        c1, c2, c3 = st.columns(3)
-        dists = ['不限']+list(df['鄉鎮市區'].unique())
-        dist_dft = 0
-        if build_case is not None:
-            df_bc = df[df['建案名稱']==build_case]
-            dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
-            dist_dft = dists.index(dist_dft)
-
-        # print(dist_dft, dists)
-        dist = c1.selectbox('行政區', options=dists, index=dist_dft, key='dist')
-        color_by = c2.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0)
-
-        df = df if dist == '不限' else df[df['鄉鎮市區']==dist]
-
-        fig_sct_3 = fn_gen_analysis_building(df, '每坪單價(萬)', color_by, bc_name=[build_case])
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records)
+        fig_sct_3 = fn_gen_analysis_building(df_sel, '每坪單價(萬)', color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sct_3, config=config)
 
     with st.expander(f'👓 檢視 物件總價 與 "建物" 指標 的關係'):
-        color_by = st.radio('著色條件:', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登錄({latest_records})'], index=0,
-                            key=1)
-        fn_set_radio_2_hor()
-        fig_sct_3 = fn_gen_analysis_building(df, '總價(萬)', color_by, bc_name=[build_case])
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='total')
+        fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sct_3, config=config)
 
 
@@ -2014,7 +2018,6 @@ def fn_gen_web_ref():
     st.write("- 鄉鎮市區界線: [政府資料開放平台 - 我國各鄉(鎮、市、區)行政區城界線圖資](https://data.gov.tw/dataset/441)")
     st.write("- 村里界圖: [政府資料開放平台 - 各縣市村(里)界](https://data.gov.tw/dataset/7438)")
     st.write("- 所得分析: [政府資料開放平台 - 綜稅所得鄉鎮村里統計分析表](https://data.gov.tw/dataset/17983)")
-
 
     st.write("")
     st.subheader('參考網站:')
