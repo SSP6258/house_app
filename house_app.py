@@ -333,17 +333,20 @@ def fn_get_hover_text(df):
     if '建物坪數' in cols:
         txt += df['建物坪數'].astype(int).astype(str) + '坪<br>'
 
-    if 'MRT DIST' in cols:
-        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺<br>'
-
     if 'MRT' in cols:
-        txt += df['MRT'].astype(str) + '<br>'
+        txt += df['MRT'].astype(str) + ', '
+
+    if 'MRT_DIST' in cols:
+        txt += df['MRT_DIST'].astype(int).astype(str) + '公尺<br>'
 
     if 'MRT_Commute_Time_UL' in cols:
         txt += '通勤' + df['MRT_Commute_Time_UL'].astype(str) + '分<br>'
 
     if 'sku_name' in cols:
-        txt += df['sku_name'].astype(str) + ' '
+        txt += df['sku_name'].astype(str) + ', '
+
+    if 'sku_dist' in cols:
+        txt += df['sku_dist'].astype(int).astype(str) + '公尺'
 
     return txt
 
@@ -677,7 +680,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
-    op = c2.slider('透明度', min_value=0.01, max_value=0.2, value=0.1)
+    op = c2.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
 
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -722,7 +725,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     del df
     hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
-                                    margin=margin, color=color_set, text=hover_text, opacity=op * 3, row=2)
+                                    margin=margin, color=color_set, text=hover_text, opacity=min(1., op * 3), row=2)
 
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=1, row=2)
