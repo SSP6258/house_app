@@ -816,12 +816,14 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
 
     y_data = df_sort['每坪單價(萬)']
 
-    hover_text = df_sort['sku_name'] + ', ' + \
-                 df_sort['鄉鎮市區'] + ', ' + \
-                 df_sort['建案名稱'].astype(str) + ', ' + \
-                 df_sort['交易年'].astype(str) + '年, ' + \
-                 df_sort['sku_dist'].astype(int).astype(str) + '公尺, ' + \
-                 df_sort['sku_109_total'].astype(int).astype(str) + '人'
+    # hover_text = df_sort['sku_name'] + ', ' + \
+    #              df_sort['鄉鎮市區'] + ', ' + \
+    #              df_sort['建案名稱'].astype(str) + ', ' + \
+    #              df_sort['交易年'].astype(str) + '年, ' + \
+    #              df_sort['sku_dist'].astype(int).astype(str) + '公尺, ' + \
+    #              df_sort['sku_109_total'].astype(int).astype(str) + '人'
+
+    hover_text = fn_get_hover_text(df_sort)
 
     fig_sku_1 = make_subplots(rows=3, cols=2,
                               specs=[[{"rowspan": 2, "colspan": 2}, None], [{}, {}], [{}, {}]],
@@ -829,13 +831,13 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort['sku_name'], y_data, row=1, col=1, margin=margin,
                                       color=color_set, text=hover_text)
 
-    hover_txt1 = df_hl['sku_name'] + ', ' + \
-                 df_hl['鄉鎮市區'] + ', ' + \
-                 df_hl['建案名稱'].astype(str) + ', ' + \
-                 df_hl['交易年'].astype(str) + '年, ' + \
-                 df_hl['sku_dist'].astype(int).astype(str) + '公尺, ' + \
-                 df_hl['sku_109_total'].astype(int).astype(str) + '人'
-
+    # hover_txt1 = df_hl['sku_name'] + ', ' + \
+    #              df_hl['鄉鎮市區'] + ', ' + \
+    #              df_hl['建案名稱'].astype(str) + ', ' + \
+    #              df_hl['交易年'].astype(str) + '年, ' + \
+    #              df_hl['sku_dist'].astype(int).astype(str) + '公尺, ' + \
+    #              df_hl['sku_109_total'].astype(int).astype(str) + '人'
+    hover_txt1 = fn_get_hover_text(df_hl)
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_hl['sku_name'], df_hl['每坪單價(萬)'], row=1, col=1, margin=margin,
                                       color='red', text=hover_txt1, opacity=1)
 
@@ -868,12 +870,13 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
 
     color_set, opacity = fn_set_color_by(color_by, df)
 
-    hover_text = df['鄉鎮市區'] + ', ' + \
-                 df['建案名稱'].astype(str) + ', ' + \
-                 df['交易年'].astype(str) + '年, ' + \
-                 df['建物坪數'].astype(int).astype(str) + '坪, ' + \
-                 df['總樓層數'].astype(int).astype(str) + '樓'
+    # hover_text = df['鄉鎮市區'] + ', ' + \
+    #              df['建案名稱'].astype(str) + ', ' + \
+    #              df['交易年'].astype(str) + '年, ' + \
+    #              df['建物坪數'].astype(int).astype(str) + '坪, ' + \
+    #              df['總樓層數'].astype(int).astype(str) + '樓'
 
+    hover_text = fn_get_hover_text(df)
     df_hl = df if bc_name is None else df[df['建案名稱'].apply(lambda x: x in bc_name)]  # <--
 
     fig_sct_3 = make_subplots(rows=2, cols=2,
@@ -883,11 +886,13 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
     fig_sct_3 = fn_gen_plotly_scatter(fig_sct_3, df['交易年'], y_data, row=1, col=1, margin=margin, color=color_set,
                                       text=hover_text, opacity=opacity)
 
-    hover_txt1 = df_hl['鄉鎮市區'] + ',' + \
-                 df_hl['建案名稱'].astype(str) + ',' + \
-                 df_hl['交易年'].astype(str) + '年,' + \
-                 df_hl['建物坪數'].astype(int).astype(str) + '坪,' + \
-                 df_hl['總樓層數'].astype(int).astype(str) + '樓'
+    # hover_txt1 = df_hl['鄉鎮市區'] + ',' + \
+    #              df_hl['建案名稱'].astype(str) + ',' + \
+    #              df_hl['交易年'].astype(str) + '年,' + \
+    #              df_hl['建物坪數'].astype(int).astype(str) + '坪,' + \
+    #              df_hl['總樓層數'].astype(int).astype(str) + '樓'
+
+    hover_txt1=fn_get_hover_text(df_hl)
 
     fig_sct_3 = fn_gen_plotly_scatter(fig_sct_3, df_hl['交易年'], df_hl[target], row=1, col=1, margin=margin, color='red',
                                       text=hover_txt1, opacity=1)
@@ -947,7 +952,7 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
 
 
-def fn_gen_analysis_sel(df, build_case, latest_records, key='k'):
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist_dft = 0
@@ -964,7 +969,8 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k'):
     build_cases = [b for b in build_cases if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
     bc = c2.selectbox(f'建案(共{len(build_cases)-1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
-    color_by = c3.selectbox('著色條件', options=['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'], index=0, key=f'{key}+color')
+    colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors==None else colors
+    color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
 
     return df, bc, color_by
 
@@ -1050,22 +1056,30 @@ def fn_gen_analysis(df, latest_records, build_case):
 
     with st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
         # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
-        fn_set_radio_2_hor()
+        # fn_set_radio_2_hor()
         fig_sct = fn_gen_analysis_admin(df, bc_name=[build_case])
         st.plotly_chart(fig_sct, config=config)
         # st.plotly_chart(fig_sct_1, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "捷運" 指標 的關係'):
-        color_by = st.radio('著色條件:', options=['無', '依捷運距離', '依通勤時間', f'依最新登錄({latest_records})'], index=0)
-        fn_set_radio_2_hor()
-        fig_sct, fig_sct_1 = fn_gen_analysis_mrt(df, color_by, bc_name=[build_case])
+        colors = ['無', '依捷運距離', '依通勤時間', f'依最新登錄({latest_records})']
+        # color_by = st.radio('著色條件:', options=colors, index=0)
+        # fn_set_radio_2_hor()
+
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='mrt',
+                                                               colors=colors)
+        fig_sct, fig_sct_1 = fn_gen_analysis_mrt(df_sel, color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sct, config=config)
         st.plotly_chart(fig_sct_1, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "小學" 指標 的關係'):
-        color_by = st.radio('著色條件:', options=['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})'], index=0)
-        fn_set_radio_2_hor()
-        fig_sku_1, fig_sku_2 = fn_gen_analysis_sku(df, color_by, bc_name=[build_case])
+        colors = ['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})']
+        # color_by = st.radio('著色條件:', options=colors, index=0)
+        # fn_set_radio_2_hor()
+
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='sku', colors=colors)
+
+        fig_sku_1, fig_sku_2 = fn_gen_analysis_sku(df_sel, color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sku_1, config=config)
         st.plotly_chart(fig_sku_2, config=config)
 
