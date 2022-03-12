@@ -466,7 +466,7 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
                 print(f'drop {df_coor.index[i]} since coor_save[{i}]={coor_save[i]}')
 
         if len(drops):
-            drop_idx=[]
+            drop_idx = []
             for d in drops:
                 drop_idx.append(df_coor.index[d])
                 print(f'drop df_coor.index[{d}] = {df_coor.index[d]}')
@@ -579,24 +579,24 @@ def fn_gen_vill(file):
                 print(f'Error {i}/{df_all.shape[0]}, {vill}, {dist}, ({lon}, {lat}), {df_all.loc[i, col]}, {addr}')
 
     if is_update:
-       if '_coor.csv' in file:
-           df_all.to_csv(file, encoding='utf_8_sig')
-       else:
-           df_all.to_csv(file, encoding='utf_8_sig', index=False)
+        if '_coor.csv' in file:
+            df_all.to_csv(file, encoding='utf_8_sig')
+        else:
+            df_all.to_csv(file, encoding='utf_8_sig', index=False)
 
-       print(f'Vill updated !')
+        print(f'Vill updated !')
 
 
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    fn_gen_raw_data(path, slp=5, is_force=True)
+    # fn_gen_raw_data(path, slp=5, is_force=True)
 
     # fn_save_building_name(path)
 
-    # file = os.path.join(path, 'output/house_all.csv')
+    file = os.path.join(path, 'output/house_all.csv')
     # file = os.path.join(dic_of_path['database'], 'House_coor.csv')
-    # fn_gen_vill(file)
+    fn_gen_vill(file)
 
 
 if __name__ == '__main__':
