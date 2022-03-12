@@ -960,7 +960,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist_dft = 0
 
-    if build_case is not None:
+    if build_case is not None and build_case != '不限':
         df_bc = df[df['建案名稱'] == build_case]
         dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
         dist_dft = dists.index(dist_dft)
