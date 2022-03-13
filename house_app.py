@@ -923,6 +923,7 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
 
 
 def fn_gen_analysis_statistic(df):
+
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
@@ -1012,7 +1013,11 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
 
-        title = '每坪單價 與 "各項指標" 的關係'
+        options = ['捷運', '小學', '建物', '均價']
+        cmp = st.radio('比較指標:', options=options, index=0)
+        fn_set_radio_2_hor()
+
+        title = f'每坪單價 與 "{cmp}" 指標 的關係'
         target = [dict(label='每坪單價', values=df_1['每坪單價(萬)'])]
 
         dimensions = [
@@ -1043,26 +1048,30 @@ def fn_gen_analysis(df, latest_records, build_case):
         d3 = dimensions[2 * figs: 3 * figs]
         d4 = dimensions[3 * figs: 4 * figs]
 
+        plots = [d1, d2, d3, d4]
+        dic_of_show = {k: plots[options.index(k)] for k in options}
+        d= dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
-        for d in [d1, d2, d3, d4]:
-            fig = go.Figure(data=go.Splom(
-                dimensions=d + target,
-                diagonal=dict(visible=False),
-                hovertext=hovertext,
-                showupperhalf=False,
-                marker=dict(color=df_1['每坪單價(萬)'],
-                            size=6,
-                            colorscale='Bluered',
-                            line=dict(width=0.5,
-                                      color='rgb(230,230,230)'))))
 
-            fig.update_layout(title=title,
-                              dragmode='select',
-                              width=800,
-                              height=800,
-                              hovermode='closest')
+        # for d in [d1, d2, d3, d4]:
+        fig = go.Figure(data=go.Splom(
+            dimensions=d + target,
+            diagonal=dict(visible=False),
+            hovertext=hovertext,
+            showupperhalf=False,
+            marker=dict(color=df_1['每坪單價(萬)'],
+                        size=6,
+                        colorscale='Bluered',
+                        line=dict(width=0.5,
+                                  color='rgb(230,230,230)'))))
 
-            st.plotly_chart(fig, config=config)
+        fig.update_layout(title=title,
+                          dragmode='select',
+                          width=800,
+                          height=800,
+                          hovermode='closest')
+
+        st.plotly_chart(fig, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
         # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
