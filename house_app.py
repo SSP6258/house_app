@@ -1050,7 +1050,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         plots = [d1, d2, d3, d4]
         dic_of_show = {k: plots[options.index(k)] for k in options}
-        d= dic_of_show[cmp]
+        d = dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
 
         # for d in [d1, d2, d3, d4]:
