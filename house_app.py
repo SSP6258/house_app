@@ -895,7 +895,7 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
     #              df_hl['建物坪數'].astype(int).astype(str) + '坪,' + \
     #              df_hl['總樓層數'].astype(int).astype(str) + '樓'
 
-    hover_txt1=fn_get_hover_text(df_hl)
+    hover_txt1 = fn_get_hover_text(df_hl)
 
     fig_sct_3 = fn_gen_plotly_scatter(fig_sct_3, df_hl['交易年'], df_hl[target], row=1, col=1, margin=margin, color='red',
                                       text=hover_txt1, opacity=1)
@@ -923,7 +923,6 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
 
 
 def fn_gen_analysis_statistic(df):
-
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
@@ -972,8 +971,8 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     build_cases = ['不限'] + list(df['建案名稱'].unique())
     build_cases = [b for b in build_cases if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
-    bc = c2.selectbox(f'建案(共{len(build_cases)-1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
-    colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors==None else colors
+    bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
+    colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
     color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
 
     return df, bc, color_by
@@ -1010,7 +1009,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar_4, config=config)
 
     with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
-
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
 
         options = ['捷運', '小學', '建物', '均價']
@@ -1096,7 +1094,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         # color_by = st.radio('著色條件:', options=colors, index=0)
         # fn_set_radio_2_hor()
 
-        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='sku', colors=colors)
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='sku',
+                                                               colors=colors)
 
         fig_sku_1, fig_sku_2 = fn_gen_analysis_sku(df_sel, color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sku_1, config=config)
@@ -1121,7 +1120,8 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                      f' 📝 登錄: {deals} 筆'
                      f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-        r = st.radio('檢視選項:', options=['樓層價差(%)', '每坪單價(萬)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'], index=0)
+        r = st.radio('檢視選項:', options=['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'],
+                     index=0)
         fn_set_radio_2_hor()
 
         dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
@@ -1131,24 +1131,22 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         if r == '樓層價差(%)':
             df_show_diff = df_show.copy()
             rows, cols = df_show_diff.shape[0], df_show_diff.shape[1]
-            for idx in range(rows-1):
+            for idx in range(rows - 1):
                 for col in range(cols):
                     son = df_show.iloc[idx, col]
-                    mom = df_show.iloc[idx+1, col]
+                    mom = df_show.iloc[idx + 1, col]
                     f = df_show.index[idx]
-                    f_1 = df_show.index[idx+1]
+                    f_1 = df_show.index[idx + 1]
                     is_f_cont = abs(int(f.split('F')[0]) - int(f_1.split('F')[0])) == 1
                     if is_f_cont and son > 0 and mom > 0:
-                        df_show_diff.at[f, df_show.columns[col]] = round(son/mom, 4) - 1
+                        df_show_diff.at[f, df_show.columns[col]] = round(son / mom, 4) - 1
 
             for col in df_show_diff:
                 df_show_diff[col] = df_show_diff[col].apply(lambda x: 0 if x > 2 else x)
 
             df_show = df_show_diff
 
-
         assert df_show is not None, f'{r} not in dic_df_show {dic_df_show.keys()}'
-        # fmt = "{:.2f}" if r in ['每坪單價(萬)', '建物坪數', '車位坪數'] else None
 
         if r in ['每坪單價(萬)', '建物坪數', '車位坪數']:
             fmt = "{:.2f}"
@@ -1160,9 +1158,9 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         df_show = df_show.astype(int) if r == '交易日期' else df_show
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
 
-        sorts=[]
+        sorts = []
         for col in df_show.columns:
-            sorts+=list(df_show[col].values)
+            sorts += list(df_show[col].values)
 
         sorts = [v for v in sorts if v > 0]
         sorts.sort()
