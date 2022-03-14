@@ -1121,15 +1121,55 @@ def fn_gen_bc_deals(build_case, dic_df_show):
                      f' 📝 登錄: {deals} 筆'
                      f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-        r = st.radio('檢視選項:', options=['每坪單價(萬)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'], index=0)
+        r = st.radio('檢視選項:', options=['樓層價差(%)', '每坪單價(萬)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'], index=0)
         fn_set_radio_2_hor()
 
+        dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
+
         df_show = dic_df_show[r] if r in dic_df_show.keys() else None
+
+        if r == '樓層價差(%)':
+            df_show_diff = df_show.copy()
+            rows, cols = df_show_diff.shape[0], df_show_diff.shape[1]
+            for idx in range(rows-1):
+                for col in range(cols):
+                    son = df_show.iloc[idx, col]
+                    mom = df_show.iloc[idx+1, col]
+                    f = df_show.index[idx]
+                    f_1 = df_show.index[idx+1]
+                    is_f_cont = abs(int(f.split('F')[0]) - int(f_1.split('F')[0])) == 1
+                    if is_f_cont and son > 0 and mom > 0:
+                        df_show_diff.at[f, df_show.columns[col]] = round(son/mom, 4) - 1
+
+            for col in df_show_diff:
+                df_show_diff[col] = df_show_diff[col].apply(lambda x: 0 if x > 2 else x)
+
+            df_show = df_show_diff
+
+
         assert df_show is not None, f'{r} not in dic_df_show {dic_df_show.keys()}'
-        fmt = "{:.2f}" if r in ['每坪單價(萬)', '建物坪數', '車位坪數'] else None
+        # fmt = "{:.2f}" if r in ['每坪單價(萬)', '建物坪數', '車位坪數'] else None
+
+        if r in ['每坪單價(萬)', '建物坪數', '車位坪數']:
+            fmt = "{:.2f}"
+        elif r in ['樓層價差(%)']:
+            fmt = "{:.1%}"
+        else:
+            None
+
         df_show = df_show.astype(int) if r == '交易日期' else df_show
-        df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color).highlight_max(axis=1, color='pink')
-        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None)
+        df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
+
+        sorts=[]
+        for col in df_show.columns:
+            sorts+=list(df_show[col].values)
+
+        sorts = [v for v in sorts if v > 0]
+        sorts.sort()
+
+        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=sorts[0])
+        df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
+
         st.dataframe(df_show_fig, width=768, height=540)
         dic_values = defaultdict(list)
         for col in df_show.columns:
