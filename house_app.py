@@ -978,6 +978,49 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     return df, bc, color_by
 
 
+def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
+    dists = list(df['鄉鎮市區'].unique())
+    dist = dists[0] if len(dists) == 1 else '台北市'
+    yr_fr, yr_to = df['交易年'].min(), df['交易年'].max()
+    r = st.radio('排序方式:', ['依銷售量', '依最早交易', '依銷售週期'], index=0)
+    margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
+    df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].min()).rename(columns={'交易年月日': '最早'})
+    df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].max()).rename(columns={'交易年月日': '最新'})
+    df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].count()).rename(columns={'交易年月日': '銷量'})
+    df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c], axis=1)
+    df_bc.reset_index(inplace=True)
+    df_bc.rename(columns={'建案名稱': '建案'}, inplace=True)
+
+    df_bc['最早'] = df_bc['最早'].apply(lambda x: str(int(str(x)[:3]) + 1911) + '-' + str(x)[3:5] + '-' + str(x)[5:])
+    df_bc['最新'] = df_bc['最新'].apply(lambda x: str(int(str(x)[:3]) + 1911) + '-' + str(x)[3:5] + '-' + str(x)[5:])
+
+    for idx in df_bc.index:
+        s = df_bc.loc[idx, '最早']
+        s_y, s_m = int(s.split('-')[0]), int(s.split('-')[1])
+        e = df_bc.loc[idx, '最新']
+        e_y, e_m = int(e.split('-')[0]), int(e.split('-')[1])
+        df_bc.at[idx, '週期'] = 12 * (e_y -s_y) + e_m - s_m + 1
+
+    if r == '依銷售量':
+        df_bc.sort_values(by='銷量', inplace=True, ascending=False)
+    elif r == '依最早交易':
+        df_bc.sort_values(by='最早', inplace=True, ascending=True)
+    elif r == '依銷售週期':
+        df_bc.sort_values(by='週期', inplace=True, ascending=False)
+
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color='銷量', hover_data=['週期'], color_continuous_scale='portland', opacity=op)
+    fig.update_yaxes(autorange="reversed")
+    fig.update_xaxes(tickformat="%Y-%m")
+    fig.update_layout(margin=margin,
+                      title={
+                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}筆 建案 的銷售分析(甘特圖)',
+                          'x': 0.5,
+                          'xanchor': 'center',
+                          'yanchor': 'top'
+                      },)
+
+    return fig
+
 def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
@@ -1026,13 +1069,13 @@ def fn_gen_analysis(df, latest_records, build_case):
 
             dict(label='小學距離', values=df_1['sku_dist']),
             dict(label='小學人數', values=df_1['sku_109_total']),
-            dict(label='交易樓層', values=df_1['移轉層次']),
-            dict(label='總樓層數', values=df_1['總樓層數']),
+            dict(label='經度', values=df_1['經度']),
+            dict(label='緯度', values=df_1['緯度']),
 
             dict(label='交易年度', values=df_1['交易年']),
             dict(label='建物坪數', values=df_1['建物坪數']),
-            dict(label='經度', values=df_1['經度']),
-            dict(label='緯度', values=df_1['緯度']),
+            dict(label='交易樓層', values=df_1['移轉層次']),
+            dict(label='總樓層數', values=df_1['總樓層數']),
 
             dict(label='座標平均', values=df_1['coor_ave']),
             dict(label='學區平均', values=df_1['SKU_ave']),
@@ -1103,13 +1146,18 @@ def fn_gen_analysis(df, latest_records, build_case):
 
     with st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records)
-        fig_sct_3 = fn_gen_analysis_building(df_sel, '每坪單價(萬)', color_by, bc_name=[build_case_sel])
-        st.plotly_chart(fig_sct_3, config=config)
+        r = st.radio('價格選項', ['每坪單價(萬)', '總價(萬)'], index=0)
+        if r == '每坪單價(萬)':
+            fig_sct_3 = fn_gen_analysis_building(df_sel, '每坪單價(萬)', color_by, bc_name=[build_case_sel])
+            st.plotly_chart(fig_sct_3, config=config)
+        elif r == '總價(萬)':
+            fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
+            st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 物件總價 與 "建物" 指標 的關係'):
-        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='total')
-        fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
-        st.plotly_chart(fig_sct_3, config=config)
+    with st.expander(f'👓 檢視 "銷售週期"'):
+        df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
+        fig_gantt = fn_gen_analysis_sale_period(df_sel)
+        st.plotly_chart(fig_gantt, config=config)
 
 
 def fn_gen_bc_deals(build_case, dic_df_show):
@@ -1153,7 +1201,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         elif r in ['樓層價差(%)']:
             fmt = "{:.1%}"
         else:
-            None
+            fmt = None
 
         df_show = df_show.astype(int) if r == '交易日期' else df_show
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
