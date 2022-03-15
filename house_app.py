@@ -1015,7 +1015,7 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
         df_bc.sort_values(by='銷售速率', inplace=True, ascending=False)
         color = '銷售速率'
 
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '週期'], color_continuous_scale='portland', opacity=op)
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期'], color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed")
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
@@ -1027,6 +1027,7 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
                       },)
 
     return fig
+
 
 def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
@@ -1160,7 +1161,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
             st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 "銷售週期"'):
+    with st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
         fig_gantt = fn_gen_analysis_sale_period(df_sel)
         st.plotly_chart(fig_gantt, config=config)
