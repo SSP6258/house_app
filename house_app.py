@@ -1094,7 +1094,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         d = dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
 
-        # for d in [d1, d2, d3, d4]:
         fig = go.Figure(data=go.Splom(
             dimensions=d + target,
             diagonal=dict(visible=False),
