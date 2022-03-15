@@ -1016,7 +1016,7 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}筆 建案 的銷售分析 (甘特圖)',
+                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}個 建案 的銷售分析 (甘特圖)',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
