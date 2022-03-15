@@ -982,7 +982,7 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
     dists = list(df['鄉鎮市區'].unique())
     dist = dists[0] if len(dists) == 1 else '台北市'
     yr_fr, yr_to = df['交易年'].min(), df['交易年'].max()
-    r = st.radio('排序方式:', ['依銷售量', '依最早交易', '依銷售週期'], index=0)
+    r = st.radio('排序方式:', ['依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)', '依最早交易'], index=0)
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
     df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].min()).rename(columns={'交易年月日': '最早'})
     df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].max()).rename(columns={'交易年月日': '最新'})
@@ -1000,20 +1000,23 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
         e = df_bc.loc[idx, '最新']
         e_y, e_m = int(e.split('-')[0]), int(e.split('-')[1])
         df_bc.at[idx, '週期'] = 12 * (e_y -s_y) + e_m - s_m + 1
+        df_bc.at[idx, '銷售速率'] = round(df_bc.at[idx, '銷量'] / df_bc.at[idx, '週期'], 1)
 
     if r == '依銷售量':
         df_bc.sort_values(by='銷量', inplace=True, ascending=False)
     elif r == '依最早交易':
         df_bc.sort_values(by='最早', inplace=True, ascending=True)
-    elif r == '依銷售週期':
+    elif r == '依銷售週期(月)':
         df_bc.sort_values(by='週期', inplace=True, ascending=False)
+    elif r == '依銷售速率(銷量/月)':
+        df_bc.sort_values(by='銷售速率', inplace=True, ascending=False)
 
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color='銷量', hover_data=['週期'], color_continuous_scale='portland', opacity=op)
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color='銷量', hover_data=['銷售速率', '週期'], color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed")
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}筆 建案 的銷售分析(甘特圖)',
+                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}筆 建案 的銷售分析 (甘特圖)',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
