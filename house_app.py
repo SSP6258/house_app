@@ -1004,14 +1004,18 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
 
     if r == '依銷售量':
         df_bc.sort_values(by='銷量', inplace=True, ascending=False)
+        color = '銷量'
     elif r == '依最早交易':
         df_bc.sort_values(by='最早', inplace=True, ascending=True)
+        color = '銷量'
     elif r == '依銷售週期(月)':
         df_bc.sort_values(by='週期', inplace=True, ascending=False)
+        color = '銷量'
     elif r == '依銷售速率(銷量/月)':
         df_bc.sort_values(by='銷售速率', inplace=True, ascending=False)
+        color = '銷售速率'
 
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color='銷量', hover_data=['銷售速率', '週期'], color_continuous_scale='portland', opacity=op)
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '週期'], color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed")
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
