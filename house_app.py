@@ -985,12 +985,15 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     dists = list(df['鄉鎮市區'].unique())
     dist = dists[0] if len(dists) == 1 else '台北市'
 
-    r = st.radio('排序方式:', ['依最早交易', '依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)'], index=0)
+    r = st.radio('排序方式:', ['依最早交易', '依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)', '依銷售總額'], index=0)
 
     df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].min()).rename(columns={'date': '最早'})
     df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].max()).rename(columns={'date': '最新'})
     df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].count()).rename(columns={'date': '銷量'})
-    df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c], axis=1)
+    df_bc_t = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['總價(萬)'].sum()).rename(columns={'總價(萬)': '總額(億)'})
+    df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c, df_bc_t], axis=1)
+    df_bc['總額(億)'] = df_bc['總額(億)'].apply(lambda x: round(x/10000, 2))
+
     df_bc.reset_index(inplace=True)
     df_bc.rename(columns={'建案名稱': '建案'}, inplace=True)
 
@@ -1026,11 +1029,14 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     elif r == '依銷售速率(銷量/月)':
         df_bc.sort_values(by='銷售速率', inplace=True, ascending=False)
         color = '銷售速率'
+    elif r == '依銷售總額':
+        df_bc.sort_values(by='總額(億)', inplace=True, ascending=False)
+        color = '總額(億)'
     else:
         color = None
 
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期'],
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期', '總額(億)'],
                       color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed", title={'text': ''})
     fig.update_xaxes(tickformat="%Y-%m")
@@ -1188,7 +1194,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
             st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 "銷售週期分析"'):
+    with st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
         fig_gantt = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
