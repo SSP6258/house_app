@@ -1000,7 +1000,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     fr_dft = fr if bc == '不限' else df_bc[df_bc['建案'] == bc]['最早'].values[0]
     to_dft = to if bc == '不限' else df_bc[df_bc['建案'] == bc]['最新'].values[0]
 
-    with st.form(key='sale'):
+    with st.form(key='sale1'):
         period = st.slider('選擇 觀察週期 (西元 年-月)', min_value=fr, max_value=to, value=(fr_dft, to_dft),
                            step=datetime.timedelta(days=31), format='YY-MM')
         submitted = st.form_submit_button('設定')
