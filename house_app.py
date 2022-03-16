@@ -1034,6 +1034,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     else:
         color = None
 
+    total = int(round(df_bc['總額(億)'].sum(), 0))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
     fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期', '總額(億)'],
                       color_continuous_scale='portland', opacity=op)
@@ -1041,7 +1042,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{fr_dft.year}年 ~ {to_dft.year}年 {dist} {df_bc.shape[0]}個 建案 的銷售分析 (甘特圖)',
+                          'text': f'甘特圖: {fr_dft.year}~{to_dft.year} {dist} {df_bc.shape[0]}個建案 銷售總額{total}億',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
