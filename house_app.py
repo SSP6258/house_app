@@ -1188,7 +1188,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
             st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 "銷售分析"'):
+    with st.expander(f'👓 檢視 "銷售週期分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
         fig_gantt = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
