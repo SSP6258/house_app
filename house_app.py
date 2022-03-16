@@ -985,7 +985,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     dists = list(df['鄉鎮市區'].unique())
     dist = dists[0] if len(dists) == 1 else '台北市'
 
-    r = st.radio('排序方式:', ['依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)', '依最早交易'], index=0)
+    r = st.radio('排序方式:', ['依最早交易', '依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)'], index=0)
 
     df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].min()).rename(columns={'date': '最早'})
     df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].max()).rename(columns={'date': '最新'})
