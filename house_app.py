@@ -981,7 +981,6 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
 def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     df['date'] = df['交易年月日'].apply(lambda x: str(int(x) + 19110000))
     df['date'] = pd.to_datetime(df['date'], format='%Y%m%d').dt.date
-
     dists = list(df['鄉鎮市區'].unique())
     dist = dists[0] if len(dists) == 1 else '台北市'
 
