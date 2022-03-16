@@ -978,28 +978,40 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     return df, bc, color_by
 
 
-def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
+def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
+    df['date'] = df['交易年月日'].apply(lambda x: str(int(x) + 19110000))
+    df['date'] = pd.to_datetime(df['date'], format='%Y%m%d').dt.date
+
     dists = list(df['鄉鎮市區'].unique())
     dist = dists[0] if len(dists) == 1 else '台北市'
-    yr_fr, yr_to = df['交易年'].min(), df['交易年'].max()
+
     r = st.radio('排序方式:', ['依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)', '依最早交易'], index=0)
-    margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
-    df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].min()).rename(columns={'交易年月日': '最早'})
-    df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].max()).rename(columns={'交易年月日': '最新'})
-    df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['交易年月日'].count()).rename(columns={'交易年月日': '銷量'})
+
+    df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].min()).rename(columns={'date': '最早'})
+    df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].max()).rename(columns={'date': '最新'})
+    df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].count()).rename(columns={'date': '銷量'})
     df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c], axis=1)
     df_bc.reset_index(inplace=True)
     df_bc.rename(columns={'建案名稱': '建案'}, inplace=True)
 
-    df_bc['最早'] = df_bc['最早'].apply(lambda x: str(int(str(x)[:3]) + 1911) + '-' + str(x)[3:5] + '-' + str(x)[5:])
-    df_bc['最新'] = df_bc['最新'].apply(lambda x: str(int(str(x)[:3]) + 1911) + '-' + str(x)[3:5] + '-' + str(x)[5:])
+    fr, to = df['date'].min(), df['date'].max()
+    fr_dft = fr if bc == '不限' else df_bc[df_bc['建案'] == bc]['最早'].values[0]
+    to_dft = to if bc == '不限' else df_bc[df_bc['建案'] == bc]['最新'].values[0]
+
+    with st.form(key='sale'):
+        period = st.slider('週期選擇 (西元 年-月)', min_value=fr, max_value=to, value=(fr_dft, to_dft),
+                           step=datetime.timedelta(days=31), format='YY-MM')
+        submitted = st.form_submit_button('設定')
+        if submitted:
+            fr_dft, to_dft = period[0], period[1]
+
+    df_bc = df_bc[df_bc['最新'] > fr_dft]
+    df_bc = df_bc[df_bc['最早'] < to_dft]
 
     for idx in df_bc.index:
         s = df_bc.loc[idx, '最早']
-        s_y, s_m = int(s.split('-')[0]), int(s.split('-')[1])
         e = df_bc.loc[idx, '最新']
-        e_y, e_m = int(e.split('-')[0]), int(e.split('-')[1])
-        df_bc.at[idx, '週期'] = 12 * (e_y -s_y) + e_m - s_m + 1
+        df_bc.at[idx, '週期'] = 12 * (e.year - s.year) + e.month - s.month + 1
         df_bc.at[idx, '銷售速率'] = round(df_bc.at[idx, '銷量'] / df_bc.at[idx, '週期'], 1)
 
     if r == '依銷售量':
@@ -1014,17 +1026,32 @@ def fn_gen_analysis_sale_period(df, margin=None, op=0.8):
     elif r == '依銷售速率(銷量/月)':
         df_bc.sort_values(by='銷售速率', inplace=True, ascending=False)
         color = '銷售速率'
+    else:
+        color = None
 
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期'], color_continuous_scale='portland', opacity=op)
-    fig.update_yaxes(autorange="reversed")
+    margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期'],
+                      color_continuous_scale='portland', opacity=op)
+    fig.update_yaxes(autorange="reversed", title={'text': ''})
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{yr_fr}年 ~ {yr_to}年 {dist} {df_bc.shape[0]}個 建案 的銷售分析 (甘特圖)',
+                          'text': f'{fr_dft.year}年 ~ {to_dft.year}年 {dist} {df_bc.shape[0]}個 建案 的銷售分析 (甘特圖)',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
-                      },)
+                      }, )
+
+    today = datetime.date.today()
+    fig.add_trace(
+        go.Scatter(
+            x= [today, today],
+            y=[df_bc.iloc[0, 0], df_bc.iloc[-1, 0]],
+            mode='lines',
+            line=go.scatter.Line(color='lightgreen', width=10),
+            showlegend=False
+        )
+    )
 
     return fig
 
@@ -1163,7 +1190,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
     with st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
-        fig_gantt = fn_gen_analysis_sale_period(df_sel)
+        fig_gantt = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
 
 
