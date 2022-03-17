@@ -990,7 +990,10 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].max()).rename(columns={'date': '最新'})
     df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].count()).rename(columns={'date': '銷量'})
     df_bc_t = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['總價(萬)'].sum()).rename(columns={'總價(萬)': '總額(億)'})
-    df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c, df_bc_t], axis=1)
+    df_bc_d = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['鄉鎮市區'].min()).rename(columns={'鄉鎮市區': '行政區'})
+    df_bc_v = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['里'].min())
+
+    df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c, df_bc_t, df_bc_d, df_bc_v], axis=1)
     df_bc['總額(億)'] = df_bc['總額(億)'].apply(lambda x: round(x / 10000, 2))
 
     df_bc.reset_index(inplace=True)
@@ -1036,13 +1039,13 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 
     total = int(round(df_bc['總額(億)'].sum(), 0))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期', '總額(億)'],
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期', '總額(億)', '行政區', '里'],
                       color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed", title={'text': ''})
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'甘特圖: {fr_dft.year}~{to_dft.year} {dist} {df_bc.shape[0]}個建案 銷售總額{total}億',
+                          'text': f'{fr_dft.year}~{to_dft.year} {dist} {df_bc.shape[0]}個建案 銷售總額{total}億',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
@@ -1055,7 +1058,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
             y=[df_bc.iloc[0, 0], df_bc.iloc[-1, 0]],
             mode='lines',
             line=go.scatter.Line(color='lightgreen', width=10),
-            showlegend=False
+            showlegend=False,
         )
     )
 
@@ -1360,7 +1363,7 @@ def fn_gen_web_eda(df):
     To = str(df_sel['交易年月日'].iloc[0])
     To = To[0:-4] + '年' + To[-4].replace('0', '') + To[-3] + '月'
 
-    From_To = f'{From} 至 {To} 有{len(df_sel)}筆交易'
+    From_To = f'{From} ~ {To}, 有 {len(df_sel)} 筆交易'
     ave = round(df_sel['每坪單價(萬)'].mean(), 0)
 
     # df_bc = pd.DataFrame()
@@ -1519,8 +1522,8 @@ def fn_gen_web_eda(df):
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
     st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
-    st.subheader(From_To)
-    st.subheader(f'均價 {int(ave)} 萬/坪,  銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
+    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
+    st.subheader(f'均價 {int(ave)} 萬/坪')
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue')
