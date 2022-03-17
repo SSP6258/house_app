@@ -991,7 +991,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     df_bc_c = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].count()).rename(columns={'date': '銷量'})
     df_bc_t = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['總價(萬)'].sum()).rename(columns={'總價(萬)': '總額(億)'})
     df_bc = pd.concat([df_bc_s, df_bc_e, df_bc_c, df_bc_t], axis=1)
-    df_bc['總額(億)'] = df_bc['總額(億)'].apply(lambda x: round(x/10000, 2))
+    df_bc['總額(億)'] = df_bc['總額(億)'].apply(lambda x: round(x / 10000, 2))
 
     df_bc.reset_index(inplace=True)
     df_bc.rename(columns={'建案名稱': '建案'}, inplace=True)
@@ -1051,7 +1051,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     today = datetime.date.today()
     fig.add_trace(
         go.Scatter(
-            x= [today, today],
+            x=[today, today],
             y=[df_bc.iloc[0, 0], df_bc.iloc[-1, 0]],
             mode='lines',
             line=go.scatter.Line(color='lightgreen', width=10),
@@ -1516,10 +1516,11 @@ def fn_gen_web_eda(df):
     fn_gen_analysis(df, latest_records, build_case)
 
     st.write('')
-    period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
+    period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
+             int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
     st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
     st.subheader(From_To)
-    st.subheader(f'均價 {int(ave)} 萬/坪,  銷售速率 {round(len(df_sel)/period, 2)} 筆/月')
+    st.subheader(f'均價 {int(ave)} 萬/坪,  銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue')
