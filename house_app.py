@@ -985,6 +985,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     dist = dists[0] if len(dists) == 1 else '台北市'
 
     r = st.radio('排序方式:', ['依最早交易', '依銷售量', '依銷售速率(銷量/月)', '依銷售週期(月)', '依銷售總額'], index=0)
+    fn_set_radio_2_hor()
 
     df_bc_s = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].min()).rename(columns={'date': '最早'})
     df_bc_e = pd.DataFrame(df.groupby(['建案名稱'], as_index=True)['date'].max()).rename(columns={'date': '最新'})
@@ -1010,8 +1011,8 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
         if submitted:
             fr_dft, to_dft = period[0], period[1]
 
-    df_bc = df_bc[df_bc['最新'] > fr_dft]
-    df_bc = df_bc[df_bc['最早'] < to_dft]
+    df_bc = df_bc[df_bc['最新'] >= fr_dft]
+    df_bc = df_bc[df_bc['最早'] <= to_dft]
 
     for idx in df_bc.index:
         s = df_bc.loc[idx, '最早']
@@ -1045,7 +1046,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{fr_dft.year}~{to_dft.year} {dist} {df_bc.shape[0]}個建案 銷售總額{total}億',
+                          'text': f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month} {dist} {df_bc.shape[0]}個建案',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
@@ -1062,7 +1063,34 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
         )
     )
 
-    return fig
+    df = df[df['date'] >= fr_dft]
+    df = df[df['date'] <= to_dft]
+
+    df['Y_M'] = df['date'].apply(lambda x: datetime.date(x.year, x.month, 1))
+
+    df_ym = pd.DataFrame(df.groupby(['Y_M'], as_index=False)['總價(萬)'].sum())
+    df_ym['總價(億)'] = df_ym['總價(萬)'].apply(lambda x: round(x/10000, 1))
+
+    df_area = pd.DataFrame(df.groupby(['Y_M'], as_index=False)['建物坪數'].sum())
+    df_area['銷售面積(百坪)'] = df_area['建物坪數'].apply(lambda x: round(x / 100, 1))
+
+    df_area['均價'] = df_ym['總價(萬)'] / df_area['建物坪數']
+    df_area['均價'] = df_area['均價'] .apply(lambda x: round(x, 2))
+
+    fig_bar = go.Figure(data=[
+        go.Bar(x=df_ym['Y_M'], y=df_ym['總價(億)'], name='銷售總額(億)'),
+        go.Line(x=df_area['Y_M'], y=df_area['銷售面積(百坪)'], name='銷售面積(百坪)', mode='lines+markers'),
+        go.Line(x=df_area['Y_M'], y=df_area['均價'], name='均價(萬/坪)', mode='lines+markers'),
+    ])
+
+    price_all = int(df_ym['總價(億)'].sum())
+    fig_bar.update_layout(title_text=f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month} {dist} {df_bc.shape[0]}個建案 銷售總額{price_all}億',
+                          title_x=0.5,
+                          margin=dict(l=100, r=10, t=30, b=40))
+
+    fig_bar.update_xaxes(tickformat="%Y-%m")
+
+    return fig, fig_bar
 
 
 def fn_gen_analysis(df, latest_records, build_case):
@@ -1199,8 +1227,10 @@ def fn_gen_analysis(df, latest_records, build_case):
 
     with st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
-        fig_gantt = fn_gen_analysis_sale_period(df_sel, build_case_sel)
+        fig_gantt, fig_bar = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
+        st.write('')
+        st.plotly_chart(fig_bar, config=config)
 
 
 def fn_gen_bc_deals(build_case, dic_df_show):
