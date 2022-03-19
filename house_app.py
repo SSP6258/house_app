@@ -1542,7 +1542,6 @@ def fn_gen_web_eda(df):
         cities = cities + c + ' '
 
     # rendering web view
-
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析 (更新至: {To})')
     st.plotly_chart(fig_map_all)
     st.write('')
