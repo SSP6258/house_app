@@ -1496,8 +1496,9 @@ def fn_gen_web_eda(df):
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
-    cols = st.sidebar.multiselect('欄位選擇', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數', '車位坪數',
-                                                                   '車位類別', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
+    cols = st.sidebar.multiselect('欄位選擇', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數',
+                                                                   '每坪單價(萬)', '總價(萬)', '車位坪數',
+                                                                   '車位類別', '車位單價(萬)',
                                                                    '交易年月日', '地址'])
 
     df_cols = df_sel[cols]
@@ -1508,16 +1509,16 @@ def fn_gen_web_eda(df):
         w = max((*w, len(col)))
         width.append(w)
 
-    fig_tbl = go.Figure(data=[
-        go.Table(columnwidth=width,
-                 header=dict(values=list(df_cols.columns),
-                             align='center',
-                             font_size=14),
-                 cells=dict(values=[df_cols[[col]] for col in df_cols.columns],
-                            align='center',
-                            font_size=14)
-                 )])
-    fig_tbl.update_layout(margin=dict(t=2, b=2, l=1, r=1))
+    # fig_tbl = go.Figure(data=[
+    #     go.Table(columnwidth=width,
+    #              header=dict(values=list(df_cols.columns),
+    #                          align='center',
+    #                          font_size=14),
+    #              cells=dict(values=[df_cols[[col]] for col in df_cols.columns],
+    #                         align='center',
+    #                         font_size=14)
+    #              )])
+    # fig_tbl.update_layout(margin=dict(t=2, b=2, l=1, r=1))
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
     # city = df['土地位置建物門牌'].apply(lambda x:x.split('市')+'市')
