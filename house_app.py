@@ -669,6 +669,21 @@ def fn_gen_df_color(val):
     return f'background-color: fcolor]'
 
 
+def fn_add_date_line(fig, df, date, mode='lines', width=10, color='lightgreen', dash=None, op=None):
+
+    fig.add_trace(
+        go.Scatter(
+            x=[date, date],
+            y=[df.iloc[0, 0], df.iloc[-1, 0]],
+            mode=mode,
+            line=go.scatter.Line(color=color, width=width, dash=dash),
+            showlegend=False,
+            opacity=op,
+        )
+    )
+    return fig
+
+
 def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2 = st.columns(2)
@@ -1038,30 +1053,26 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     else:
         color = None
 
-    # total = int(round(df_bc['總額(億)'].sum(), 0))
+    title = f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month}, ' \
+            f'{12*(to_dft.year-fr_dft.year)+(to_dft.month-fr_dft.month+1)}個月 {dist} {df_bc.shape[0]}個建案'
+
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
-    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color, hover_data=['銷售速率', '銷量', '週期', '總額(億)', '行政區', '里'],
+    fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color,
+                      hover_data=['銷售速率', '銷量', '週期', '總額(億)', '行政區', '里'],
                       color_continuous_scale='portland', opacity=op)
     fig.update_yaxes(autorange="reversed", title={'text': ''})
     fig.update_xaxes(tickformat="%Y-%m")
     fig.update_layout(margin=margin,
                       title={
-                          'text': f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month} {dist} {df_bc.shape[0]}個建案',
+                          'text': f'{title}',
                           'x': 0.5,
                           'xanchor': 'center',
                           'yanchor': 'top'
                       }, )
 
-    today = datetime.date.today()
-    fig.add_trace(
-        go.Scatter(
-            x=[today, today],
-            y=[df_bc.iloc[0, 0], df_bc.iloc[-1, 0]],
-            mode='lines',
-            line=go.scatter.Line(color='lightgreen', width=10),
-            showlegend=False,
-        )
-    )
+    fig = fn_add_date_line(fig, df_bc, datetime.date.today())
+    fig = fn_add_date_line(fig, df_bc, fr_dft, dash='dot', color='orangered', width=3, op=0.5)
+    fig = fn_add_date_line(fig, df_bc, to_dft, dash='dot', color='orangered', width=3, op=0.5)
 
     df = df[df['date'] >= fr_dft]
     df = df[df['date'] <= to_dft]
@@ -1084,7 +1095,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     ])
 
     price_all = int(df_ym['總價(億)'].sum())
-    fig_bar.update_layout(title_text=f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month} {dist} {df_bc.shape[0]}個建案 銷售總額{price_all}億',
+    fig_bar.update_layout(title_text=f'{title} 銷售總額{price_all}億',
                           title_x=0.5,
                           margin=dict(l=100, r=10, t=30, b=40))
 
