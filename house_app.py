@@ -2233,7 +2233,7 @@ def fn_gen_web_ref():
         "- 房價預測網站: [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)")
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
-    st.write("- 房價指數: [臺北市地政局 房市指標溫度計](https://emuseum.land.gov.taipei/TaipeiLandRealEstate/)")
+    st.write("- 房價指標: [臺北市地政局 房市指標溫度計](https://emuseum.land.gov.taipei/TaipeiLandRealEstate/)")
 
     st.write('')
     st.subheader('相關競賽:')
