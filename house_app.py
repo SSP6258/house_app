@@ -670,7 +670,6 @@ def fn_gen_df_color(val):
 
 
 def fn_add_date_line(fig, df, date, mode='lines', width=10, color='lightgreen', dash=None, op=None):
-
     fig.add_trace(
         go.Scatter(
             x=[date, date],
@@ -1054,7 +1053,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
         color = None
 
     title = f'{fr_dft.year}.{fr_dft.month}~{to_dft.year}.{to_dft.month}, ' \
-            f'{12*(to_dft.year-fr_dft.year)+(to_dft.month-fr_dft.month+1)}個月 {dist} {df_bc.shape[0]}個建案'
+            f'{12 * (to_dft.year - fr_dft.year) + (to_dft.month - fr_dft.month + 1)}個月 {dist} {df_bc.shape[0]}個建案'
 
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
     fig = px.timeline(df_bc, x_start='最早', x_end='最新', y='建案', color=color,
@@ -1080,16 +1079,16 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     df['Y_M'] = df['date'].apply(lambda x: datetime.date(x.year, x.month, 1))
 
     df_ym = pd.DataFrame(df.groupby(['Y_M'], as_index=False)['總價(萬)'].sum())
-    df_ym['總價(億)'] = df_ym['總價(萬)'].apply(lambda x: round(x/10000, 1))
+    df_ym['總價(億)'] = df_ym['總價(萬)'].apply(lambda x: round(x / 10000, 1))
 
     df_area = pd.DataFrame(df.groupby(['Y_M'], as_index=False)['建物坪數'].sum())
     df_area['銷售面積(百坪)'] = df_area['建物坪數'].apply(lambda x: round(x / 100, 1))
 
     df_area['均價'] = df_ym['總價(萬)'] / df_area['建物坪數']
-    df_area['均價'] = df_area['均價'] .apply(lambda x: round(x, 2))
+    df_area['均價'] = df_area['均價'].apply(lambda x: round(x, 2))
 
     fig_bar = go.Figure(data=[
-        go.Bar(x=df_ym['Y_M'], y=df_ym['總價(億)'], name='銷售總額(億)'),
+        go.Bar(x=df_ym['Y_M'], y=df_ym['總價(億)'], name='銷售總額(億)', opacity=op),
         go.Line(x=df_area['Y_M'], y=df_area['銷售面積(百坪)'], name='銷售面積(百坪)', mode='lines+markers'),
         go.Line(x=df_area['Y_M'], y=df_area['均價'], name='均價(萬/坪)', mode='lines+markers'),
     ])
@@ -1533,12 +1532,27 @@ def fn_gen_web_eda(df):
     df = df.sort_values(by=['交易年月日'])
 
     # df_bc_cnt = pd.DataFrame(df.groupby('建案名稱', as_index=True)['建案名稱'].count())
-    df_bc_cnt = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count())
-    for i in df.index:
-        bc = df.loc[i, '地址']
-        df.at[i, '交易量'] = 1 if str(bc) == 'nan' else df_bc_cnt.loc[bc, '地址']
+    df_bc_1 = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count()).rename(columns={'地址': '交易量'})
+    df_bc_2 = pd.DataFrame(df.groupby('地址', as_index=True)['MRT'].nth(1))
+    df_bc_3 = pd.DataFrame(df.groupby('地址', as_index=True)['建案名稱'].nth(1))
+    df_bc_4 = pd.DataFrame(df.groupby('地址', as_index=True)['交易年月日'].nth(-1))
+    df_bc_5 = pd.DataFrame(df.groupby('地址', as_index=True)['經度'].nth(1))
+    df_bc_6 = pd.DataFrame(df.groupby('地址', as_index=True)['緯度'].nth(1))
+    df_bc_7 = pd.DataFrame(df.groupby('地址', as_index=True)['每坪單價(萬)'].mean())
 
-    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.03, size='交易量')
+    df_bc_cnt = pd.concat([df_bc_1, df_bc_2, df_bc_3, df_bc_4, df_bc_5, df_bc_6, df_bc_7], axis=1)
+    df_bc_cnt['每坪單價(萬)'] = df_bc_cnt['每坪單價(萬)'].apply(lambda x: round(x, 2))
+
+
+    # for i in df.index:
+    #     bc = df.loc[i, '地址']
+    #     df.at[i, '交易量'] = 1 if str(bc) == 'nan' else df_bc_cnt.loc[bc, '地址']
+
+    # fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.03,
+    #                                 size='交易量')
+
+    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
+                                    size=df_bc_cnt['交易量'])
 
     latest_rel = '0311'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
