@@ -1543,14 +1543,6 @@ def fn_gen_web_eda(df):
     df_bc_cnt = pd.concat([df_bc_1, df_bc_2, df_bc_3, df_bc_4, df_bc_5, df_bc_6, df_bc_7], axis=1)
     df_bc_cnt['每坪單價(萬)'] = df_bc_cnt['每坪單價(萬)'].apply(lambda x: round(x, 2))
 
-
-    # for i in df.index:
-    #     bc = df.loc[i, '地址']
-    #     df.at[i, '交易量'] = 1 if str(bc) == 'nan' else df_bc_cnt.loc[bc, '地址']
-
-    # fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.03,
-    #                                 size='交易量')
-
     fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
                                     size=df_bc_cnt['交易量'])
 
