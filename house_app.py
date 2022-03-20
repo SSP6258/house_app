@@ -1525,9 +1525,8 @@ def fn_gen_web_eda(df):
 
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
     title = f'{period}: {df.shape[0]} 筆 {house_typ} 實價登錄資料'
-    hover_name = '交易年月日'
-    hover_data = ["MRT", "建案名稱"]
-    color = '每坪單價(萬)'
+
+
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
 
@@ -1535,13 +1534,17 @@ def fn_gen_web_eda(df):
     df_bc_1 = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count()).rename(columns={'地址': '交易量'})
     df_bc_2 = pd.DataFrame(df.groupby('地址', as_index=True)['MRT'].nth(1))
     df_bc_3 = pd.DataFrame(df.groupby('地址', as_index=True)['建案名稱'].nth(1))
-    df_bc_4 = pd.DataFrame(df.groupby('地址', as_index=True)['交易年月日'].nth(-1))
+    df_bc_4 = pd.DataFrame(df.groupby('地址', as_index=True)['交易年月日'].nth(-1)).rename(columns={'交易年月日': '最新登錄'})
     df_bc_5 = pd.DataFrame(df.groupby('地址', as_index=True)['經度'].nth(1))
     df_bc_6 = pd.DataFrame(df.groupby('地址', as_index=True)['緯度'].nth(1))
     df_bc_7 = pd.DataFrame(df.groupby('地址', as_index=True)['每坪單價(萬)'].mean())
 
     df_bc_cnt = pd.concat([df_bc_1, df_bc_2, df_bc_3, df_bc_4, df_bc_5, df_bc_6, df_bc_7], axis=1)
-    df_bc_cnt['每坪單價(萬)'] = df_bc_cnt['每坪單價(萬)'].apply(lambda x: round(x, 2))
+    df_bc_cnt['每坪均價(萬)'] = df_bc_cnt['每坪單價(萬)'].apply(lambda x: round(x, 2))
+
+    hover_name = "建案名稱"
+    hover_data = ["MRT", '最新登錄']
+    color = '每坪均價(萬)'
 
     fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
                                     size=df_bc_cnt['交易量'])
