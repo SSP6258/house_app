@@ -1535,10 +1535,10 @@ def fn_gen_web_eda(df):
     df_bc_4 = pd.DataFrame(df.groupby('地址', as_index=True)['交易年月日'].nth(-1)).rename(columns={'交易年月日': '最新登錄'})
     df_bc_5 = pd.DataFrame(df.groupby('地址', as_index=True)['經度'].nth(1))
     df_bc_6 = pd.DataFrame(df.groupby('地址', as_index=True)['緯度'].nth(1))
-    df_bc_7 = pd.DataFrame(df.groupby('地址', as_index=True)['每坪單價(萬)'].mean())
+    df_bc_7 = pd.DataFrame(df.groupby('地址', as_index=True)['每坪單價(萬)'].mean()).rename(columns={'每坪單價(萬)': '每坪均價(萬)'})
 
     df_bc_cnt = pd.concat([df_bc_1, df_bc_2, df_bc_3, df_bc_4, df_bc_5, df_bc_6, df_bc_7], axis=1)
-    df_bc_cnt['每坪均價(萬)'] = df_bc_cnt['每坪單價(萬)'].apply(lambda x: round(x, 2))
+    df_bc_cnt['每坪均價(萬)'] = df_bc_cnt['每坪均價(萬)'].apply(lambda x: round(x, 2))
 
     hover_name = "建案名稱"
     hover_data = ["MRT", '最新登錄']
