@@ -1526,11 +1526,9 @@ def fn_gen_web_eda(df):
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
     title = f'{period}: {df.shape[0]} 筆 {house_typ} 實價登錄資料'
 
-
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
 
-    # df_bc_cnt = pd.DataFrame(df.groupby('建案名稱', as_index=True)['建案名稱'].count())
     df_bc_1 = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count()).rename(columns={'地址': '交易量'})
     df_bc_2 = pd.DataFrame(df.groupby('地址', as_index=True)['MRT'].nth(1))
     df_bc_3 = pd.DataFrame(df.groupby('地址', as_index=True)['建案名稱'].nth(1))
