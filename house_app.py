@@ -1547,7 +1547,7 @@ def fn_gen_web_eda(df):
     color = '每坪均價(萬)'
 
     fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
-                                    size=df_bc_cnt['交易量'])
+                                    size='交易量')
 
     latest_rel = '0311'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
