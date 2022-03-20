@@ -590,7 +590,7 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
 
 
 def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
-                      color=None, zoom=10, height=400, text=None, margin=None, op=None):
+                      color=None, zoom=10, height=400, text=None, margin=None, op=None, size=None):
     margin = {"r": 0, "t": 40, "l": 0, "b": 0} if margin is None else margin
 
     lat, lon = 'na', 'na'
@@ -615,7 +615,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             color_continuous_scale='portland',  # jet
                             # color_continuous_midpoint=color_mid,
                             zoom=zoom, height=height, color=color,
-                            text=text, opacity=op)
+                            text=text, opacity=op, size=size)
 
     fig.update_layout(mapbox_style=map_style, margin=margin)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
@@ -1531,7 +1531,14 @@ def fn_gen_web_eda(df):
     color = '每坪單價(萬)'
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
-    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=1)
+
+    # df_bc_cnt = pd.DataFrame(df.groupby('建案名稱', as_index=True)['建案名稱'].count())
+    df_bc_cnt = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count())
+    for i in df.index:
+        bc = df.loc[i, '地址']
+        df.at[i, '交易量'] = 1 if str(bc) == 'nan' else df_bc_cnt.loc[bc, '地址']
+
+    fig_map_all = fn_gen_plotly_map(df, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.03, size='交易量')
 
     latest_rel = '0311'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
