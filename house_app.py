@@ -2003,14 +2003,14 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     if df_top.shape[0] > 0:
 
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                    color_col=color_col, text_fmt=text_fmt, op=0.7)
+                                    color_col=color_col, text_fmt=text_fmt, op=0.8)
 
         c1, c2, c3 = st.columns(3)
         c2.markdown(f'{"#" * 5} 區域均價 對 房價 的影響')
         st.plotly_chart(fig_top)
 
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.7)
+                                color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8)
     c1, c2, c3 = st.columns(3)
     c2.markdown(f'{"#" * 5} 各項指標 對 房價 的影響')
     st.plotly_chart(fig_bot)
