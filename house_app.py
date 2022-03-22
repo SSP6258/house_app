@@ -213,6 +213,7 @@ def fn_get_house_data(path):
                 print(f'Append {df_ownd.shape[0]} data from pre_ownd to {read_typ} and total is {df.shape[0]}')
 
     df.drop_duplicates(subset=['地址', '交易年月日', '總樓層數', '移轉層次', '每坪單價(萬)', '建物移轉坪數', '總價(萬)', '車位總價(萬)', '戶別'],
+                       keep="first",
                        inplace=True)
     df.reset_index(drop=True, inplace=True)
     print(f'Read {read_typ} data from {path} !!!')
@@ -277,7 +278,11 @@ def fn_get_sku_people_by_year(df):
 def fn_get_interest_rate(df, months=1):
     path = dic_of_path['database']
     file = os.path.join(path, 'a13rate.csv')
-    df['交易年月日'] = df['交易年'] * 10000 + 900 if '交易年月日' not in df.columns else df['交易年月日']
+
+    last_month = datetime.date.today().month-1
+    sel_yr = df['交易年'].values[0] - 1 if last_month == 12 else df['交易年'].values[0]
+
+    df['交易年月日'] = sel_yr * 10000 + int(last_month) * 100 if '交易年月日' not in df.columns else df['交易年月日']
 
     df_rate = pd.read_csv(file, encoding='utf-8-sig', header=4)
     rate_col = df_rate.columns[13]  # 定存利率
@@ -464,7 +469,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                 st.plotly_chart(fig, config=config)
 
             st.write('')
-            AgGrid(df_show)
+            AgGrid(df_show, theme='blue')
 
             del df
         else:
@@ -577,14 +582,16 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
 
 
 def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                      color_col=None, text_fmt=None, title=None, ccs='agsunset'):
+                      color_col=None, text_fmt=None, title=None, ccs='agsunset', op=None):
     fig = px.bar(df_top, x=x_data_col, y=y_data_col,
                  orientation=v_or_h, title=title,
                  text=text_col, color=color_col,
-                 color_continuous_scale=ccs)
+                 color_continuous_scale=ccs,
+                 opacity=op)
 
     fig.update_traces(texttemplate=text_fmt)
-    fig.update_layout(margin=margin)
+    fig.update_layout(margin=margin,
+                      yaxis_title='')
 
     return fig
 
@@ -1547,7 +1554,7 @@ def fn_gen_web_eda(df):
     fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
                                     size='交易量')
 
-    latest_rel = '0311'
+    latest_rel = '0321'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -1760,7 +1767,7 @@ def fn_gen_web_ml_train(df, path):
             if '無' not in ano_det:
                 st.markdown(f'{"#" * 5} {ano_det} 的資料: 共{df_ano.shape[0]}筆')
                 df_screen = df_ano[['MRT', '地址', '每坪單價(萬)', '交易年月日', '備註']]
-                AgGrid(df_screen)
+                AgGrid(df_screen, theme='blue')
 
         with st.expander(f'👓 檢視 資料分佈'):
             watch = "每坪單價(萬)"
@@ -1839,7 +1846,17 @@ def fn_gen_web_ml_train(df, path):
                 print(X_train[[c]].describe())
                 print(X_train[X_train[c].isna()][c])
 
-        regr.fit(X_train, y_train.values.ravel())
+        try:
+            regr.fit(X_train, y_train.values.ravel())
+        except:
+            df_dbg = X_train[X_train['交易年'] > 110]
+            for c in df_dbg.columns:
+                if 'B1-12F號' in df_dbg[c].values:
+                    print(c)
+                    print(df_dbg[c])
+
+            assert False, f'{X_train.shape, y_train.shape}'
+
 
         if tune == 'GridSearch':
             print(regr.best_params_)
@@ -1949,6 +1966,19 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     c2.plotly_chart(fig)
 
+    X_train.rename(columns={'sku_dist': '小學距離',
+                            'sku_total': '鄰近小學人數',
+                            'MRT_DIST': '捷運距離',
+                            'MRT_Tput_UL': '捷運進站人數(上班)',
+                            'MRT_Tput_DL': '捷運出站人數(上班)',
+                            'MRT_Tput': '捷運人流(上班)',
+                            'MRT_Commute_Time_UL': '捷運通勤時間',
+                            'MRT_ave': '鄰近捷運<br>區域均價',
+                            'DIST_ave': '行政區<br>區域均價',
+                            'SKU_ave': '鄰近小學<br>區域均價',
+                            '頂樓-1': '次頂樓',
+                            '移轉層次': '樓層'}, inplace=True)
+
     try:
         df_imp = pd.DataFrame({'Features': X_train.columns, 'Importance': regr.feature_importances_})
     except:
@@ -1956,8 +1986,13 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     df_imp = df_imp.sort_values(by='Importance')
 
-    df_top = df_imp.iloc[df_imp.shape[0] - 10:df_imp.shape[0] + 1, :]
-    df_bot = df_imp.iloc[:10, :]
+    # df_top = df_imp.iloc[df_imp.shape[0] - 10:df_imp.shape[0] + 1, :]
+    # df_bot = df_imp.iloc[:10, :]
+
+    df_imp['Importance'] = df_imp['Importance'].apply(lambda x: round(x, 5))
+    df_top = df_imp[df_imp['Features'].apply(lambda x: '均價' in x)]
+    df_bot = df_imp[df_imp['Features'].apply(lambda x: '均價' not in x)]
+    df_bot = df_bot[df_bot['Importance'] > 0.001]
 
     x_data_col = 'Importance'
     y_data_col = 'Features'
@@ -1967,21 +2002,24 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     margin = dict(t=0, b=0, l=10, r=15)
     text_fmt = '%{value:.5f}'
 
-    fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                color_col=color_col, text_fmt=text_fmt)
+    if df_top.shape[0] > 0:
+
+        fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
+                                    color_col=color_col, text_fmt=text_fmt, op=0.7)
+
+        c1, c2, c3 = st.columns(3)
+        c2.markdown(f'{"#" * 5} 區域均價 對 房價 的影響')
+        st.plotly_chart(fig_top)
 
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                color_col=color_col, text_fmt=text_fmt, ccs='haline')
-
-    st.markdown(f'{"#" * 5} 根據訓練模型 影房價最 "重要" 的{df_top.shape[0]}個因素是?')
-    st.plotly_chart(fig_top)
-
-    st.markdown(f'{"#" * 5} 根據訓練模型 影房價較 "不重要" 的{df_bot.shape[0]}個因素是?')
+                                color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.7)
+    c1, c2, c3 = st.columns(3)
+    c2.markdown(f'{"#" * 5} 各項指標 對 房價 的影響')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集的模型預結果(萬/坪):')
     # st.dataframe(df_metrics)
-    AgGrid(df_metrics)
+    AgGrid(df_metrics, theme='blue')
 
     te = time.time()
     dur = round(te - ts, 5)
@@ -2088,7 +2126,8 @@ def fn_gen_web_ml_inference(path, build_typ):
             dic_of_input['土地坪數'] = c3.text_input(label='土地坪數', value='未使用')
 
             c1, c2, c3, c4 = st.columns(4)
-            dic_of_input['交易年'] = c1.slider('交易年(民國)', min_value=100, max_value=130, step=1, value=110)
+            this_yr = datetime.date.today().year-1911
+            dic_of_input['交易年'] = c1.slider('交易年(民國)', min_value=100, max_value=120, step=1, value=this_yr)
             dic_of_input['移轉層次'] = c2.slider('交易樓層', min_value=2, max_value=40, step=1, value=14)
             dic_of_input['總樓層數'] = c3.slider('建物總樓層', min_value=2, max_value=40, step=1, value=15)
             dic_of_input['屋齡'] = c4.slider('屋齢', min_value=0, max_value=20, step=1, value=0)
