@@ -1851,12 +1851,10 @@ def fn_gen_web_ml_train(df, path):
         except:
             df_dbg = X_train[X_train['交易年'] > 110]
             for c in df_dbg.columns:
-                if 'B1-12F號' in df_dbg[c].values:
-                    print(c)
-                    print(df_dbg[c])
+                print(c)
+                print(df_dbg[c])
 
             assert False, f'{X_train.shape, y_train.shape}'
-
 
         if tune == 'GridSearch':
             print(regr.best_params_)
