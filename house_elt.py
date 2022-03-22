@@ -259,6 +259,7 @@ def fn_addr_handle(addr):
     a = '台北市士林區重慶北路四段110號' if a == '台北市士林區重慶北路四段' else a  # 日健闊
     a = '台北市南港區市民大道七段8號' if a == '台北市南港區市民大道七段' else a  # 璞松綻
     a = '台北市中正區金山南路一段96號' if a == '台北市中正區金山南路一段' else a  # 達欣東門馥寓
+    a = '台北市北投區致遠一路一段40號' if a == '台北市北投區致遠一路一段' else a  # 璞玥
 
     return a
 
@@ -590,7 +591,7 @@ def fn_gen_vill(file):
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    # fn_gen_raw_data(path, slp=5, is_force=True)
+    fn_gen_raw_data(path, slp=5, is_force=False)
 
     # fn_save_building_name(path)
 
