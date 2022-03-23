@@ -241,20 +241,21 @@ def fn_get_admin_dist(addr):
         if num.split('號')[0].isnumeric():
             pass
         else:
-            number = num.split('號')[0].split('之')[0].split('-')[0].split('~')[0]
+            # 7.9號 / 39，41號 / 8，10號 / 四小段11號 / 二小段0618-0000號
+            number = num.split('號')[0].split('之')[0].split('-')[0].split('~')[0].split('.')[0].split('，')[0].split('段')[-1]
             if number.isnumeric():
                 num = number + '號'
             else:
                 n = ''
                 for i, v in enumerate(num.split('號')[0]):
                     n += v if v.isnumeric() else ''
+                print('Review this addr num !', num, '-->', n + '號')
                 num = n + '號'
-                print(num, '-->', num)
 
     if section != 'NA':
         section = fn_cn_2_an(section)
 
-        # special addr handle
+    # special addr handle
     if road == 'NA':
         if '大道' in num:
             road = num.split('道')[0] + '道'
