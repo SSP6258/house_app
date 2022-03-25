@@ -334,6 +334,12 @@ def fn_get_hover_text(df):
     if '稅_中位數' in cols:
         txt += '所得中位 ' + (df['稅_中位數'] / 10).astype(int).astype(str) + ' 萬元<br>'
 
+    if '稅_平均數(萬)' in cols:
+        txt += '所得平均 ' + (df['稅_平均數(萬)']).astype(int).astype(str) + ' 萬元<br>'
+
+    if '稅_中位數(萬)' in cols:
+        txt += '所得中位 ' + (df['稅_中位數(萬)']).astype(int).astype(str) + ' 萬元<br>'
+
     if '建案名稱' in cols:
         bc = df['建案名稱'].astype(str)
         bc = bc.apply(lambda x: '' if 'nan' in x else x)
@@ -763,19 +769,24 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     hover_text = fn_get_hover_text(df_sort)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
-                                    margin=margin, color=color_set, text=hover_text, opacity=0.6, row=2, size=12)
+                                    margin=margin, color=color_set, text=hover_text,
+                                    opacity=0.6, row=2, size=12, marker_sym=24)
 
     if tax == '所得平均數' or tax == '全選':
         df_tax = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_平均數'].values[0] / 10))
+        df_tax.rename(columns={'里': '稅_平均數(萬)'}, inplace=True)
         hover_text = fn_get_hover_text(df_tax)
-        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['里'],
-                                        margin=margin, color=color_set, text=hover_text, opacity=0.8, row=2, size=12, marker_sym=3)
+        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['稅_平均數(萬)'],
+                                        margin=margin, color=color_set, text=hover_text,
+                                        opacity=0.7, row=2, size=12, marker_sym=3)
 
     if tax == '所得中位數' or tax == '全選':
         df_tax = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_中位數'].values[0] / 10))
+        df_tax.rename(columns={'里': '稅_中位數(萬)'}, inplace=True)
         hover_text = fn_get_hover_text(df_tax)
-        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['里'],
-                                        margin=margin, color=color_set, text=hover_text, opacity=0.8, row=2, size=12, marker_sym=17)
+        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['稅_中位數(萬)'],
+                                        margin=margin, color=color_set, text=hover_text,
+                                        opacity=0.7, row=2, size=12, marker_sym=17)
 
     return fig_sct
 
