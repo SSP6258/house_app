@@ -762,7 +762,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                     margin=margin, color=color_set, text=hover_text, opacity=min(1., op * 3), row=2)
 
     hover_text = fn_get_hover_text(df_sort)
-    # print(df.columns)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=0.6, row=2, size=12)
 
