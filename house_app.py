@@ -1197,15 +1197,15 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='捷運平均', values=df_1['MRT_ave']),
             dict(label='行政區平均', values=df_1['DIST_ave']),
 
-            dict(label='稅_所得總額', values=df_1['稅_綜合所得總額']),
-            dict(label='稅_平均數', values=df_1['稅_平均數']),
-            dict(label='稅_中位數', values=df_1['稅_中位數']),
-            dict(label='稅_平均減中位', values=df_1['稅_平均_減_中位']),
+            dict(label='各里所得_總額', values=df_1['稅_綜合所得總額']),
+            dict(label='各里所得_平均數', values=df_1['稅_平均數']),
+            dict(label='各里所得_中位數', values=df_1['稅_中位數']),
+            dict(label='平均減中位', values=df_1['稅_平均_減_中位']),
 
-            dict(label='稅_第一分位', values=df_1['稅_第一分位數']),
-            dict(label='稅_第三分位', values=df_1['稅_第三分位數']),
-            dict(label='稅_標準差', values=df_1['稅_標準差']),
-            dict(label='稅_變異數', values=df_1['稅_變異係數']),
+            dict(label='各里所得_第一分位', values=df_1['稅_第一分位數']),
+            dict(label='各里所得_第三分位', values=df_1['稅_第三分位數']),
+            dict(label='各里所得_標準差', values=df_1['稅_標準差']),
+            dict(label='各里所得_變異數', values=df_1['稅_變異係數']),
         ]
 
         figs = 4
