@@ -133,6 +133,7 @@ def fn_cln_house_data(df):
 
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
     df = df[df['里'].apply(lambda x: str(x).endswith('里'))] if '里' in df.columns else df
+    df = df[df['稅_中位數'].apply(lambda x: str(x) != 'nan')] if '稅_中位數' in df.columns else df
 
     df = fn_gen_build_case(df)
     df[['經度', '緯度']] = df[['log', 'lat']]
@@ -279,7 +280,7 @@ def fn_get_interest_rate(df, months=1):
     path = dic_of_path['database']
     file = os.path.join(path, 'a13rate.csv')
 
-    last_month = datetime.date.today().month-1
+    last_month = datetime.date.today().month - 1
     sel_yr = df['交易年'].values[0] - 1 if last_month == 12 else df['交易年'].values[0]
 
     df['交易年月日'] = sel_yr * 10000 + int(last_month) * 100 if '交易年月日' not in df.columns else df['交易年月日']
@@ -322,7 +323,16 @@ def fn_get_hover_text(df):
         txt += df['交易年'].astype(str) + '年<br>'
 
     if '鄉鎮市區' in cols:
-        txt += df['鄉鎮市區'] + '<br>'
+        txt += df['鄉鎮市區'].astype(str) + ' '
+
+    if '里' in cols:
+        txt += df['里'].astype(str) + '<br>'
+
+    if '稅_平均數' in cols:
+        txt += '所得平均 ' + (df['稅_平均數'] / 10).astype(int).astype(str) + ' 萬元<br>'
+
+    if '稅_中位數' in cols:
+        txt += '所得中位 ' + (df['稅_中位數'] / 10).astype(int).astype(str) + ' 萬元<br>'
 
     if '建案名稱' in cols:
         bc = df['建案名稱'].astype(str)
@@ -351,7 +361,7 @@ def fn_get_hover_text(df):
         txt += df['sku_name'].astype(str) + ', '
 
     if 'sku_dist' in cols:
-        txt += df['sku_dist'].astype(int).astype(str) + '公尺'
+        txt += df['sku_dist'].astype(int).astype(str) + '公尺<br>'
 
     return txt
 
@@ -631,9 +641,11 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
-                          xlabel=None, ylabel=None, title=None):
+                          xlabel=None, ylabel=None, title=None, size=None, marker_sym=None):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=False, hovertext=text,
+                             marker_symbol=marker_sym,
                              marker=dict(
+                                 size=size,
                                  opacity=opacity,
                                  line={'color': 'White', 'width': 0.4},
                                  color=color,
@@ -692,7 +704,7 @@ def fn_add_date_line(fig, df, date, mode='lines', width=10, color='lightgreen', 
 
 def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns(3)
     # print(str(bc_name))
 
     # IndexError: index 0 is out of bounds for axis 0 with size 0
@@ -701,7 +713,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
-    op = c2.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
+    tax = c2.selectbox('各里所得分析(108年度)', options=['無', '所得平均數', '所得中位數', '全選'], index=0)
+    op = c3.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
 
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -743,13 +756,27 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     for vill in df_sort['里'].values:
         df_vill = pd.concat([df_vill, df[df['dist_vill'] == vill]], axis=0)
 
-    del df
+    # del df
     hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text, opacity=min(1., op * 3), row=2)
 
+    hover_text = fn_get_hover_text(df_sort)
+    # print(df.columns)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
-                                    margin=margin, color=color_set, text=hover_text, opacity=1, row=2)
+                                    margin=margin, color=color_set, text=hover_text, opacity=0.6, row=2, size=12)
+
+    if tax == '所得平均數' or tax == '全選':
+        df_tax = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_平均數'].values[0] / 10))
+        hover_text = fn_get_hover_text(df_tax)
+        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['里'],
+                                        margin=margin, color=color_set, text=hover_text, opacity=0.8, row=2, size=12, marker_sym=3)
+
+    if tax == '所得中位數' or tax == '全選':
+        df_tax = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_中位數'].values[0] / 10))
+        hover_text = fn_get_hover_text(df_tax)
+        fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax['里'],
+                                        margin=margin, color=color_set, text=hover_text, opacity=0.8, row=2, size=12, marker_sym=17)
 
     return fig_sct
 
@@ -1143,7 +1170,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
 
-        options = ['捷運', '小學', '建物', '均價']
+        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2']
         cmp = st.radio('比較指標:', options=options, index=0)
         fn_set_radio_2_hor()
 
@@ -1170,6 +1197,16 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='學區平均', values=df_1['SKU_ave']),
             dict(label='捷運平均', values=df_1['MRT_ave']),
             dict(label='行政區平均', values=df_1['DIST_ave']),
+
+            dict(label='稅_所得總額', values=df_1['稅_綜合所得總額']),
+            dict(label='稅_平均數', values=df_1['稅_平均數']),
+            dict(label='稅_中位數', values=df_1['稅_中位數']),
+            dict(label='稅_平均減中位', values=df_1['稅_平均_減_中位']),
+
+            dict(label='稅_第一分位', values=df_1['稅_第一分位數']),
+            dict(label='稅_第三分位', values=df_1['稅_第三分位數']),
+            dict(label='稅_標準差', values=df_1['稅_標準差']),
+            dict(label='稅_變異數', values=df_1['稅_變異係數']),
         ]
 
         figs = 4
@@ -1177,8 +1214,10 @@ def fn_gen_analysis(df, latest_records, build_case):
         d2 = dimensions[figs: 2 * figs]
         d3 = dimensions[2 * figs: 3 * figs]
         d4 = dimensions[3 * figs: 4 * figs]
+        d5 = dimensions[4 * figs: 5 * figs]
+        d6 = dimensions[5 * figs: 6 * figs]
 
-        plots = [d1, d2, d3, d4]
+        plots = [d1, d2, d3, d4, d5, d6]
         dic_of_show = {k: plots[options.index(k)] for k in options}
         d = dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
@@ -1551,7 +1590,8 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", '最新登錄']
     color = '每坪均價(萬)'
 
-    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25, op=0.55,
+    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25,
+                                    op=0.55,
                                     size='交易量')
 
     latest_rel = '0321'
@@ -1567,6 +1607,7 @@ def fn_gen_web_eda(df):
     st.plotly_chart(fig_map_all)
     st.write('')
     area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=0)
+    fn_set_radio_2_hor()
     if area == '交易筆數':
         st.plotly_chart(fig_tm)
     elif area == '最小坪數':
@@ -2001,7 +2042,6 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     text_fmt = '%{value:.5f}'
 
     if df_top.shape[0] > 0:
-
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
                                     color_col=color_col, text_fmt=text_fmt, op=0.8)
 
@@ -2124,7 +2164,7 @@ def fn_gen_web_ml_inference(path, build_typ):
             dic_of_input['土地坪數'] = c3.text_input(label='土地坪數', value='未使用')
 
             c1, c2, c3, c4 = st.columns(4)
-            this_yr = datetime.date.today().year-1911
+            this_yr = datetime.date.today().year - 1911
             dic_of_input['交易年'] = c1.slider('交易年(民國)', min_value=100, max_value=120, step=1, value=this_yr)
             dic_of_input['移轉層次'] = c2.slider('交易樓層', min_value=2, max_value=40, step=1, value=14)
             dic_of_input['總樓層數'] = c3.slider('建物總樓層', min_value=2, max_value=40, step=1, value=15)
@@ -2274,6 +2314,8 @@ def fn_gen_web_ref():
     st.write("- 鄉鎮市區界線: [政府資料開放平台 - 我國各鄉(鎮、市、區)行政區城界線圖資](https://data.gov.tw/dataset/441)")
     st.write("- 村里界圖: [政府資料開放平台 - 各縣市村(里)界](https://data.gov.tw/dataset/7438)")
     st.write("- 所得分析: [政府資料開放平台 - 綜稅所得鄉鎮村里統計分析表](https://data.gov.tw/dataset/17983)")
+    st.write(
+        "- 所得分析: [表165-A(108年度)綜稅所得總額各縣市鄉鎮村里統計分析表](https://www.fia.gov.tw/WEB/fia/ias/isa108s/isa108/108_165-A.pdf)")
 
     st.write("")
     st.subheader('參考網站:')
