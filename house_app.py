@@ -797,7 +797,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                         legend=True, name='所得中位數')
 
     if tax in ['全選', '所得中位數', '所得平均數']:
-
         fig_sct_2 = make_subplots(rows=2, cols=1,
                                 subplot_titles=(f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得中位數)',
                                                 f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得平均數)'))
