@@ -796,39 +796,43 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                         opacity=0.7, row=2, size=11, marker_sym=17,
                                         legend=True, name='所得中位數')
 
-    if tax in ['全選']:
+    if tax in ['全選', '所得中位數', '所得平均數']:
 
         fig_sct_2 = make_subplots(rows=2, cols=1,
-                                subplot_titles=(f'{dist_sel}各里 - 購屋痛苦指數 (每坪均價 - 年所得中位數)',
-                                                f'{dist_sel}各里 - 購屋痛苦指數 (每坪均價 - 年所得平均數)'))
+                                subplot_titles=(f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得中位數)',
+                                                f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得平均數)'))
+
         df_1 = df_sort
-        df_1['均價_中位數'] = df_sort['每坪單價(萬)'] - df_tax_med['稅_中位數(萬)']
-        df_1['均價_平均數'] = df_sort['每坪單價(萬)'] - df_tax_ave['稅_平均數(萬)']
-        df_1 = df_1.sort_values(by='均價_中位數', ascending=False)
-        hover_text = fn_get_hover_text(df_1)
+        if tax in ['全選', '所得中位數']:
 
-        fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_中位數'],
-                                          margin=margin, color='red', text=hover_text,
-                                          opacity=1, row=1, size=12, marker_sym=18,
-                                          legend=False, name='所得中位數-每坪均價')
+            df_1['均價_中位數'] = df_sort['每坪單價(萬)'] - df_tax_med['稅_中位數(萬)']
+            df_1 = df_1.sort_values(by='均價_中位數', ascending=False)
+            hover_text = fn_get_hover_text(df_1)
 
-        df_1_ok = df_1[df_1['均價_中位數'] <= 0]
-        fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_中位數'],
-                                          margin=margin, color='lightseagreen', text=hover_text,
-                                          opacity=1, row=1, size=12, marker_sym=18,
-                                          legend=False, name='所得中位數-每坪均價')
+            fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_中位數'],
+                                              margin=margin, color='red', text=hover_text,
+                                              opacity=1, row=1, size=12, marker_sym=18,
+                                              legend=False, name='所得中位數-每坪均價')
 
-        df_1 = df_1.sort_values(by='均價_平均數', ascending=False)
-        fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_平均數'],
-                                          margin=margin, color='red', text=hover_text,
-                                          opacity=1, row=2, size=12, marker_sym=18,
-                                          legend=False, name='所得平均數-每坪均價')
+            df_1_ok = df_1[df_1['均價_中位數'] <= 0]
+            fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_中位數'],
+                                              margin=margin, color='lightseagreen', text=hover_text,
+                                              opacity=1, row=1, size=12, marker_sym=18,
+                                              legend=False, name='所得中位數-每坪均價')
 
-        df_1_ok = df_1[df_1['均價_平均數'] <= 0]
-        fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_平均數'],
-                                          margin=margin, color='lightseagreen', text=hover_text,
-                                          opacity=1, row=2, size=12, marker_sym=18,
-                                          legend=False, name='所得平均數-每坪均價')
+        if tax in ['全選', '所得平均數']:
+            df_1['均價_平均數'] = df_sort['每坪單價(萬)'] - df_tax_ave['稅_平均數(萬)']
+            df_1 = df_1.sort_values(by='均價_平均數', ascending=False)
+            fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_平均數'],
+                                              margin=margin, color='red', text=hover_text,
+                                              opacity=1, row=2, size=12, marker_sym=18,
+                                              legend=False, name='所得平均數-每坪均價')
+
+            df_1_ok = df_1[df_1['均價_平均數'] <= 0]
+            fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_平均數'],
+                                              margin=margin, color='lightseagreen', text=hover_text,
+                                              opacity=1, row=2, size=12, marker_sym=18,
+                                              legend=False, name='所得平均數-每坪均價')
 
         return [fig_sct, fig_sct_2]
     else:
