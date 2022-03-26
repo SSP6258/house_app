@@ -734,11 +734,12 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_dist.reset_index(inplace=True)
     df_dist.rename(columns={'index': '里'})
     admin_vills = len(df_dist['里'].unique())
+    dist_sel = dist.replace("不限", "台北市")
 
     fig_sct = make_subplots(rows=2, cols=1,
                             # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
                             subplot_titles=(f'台北市 {admin_dists}個 行政區 v.s. 每坪單價(萬)',
-                                            f'{dist.replace("不限", "台北市")} {admin_vills}個 里 v.s. 每坪單價(萬)'))
+                                            f'{dist_sel} {admin_vills}個 里 v.s. 每坪單價(萬)'))
 
     df_sort = df.sort_values(by='DIST_ave', ascending=False)
     df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
@@ -796,9 +797,10 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                         legend=True, name='所得中位數')
 
     if tax in ['全選']:
+
         fig_sct_2 = make_subplots(rows=2, cols=1,
-                                subplot_titles=(f'各里購屋痛苦指數 (每坪均價 - 年所得中位數)',
-                                                f'各里購屋痛苦指數 (每坪均價 - 年所得平均數)'))
+                                subplot_titles=(f'{dist_sel}各里 - 購屋痛苦指數 (每坪均價 - 年所得中位數)',
+                                                f'{dist_sel}各里 - 購屋痛苦指數 (每坪均價 - 年所得平均數)'))
         df_1 = df_sort
         df_1['均價_中位數'] = df_sort['每坪單價(萬)'] - df_tax_med['稅_中位數(萬)']
         df_1['均價_平均數'] = df_sort['每坪單價(萬)'] - df_tax_ave['稅_平均數(萬)']
