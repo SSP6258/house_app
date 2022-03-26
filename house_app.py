@@ -719,7 +719,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
-    tax = c2.selectbox('各里所得分析(108年度)', options=['無', '所得平均數', '所得中位數', '全選'], index=0)
+    tax = c2.selectbox('各里所得分析(108年度)', options=['無', '所得中位數', '所得平均數', '全選'], index=1)
     op = c3.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
 
     # if bc_name is None:
@@ -811,13 +811,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_中位數'],
                                               margin=margin, color='red', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=18,
-                                              legend=False, name='所得中位數-每坪均價')
+                                              legend=True, name='入不敷出')
 
             df_1_ok = df_1[df_1['均價_中位數'] <= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_中位數'],
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=18,
-                                              legend=False, name='所得中位數-每坪均價')
+                                              legend=True, name='入可敷出')
 
         if tax in ['全選', '所得平均數']:
             df_1['均價_平均數'] = df_sort['每坪單價(萬)'] - df_tax_ave['稅_平均數(萬)']
@@ -825,13 +825,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_平均數'],
                                               margin=margin, color='red', text=hover_text,
                                               opacity=1, row=2, size=12, marker_sym=18,
-                                              legend=False, name='所得平均數-每坪均價')
+                                              legend=True, name='入不敷出')
 
             df_1_ok = df_1[df_1['均價_平均數'] <= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_平均數'],
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=2, size=12, marker_sym=18,
-                                              legend=False, name='所得平均數-每坪均價')
+                                              legend=True, name='入可敷出')
 
         return [fig_sct, fig_sct_2]
     else:
