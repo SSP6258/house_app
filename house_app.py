@@ -531,8 +531,8 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     f_num += ['利率_13個月前', '利率_15個月前']
     f_num += ['頂樓-1']
     f_num += ['使用分區_住']
-
     f_num += ['MRT_ave', 'SKU_ave', 'DIST_ave']
+    f_num += ['稅_中位數', '稅_平均數']
 
     if is_inference:
         Features = df_F['Features'].to_list()
@@ -598,7 +598,7 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
 
 
 def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                      color_col=None, text_fmt=None, title=None, ccs='agsunset', op=None):
+                      color_col=None, text_fmt=None, title=None, x_title=None, y_title=None, ccs='agsunset', op=None):
     fig = px.bar(df_top, x=x_data_col, y=y_data_col,
                  orientation=v_or_h, title=title,
                  text=text_col, color=color_col,
@@ -607,7 +607,8 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
 
     fig.update_traces(texttemplate=text_fmt)
     fig.update_layout(margin=margin,
-                      yaxis_title='')
+                      yaxis_title=y_title,
+                      xaxis_title=x_title)
 
     return fig
 
@@ -770,7 +771,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     # del df
     hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
-                                    margin=margin, color='lightseagreen', text=hover_text, opacity=min(1., op * 3), row=2)
+                                    margin=margin, color='lightseagreen', text=hover_text, opacity=min(1., op * 3),
+                                    row=2)
 
     hover_text = fn_get_hover_text(df_sort)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
@@ -798,12 +800,11 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     if tax in ['全選', '所得中位數', '所得平均數']:
         fig_sct_2 = make_subplots(rows=2, cols=1,
-                                subplot_titles=(f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得中位數)',
-                                                f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得平均數)'))
+                                  subplot_titles=(f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得中位數)',
+                                                  f'😣 購屋痛苦指數 ({dist_sel}各里 每坪均價 - 年所得平均數)'))
 
         df_1 = df_sort
         if tax in ['全選', '所得中位數']:
-
             df_1['均價_中位數'] = df_sort['每坪單價(萬)'] - df_tax_med['稅_中位數(萬)']
             df_1 = df_1.sort_values(by='均價_中位數', ascending=False)
             hover_text = fn_get_hover_text(df_1)
@@ -1993,6 +1994,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     df_result = pd.DataFrame(dic_of_metric, index=['訓練集', '測試集']).T
     df_result['差異'] = df_result['測試集'] - df_result['訓練集']
+    mse = round(df_result.loc["MSE", "測試集"], 2)
 
     st.write('')
     is_model_save = st.button('訓練並儲存 模型')
@@ -2001,7 +2003,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
         df_F['Features'] = X_train.columns
         # df_F.to_csv(model_file.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
         # pickle.dump(regr, open(model_file, 'wb'))
-        mse = round(df_result.loc["MSE", "測試集"], 2)
+        # mse = round(df_result.loc["MSE", "測試集"], 2)
         st.session_state['Model_Metrics'] = f'此 {ml_model} 模型在測試資料集MSE為 {mse}'
         # st.markdown(f'{"#" * 6} {st.session_state["Model_Metrics"]} 已儲存 💾 !')
         # st.write(f'save to {model_file}')
@@ -2074,7 +2076,9 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
                             'DIST_ave': '行政區<br>區域均價',
                             'SKU_ave': '鄰近小學<br>區域均價',
                             '頂樓-1': '次頂樓',
-                            '移轉層次': '樓層'}, inplace=True)
+                            '移轉層次': '樓層',
+                            '稅_中位數': '所得中位數',
+                            '稅_平均數': '所得平均數'}, inplace=True)
 
     try:
         df_imp = pd.DataFrame({'Features': X_train.columns, 'Importance': regr.feature_importances_})
@@ -2101,14 +2105,16 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     if df_top.shape[0] > 0:
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                    color_col=color_col, text_fmt=text_fmt, op=0.8)
+                                    color_col=color_col, text_fmt=text_fmt, op=0.8,
+                                    x_title='重要度 (影響力)', y_title='')
 
         c1, c2, c3 = st.columns(3)
         c2.markdown(f'{"#" * 5} 區域均價 對 房價 的影響')
         st.plotly_chart(fig_top)
 
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
-                                color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8)
+                                color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
+                                x_title='重要度 (影響力)', y_title='')
     c1, c2, c3 = st.columns(3)
     c2.markdown(f'{"#" * 5} 各項指標 對 房價 的影響')
     st.plotly_chart(fig_bot)
@@ -2177,7 +2183,15 @@ def fn_gen_web_ml_inference(path, build_typ):
 
             geo_info, is_coor_save, is_match, addr_fr_db = fn_get_geo_info(addr, df_coor_read, slp=5)
 
-            st.write(f'鄰近地址: {addr_fr_db}') if is_match else None
+            if addr in df_coor_read.index:
+                vill = df_coor_read.loc[addr, '里']
+                # st.write(f'鄰近地址: {is_match} {addr} {vill}')
+            elif is_match:
+                vill = df_coor_read.loc[addr_fr_db, '里']
+
+                st.write(f'鄰近地址: {is_match} {addr_fr_db} {vill}')
+            else:
+                assert False, f'ToDo: Add vill from addr !'
 
             # mrt_info, addr_coor, sku_info
             if addr not in df_coor_read.index:
@@ -2203,6 +2217,7 @@ def fn_gen_web_ml_inference(path, build_typ):
             df_sku_ave = pd.read_csv(os.path.join(ave_path, 'SKU_ave.csv'), index_col='sku_name')
             df_mrt_ave = pd.read_csv(os.path.join(ave_path, 'MRT_ave.csv'), index_col='MRT')
             df_dist_ave = pd.read_csv(os.path.join(ave_path, 'DIST_ave.csv'), index_col='鄉鎮市區')
+            df_tax = pd.read_csv(os.path.join(ave_path, '108_165-A.csv'), index_col='行政區')
 
             mrt = dic_of_input['MRT']
             dic_of_input['MRT_ave'] = df_mrt_ave.loc[mrt, '每坪單價(萬)']
@@ -2212,6 +2227,10 @@ def fn_gen_web_ml_inference(path, build_typ):
             dic_of_input['SKU_ave'] = df_sku_ave.loc[sku, '每坪單價(萬)']
             dist = addr.split('市')[-1].split('區')[0] + '區'
             dic_of_input['DIST_ave'] = df_dist_ave.loc[dist, '每坪單價(萬)']
+
+            df_tax = df_tax[df_tax.index == dist]
+            dic_of_input['稅_中位數'] = df_tax[df_tax['里'] == vill]['中位數'].values[0]
+            dic_of_input['稅_平均數'] = df_tax[df_tax['里'] == vill]['平均數'].values[0]
 
             dic_of_input['緯度'] = dic_of_input.pop('lat')
             dic_of_input['經度'] = dic_of_input.pop('log')
