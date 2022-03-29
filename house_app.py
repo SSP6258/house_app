@@ -369,6 +369,9 @@ def fn_get_hover_text(df):
     if 'sku_dist' in cols:
         txt += df['sku_dist'].astype(int).astype(str) + '公尺<br>'
 
+    if '每坪單價(萬)' in cols:
+        txt += '每坪單價 '+df['每坪單價(萬)'].astype(str) + ' 萬元<br>'
+
     return txt
 
 
@@ -648,7 +651,9 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
-                          xlabel=None, ylabel=None, title=None, size=None, marker_sym=None, legend=False, name=None):
+                          xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
+                          legend=False, name=None):
+
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              marker=dict(
@@ -853,6 +858,11 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
                             specs=[[{"colspan": 2, "rowspan": 2}, None], [{}, {}], [{}, {}]],
                             subplot_titles=(f'{mrts}個 鄰近捷運站 V.S. 每坪單價(萬)',))
     # df_sort = df.sort_values(by='每坪單價(萬),ascending=True)
+
+    df_ave = pd.DataFrame(df.groupby(['MRT'])['每坪單價(萬)'].mean())
+
+    df['MRT_ave'] = df['MRT'].apply(lambda x: round(df_ave.loc[x, '每坪單價(萬)'], 2))
+
     df_sort = df.sort_values(by='MRT_ave', ascending=False)
     df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
@@ -862,6 +872,9 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
 
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['MRT'], df_sort['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text)
+
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['MRT'], df_sort['MRT_ave'], row=1, col=1, margin=margin,
+                                      color='violet', opacity=0.3, marker_sym=124, size=12)
 
     hover_txt1 = fn_get_hover_text(df_hl)
 
@@ -910,10 +923,14 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
 
 
 def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
-    if bc_name is None:
-        bc_name = ['康寶日出印象']
+    # if bc_name is None:
+    #     bc_name = ['康寶日出印象']
     SKUs = len(df['sku_name'].unique())
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20} if margin is None else margin
+
+    df_ave = pd.DataFrame(df.groupby(['sku_name'])['每坪單價(萬)'].mean())
+
+    df['SKU_ave'] = df['sku_name'].apply(lambda x: round(df_ave.loc[x, '每坪單價(萬)'], 2))
 
     df_sort = df.sort_values(by='SKU_ave', ascending=False)
 
@@ -925,27 +942,17 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
 
     y_data = df_sort['每坪單價(萬)']
 
-    # hover_text = df_sort['sku_name'] + ', ' + \
-    #              df_sort['鄉鎮市區'] + ', ' + \
-    #              df_sort['建案名稱'].astype(str) + ', ' + \
-    #              df_sort['交易年'].astype(str) + '年, ' + \
-    #              df_sort['sku_dist'].astype(int).astype(str) + '公尺, ' + \
-    #              df_sort['sku_109_total'].astype(int).astype(str) + '人'
-
     hover_text = fn_get_hover_text(df_sort)
 
     fig_sku_1 = make_subplots(rows=3, cols=2,
                               specs=[[{"rowspan": 2, "colspan": 2}, None], [{}, {}], [{}, {}]],
                               subplot_titles=(f'{SKUs}個鄰近小學 v.s.每坪單價(萬)',))
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort['sku_name'], y_data, row=1, col=1, margin=margin,
-                                      color=color_set, text=hover_text)
+                                      color=color_set, text=hover_text, opacity=0.5)
 
-    # hover_txt1 = df_hl['sku_name'] + ', ' + \
-    #              df_hl['鄉鎮市區'] + ', ' + \
-    #              df_hl['建案名稱'].astype(str) + ', ' + \
-    #              df_hl['交易年'].astype(str) + '年, ' + \
-    #              df_hl['sku_dist'].astype(int).astype(str) + '公尺, ' + \
-    #              df_hl['sku_109_total'].astype(int).astype(str) + '人'
+    fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort['sku_name'], df_sort['SKU_ave'], row=1, col=1, margin=margin,
+                                      color='violet', opacity=0.3, marker_sym=124, size=12)
+
     hover_txt1 = fn_get_hover_text(df_hl)
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_hl['sku_name'], df_hl['每坪單價(萬)'], row=1, col=1, margin=margin,
                                       color='red', text=hover_txt1, opacity=1)
@@ -1836,7 +1843,11 @@ def fn_gen_web_ml_train(df, path):
             st.markdown('##### 訓練特徵選擇:')
             features_sel = st.multiselect('特徵選擇:', X.columns,
                                           default=[c for c in X.columns if
-                                                   '建材' not in c and '車位' not in c and c != 'MRT'])
+                                                   '建材' not in c and
+                                                   '車位' not in c and
+                                                   'MRT_ave' not in c and
+                                                   'DIST_ave' not in c and
+                                                   c != 'MRT'])
             st.write('')
             form2_submitted = st.form_submit_button('選擇')
 
