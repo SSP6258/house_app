@@ -1766,7 +1766,7 @@ def fn_gen_web_ml_train(df, path):
             dft_depth = st.session_state['para']['max_depth']
         else:
             dft_trees = 800
-            dft_depth = 50
+            dft_depth = 150
 
         trees = col3.slider('要使用幾棵樹訓練(n_estimators)', min_value=1, max_value=1000, step=10, value=dft_trees)
         max_depth = col3.slider('每顆樹的最大深度(max_depth)', min_value=1, max_value=500, step=10, value=dft_depth)
@@ -1846,7 +1846,7 @@ def fn_gen_web_ml_train(df, path):
             features_sel = st.multiselect('特徵選擇:', X.columns,
                                           default=[c for c in X.columns if
                                                    '建材' not in c and
-                                                   '車位' not in c and
+                                                   '車位類別' not in c and
                                                    'MRT_ave' not in c and
                                                    'DIST_ave' not in c and
                                                    c != 'MRT'])
