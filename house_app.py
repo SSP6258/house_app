@@ -525,7 +525,7 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     df = fn_get_sku_people_by_year(df.copy())
     df = fn_get_interest_rate(df.copy(), months=24)
 
-    f_num = ['屋齡', '交易年']
+    f_num = ['屋齡', '交易年', '交易月']
     f_num += ['台北市', '緯度', '經度']
     f_num += ['建物坪數', '車位坪數', '幾房', '幾廳', '幾衛']
     f_num += ['總樓層數', '頂樓', '移轉層次']
@@ -535,7 +535,7 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     f_num += ['頂樓-1']
     f_num += ['使用分區_住']
     f_num += ['MRT_ave', 'SKU_ave', 'DIST_ave']
-    f_num += ['稅_中位數', '稅_平均數']
+    f_num += ['稅_中位數', '稅_平均數', '稅_第一分位數', '稅_第三分位數']
 
     if is_inference:
         Features = df_F['Features'].to_list()
@@ -1849,6 +1849,7 @@ def fn_gen_web_ml_train(df, path):
                                                    '車位類別' not in c and
                                                    'MRT_ave' not in c and
                                                    'DIST_ave' not in c and
+                                                   '稅_第' not in c and
                                                    c != 'MRT'])
             st.write('')
             form2_submitted = st.form_submit_button('選擇')
@@ -1922,8 +1923,8 @@ def fn_gen_web_ml_train(df, path):
                 regr_sel = RandomForestRegressor()
 
                 param_grid = [
-                    {'n_estimators': [600, 800, 1000],
-                     'max_depth': [50, 100, 150]},
+                    {'n_estimators': [500, 600, 800, 1000],
+                     'max_depth': [50, 100, 150, 200]},
                     # ('bootstrap': [False],
                     # 'n_estimators': [150,200,259].
                     # 'max_features': [10, X_train.shape[1]]),
@@ -2091,7 +2092,9 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
                             '頂樓-1': '次頂樓',
                             '移轉層次': '樓層',
                             '稅_中位數': '所得中位數',
-                            '稅_平均數': '所得平均數'}, inplace=True)
+                            '稅_平均數': '所得平均數',
+                            '稅_第一分位數': '所得第一分位數',
+                            '稅_第三分位數': '所得第三分位數'}, inplace=True)
 
     try:
         df_imp = pd.DataFrame({'Features': X_train.columns, 'Importance': regr.feature_importances_})
