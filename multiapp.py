@@ -44,7 +44,7 @@ class MultiApp:
     def run(self):
         fn_chrome_96_workaround()
         st.set_page_config(page_title="尋找夢想家", page_icon="🏠")
-        imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.JPG']
+        imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
         fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
         st.sidebar.title("👨‍🏫 [Jack.Pan's](https://www.facebook.com/jack.pan.96/) 房市看板 ")
         st.sidebar.write('- ✉️ ssp6258@yahoo.com.tw')
