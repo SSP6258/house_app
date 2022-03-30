@@ -873,8 +873,9 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['MRT'], df_sort['每坪單價(萬)'],
                                     margin=margin, color=color_set, text=hover_text)
 
-    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['MRT'], df_sort['MRT_ave'], row=1, col=1, margin=margin,
-                                      color='violet', opacity=0.3, marker_sym=124, size=12)
+    df_sort_ave = df_sort.drop_duplicates(subset=['MRT'], keep='first')
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort_ave['MRT'], df_sort_ave['MRT_ave'], row=1, col=1, margin=margin,
+                                      color='violet', opacity=0.7, marker_sym=24, size=13)
 
     hover_txt1 = fn_get_hover_text(df_hl)
 
@@ -950,8 +951,9 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort['sku_name'], y_data, row=1, col=1, margin=margin,
                                       color=color_set, text=hover_text, opacity=0.5)
 
-    fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort['sku_name'], df_sort['SKU_ave'], row=1, col=1, margin=margin,
-                                      color='violet', opacity=0.3, marker_sym=124, size=12)
+    df_sort_ave = df_sort.drop_duplicates(subset=['sku_name'], keep='first')
+    fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort_ave['sku_name'], df_sort_ave['SKU_ave'], row=1, col=1, margin=margin,
+                                      color='violet', opacity=0.7, marker_sym=24, size=13)
 
     hover_txt1 = fn_get_hover_text(df_hl)
     fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_hl['sku_name'], df_hl['每坪單價(萬)'], row=1, col=1, margin=margin,
@@ -1863,7 +1865,7 @@ def fn_gen_web_ml_train(df, path):
                 assert False
 
     st.write('')
-    is_train = st.button('模型訓練')
+    is_train = st.button('硬Train一發!')
     if is_train or st.session_state['Train'] == 'done':
         X = X[features_sel]
         if drop_sel == '包含':
