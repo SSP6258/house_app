@@ -602,6 +602,7 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
 
 def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
                       color_col=None, text_fmt=None, title=None, x_title=None, y_title=None, ccs='agsunset', op=None):
+
     fig = px.bar(df_top, x=x_data_col, y=y_data_col,
                  orientation=v_or_h, title=title,
                  text=text_col, color=color_col,
@@ -1592,8 +1593,8 @@ def fn_gen_web_eda(df):
 
     floors = [str(f) + 'F' for f in floors]
     fig_bar2 = go.Figure(data=[
-        go.Bar(name='均價(萬/坪)', x=floors, y=prices),
-        go.Bar(name='成交戶數', x=floors, y=deals)
+        go.Bar(name='均價(萬/坪)', x=floors, y=prices, opacity=0.8),
+        go.Bar(name='成交戶數', x=floors, y=deals, opacity=0.8)
     ],
         layout={'title': f'{mrt} ({From_To})'})
 
