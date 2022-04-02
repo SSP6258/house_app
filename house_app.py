@@ -2260,6 +2260,7 @@ def fn_gen_web_ml_inference(path, build_typ):
             c1, c2, c3, c4 = st.columns(4)
             this_yr = datetime.date.today().year - 1911
             dic_of_input['交易年'] = c1.slider('交易年(民國)', min_value=100, max_value=120, step=1, value=this_yr)
+            dic_of_input['交易月'] = datetime.date.today().month
             dic_of_input['移轉層次'] = c2.slider('交易樓層', min_value=2, max_value=40, step=1, value=14)
             dic_of_input['總樓層數'] = c3.slider('建物總樓層', min_value=2, max_value=40, step=1, value=15)
             dic_of_input['屋齡'] = c4.slider('屋齢', min_value=0, max_value=20, step=1, value=0)
