@@ -283,7 +283,8 @@ def fn_get_interest_rate(df, months=1):
     last_month = datetime.date.today().month - 1
     sel_yr = df['交易年'].values[0] - 1 if last_month == 12 else df['交易年'].values[0]
 
-    df['交易年月日'] = sel_yr * 10000 + int(last_month) * 100 if '交易年月日' not in df.columns else df['交易年月日']
+    sel_month = last_month - 1 if last_month > 1 else last_month  # ToDo
+    df['交易年月日'] = sel_yr * 10000 + int(sel_month) * 100 if '交易年月日' not in df.columns else df['交易年月日']
 
     df_rate = pd.read_csv(file, encoding='utf-8-sig', header=4)
     rate_col = df_rate.columns[13]  # 定存利率
