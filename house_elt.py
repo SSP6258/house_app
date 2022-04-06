@@ -71,12 +71,18 @@ dic_of_name_2_addr = {
     '達欣東門馥寓': '台北市中正區金山南路一段96號',
     '達永豐盛學': '台北市北投區中央北路一段88號',
     '璞玥': '台北市北投區致遠一路一段40號',
+    '璞園寬心苑': '台北市台北市北投區石牌路二段307號',
     '松露院': '台北市秀明路二段75號',
     '敦北南京': '台北市松山區南京東路四段63號',
     '景美聯山-臻品區': '台北市文山區羅斯福路六段166巷',
     '遠雄晴川': '台北市文山區木柵路三段81號',
     '冠德羅斯福': '台北市中正區羅斯福路三段138號',
     '琢豐': '台北市中山區南京東路二段5號',
+    '昭揚天際': '台北市北投區承德路七段140號',
+    '維正里安': '台北市北投區立農街一段343巷',
+    '宏國大道城B棟': '台北市大同區承德路二段101號',
+    '至仁愛': '台北市中正區仁愛路二段74號',
+    '景美聯山-極品區': '台北市文山區羅斯福路六段198號',
 }
 
 
@@ -147,6 +153,10 @@ def fn_house_filter(df):
             df.at[idx, '土地位置建物門牌'] = city + df.loc[idx, '土地位置建物門牌']
 
     df = df[df['土地位置建物門牌'].apply(lambda x: '地號' not in x)]
+
+    if '建案名稱' in df.columns:
+        df['建案名稱'] = df['建案名稱'].apply(lambda x: x.replace('.', '').replace('大?', '大喆').replace('吉美君?', '吉美君悅'))
+
     df_fix = df[df['土地位置建物門牌'].apply(lambda x: fn_addr_handle(x).endswith('段'))]
 
     if len(df['建築完成年月'].unique()) > 5:  # 中古屋
@@ -311,9 +321,11 @@ def fn_house_coor_read():
 
 def fn_house_coor_save(df_coor_save):
     House_coor_file = os.path.join(dic_of_path['database'], 'House_coor.csv')
+    df_coor_save = df_coor_save.reset_index().drop_duplicates(subset='index', keep='first')
+    df_coor_save.set_index('index', inplace=True)
     df_coor_save.sort_index(inplace=True)
     df_coor_save.to_csv(House_coor_file, encoding='utf_8_sig')
-    print(f'共{df_coor_save.shape[0]}筆座標')
+    print(f'儲存 {df_coor_save.shape[0]} 筆座標 至 {House_coor_file}')
 
 
 def fn_save_building_name(path):
@@ -437,7 +449,7 @@ def fn_gen_build_case(df):
     return df
 
 
-def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
+def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame(), is_trc=True):
     df = pd.read_csv(file) if df_validate.shape[0] == 0 else df_validate
     source = os.path.dirname(file)
     root = os.path.dirname(source)
@@ -480,7 +492,8 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
 
         # if addr not in df_coor_read.index:
         dic_of_coor[addr] = [dic_of_geo_info[addr]['coor']['lat'], dic_of_geo_info[addr]['coor']['log']]
-        print(f'{is_coor_save}, {list_of_addr_unique.index(addr)}/{len(list_of_addr_unique)}', addr, dic_of_coor[addr])
+        if is_trc:
+            print(f'{is_coor_save}, {list_of_addr_unique.index(addr)}/{len(list_of_addr_unique)}', addr, dic_of_coor[addr])
 
     if len(dic_of_coor.keys()):
         df_coor = pd.DataFrame(dic_of_coor, index=['lat', 'lon'])
@@ -496,17 +509,20 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
         for i in range(len(coor_save)):
             if coor_save[i] is False:
                 drops.append(i)
-                print(f'drop {df_coor.index[i]} since coor_save[{i}]={coor_save[i]}')
+                # print(f'drop {df_coor.index[i]} since coor_save[{i}]={coor_save[i]}')
 
         if len(drops):
             drop_idx = []
             for d in drops:
                 drop_idx.append(df_coor.index[d])
-                print(f'drop df_coor.index[{d}] = {df_coor.index[d]}')
+                # print(f'drop df_coor.index[{d}] = {df_coor.index[d]}')
             df_coor.drop(index=drop_idx, inplace=True)
 
-        df_coor_save = df_coor_read.append(df_coor)
-        fn_house_coor_save(df_coor_save)
+        if df_coor.shape[0] > 0:
+            print(f'新增了 {df_coor.shape[0]} 筆座標 !')
+            # df_coor_save = df_coor_read.append(df_coor)
+            df_coor_save = pd.concat([df_coor_read, df_coor])
+            fn_house_coor_save(df_coor_save)
 
     for idx in df.index:
         addr = df['土地位置建物門牌'][idx]
@@ -519,7 +535,7 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame()):
         else:
             print(f'{a} not in dic_of_geo_info.keys()')
 
-    print(df.columns)
+    # print(df.columns)
     df.to_csv(output, encoding='utf_8_sig', index=False)
     return df
 
@@ -620,16 +636,49 @@ def fn_gen_vill(file):
         print(f'Vill updated !')
 
 
+def fn_gen_tax_info(file):
+    tax = os.path.join(dic_of_path['database'], '108_165-A.csv')  # 107_165-A.csv, 108_165-A.csv
+    df_tax = pd.read_csv(tax)
+    df_all = pd.read_csv(file)
+
+    if '里' in df_all.columns:
+        df_all['區_里'] = df_all['鄉鎮市區']+'_'+df_all['里']
+        if '鄉鎮市區' in df_tax.columns:
+            df_tax['區_里'] = df_tax['鄉鎮市區'] + '_' + df_tax['村里']
+        else:
+            df_tax['區_里'] = df_tax['行政區'] + '_' + df_tax['里']
+
+        for idx in df_all.index:
+            d_v = df_all.loc[idx, '區_里']
+            if d_v in df_tax['區_里'].values:
+                df_tax_sel = df_tax[df_tax['區_里'] == d_v]
+                assert df_tax_sel.shape[0] == 1, f'df_tax_sel.shape = { df_tax_sel.shape} {d_v} {idx}'
+                for c in df_tax_sel.columns:
+                    if c in ['里', '行政區', '鄉鎮市區', '村里', '區_里', '納稅單位']:
+                        pass
+                    else:
+                        df_all.at[idx, '稅_'+str(c)] = df_tax_sel[c].values[0]
+            else:
+                if str(d_v) != 'nan':
+                    print(f'{d_v} not in df_tax {tax}')
+
+        df_all.to_csv(file, encoding='utf-8-sig', index=False)
+        print(f'Add Tax Info Done ! {df_all.shape} {file}')
+    else:
+        print(f'Tax gen fail ! Missing column 里 in {file}')
+
+
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    fn_gen_raw_data(path, slp=5, is_force=False)
+    # fn_gen_raw_data(path, slp=5, is_force=False)
 
     # fn_save_building_name(path)
 
-    file = os.path.join(path, 'output/house_all.csv')
+    file = os.path.join(path, 'output', 'house_all.csv')
     # file = os.path.join(dic_of_path['database'], 'House_coor.csv')
-    fn_gen_vill(file)
+    # fn_gen_vill(file)
+    fn_gen_tax_info(file)
 
 
 if __name__ == '__main__':
