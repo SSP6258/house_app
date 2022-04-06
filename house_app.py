@@ -21,7 +21,7 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 # from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 
@@ -381,6 +381,8 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     st.subheader('批次驗證')
     st.write("驗證資料:[内政部不動產成交案件 資料供應系統(每月1、11、21日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)")
 
+    df_tax = pd.read_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), index_col='行政區')
+
     file = st.file_uploader("資料上傳", type=['csv'])
     print(file)
     if not file:
@@ -396,11 +398,40 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
         temp = os.path.join(path, 'output\\temp')
         if not os.path.exists(temp):
             os.makedirs(temp)
-        df = fn_gen_house_data(os.path.join(temp, file.name), 'test', df_validate=df)
+        df = fn_gen_house_data(os.path.join(temp, file.name), 'test', df_validate=df, is_trc=False)
 
         df['MRT_ave'] = df['MRT'].apply(lambda x: df_mrt_ave.loc[x, '每坪單價(萬)'])
         df['SKU_ave'] = df['sku_name'].apply(lambda x: df_sku_ave.loc[x, '每坪單價(萬)'])
         df['DIST_ave'] = df['鄉鎮市區'].apply(lambda x: df_dist_ave.loc[x, '每坪單價(萬)'])
+
+        df_coor_read = fn_house_coor_read()
+        for idx in df.index:
+            addr = df.loc[idx, '地址']
+            addr = addr if '台北市' in addr else '台北市' + addr
+
+            vill = ''
+            if addr in df_coor_read.index:
+                vill = df_coor_read.loc[addr, '里']
+            else:
+                try:
+                    addr_coor, is_match, add_fr_db = fn_get_coor_fr_db(addr, df_coor_read.copy(), is_trc=False)
+                except:
+                    is_match = False
+
+                if is_match:
+                    print(addr, 'not in coor addr, try', add_fr_db)
+                    vill = df_coor_read.loc[add_fr_db, '里']
+
+            if str(vill).endswith('里'):
+                df.at[idx, '里'] = vill
+
+        if '里' in df.columns:
+            df = df[df['里'].astype(str) != 'nan']
+            df = df[df['里'].apply(lambda x: x in df_tax['里'].values)]
+            df['稅_中位數'] = df['里'].apply(lambda x: df_tax[df_tax['里'] == x]['中位數'].values[0])
+            df['稅_平均數'] = df['里'].apply(lambda x: df_tax[df_tax['里'] == x]['平均數'].values[0])
+        else:
+            assert False, f'No 里 in df.columns'
 
         if df.shape[0] and n_data:
 
@@ -736,7 +767,10 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     admin_dists = len(df['鄉鎮市區'].unique())
 
     df_dist = df.copy() if dist == '不限' else df[df['鄉鎮市區'] == dist]
-    df_dist.at[:, '里'] = df_dist.loc[:, '鄉鎮市區'] + '_' + df_dist.loc[:, '里']
+
+    d_v = df_dist.loc[:, '鄉鎮市區'] + '_' + df_dist.loc[:, '里']
+    df_dist.loc[:, '里'] = d_v.copy()
+
     df_dist = pd.DataFrame(df_dist.groupby('里', as_index=True)['每坪單價(萬)'].mean())
     df_dist = df_dist[['每坪單價(萬)']].apply(lambda x: round(x, 2))
     df_dist.reset_index(inplace=True)
@@ -2223,6 +2257,7 @@ def fn_gen_web_ml_inference(path, build_typ):
 
                 df_coor_save = df_coor_read.append(df_coor)
                 if is_coor_save:
+                    print(f'save {addr}')
                     fn_house_coor_save(df_coor_save)
 
             dic_of_input['台北市'] = 1 if '台北市' in addr else 0
@@ -2336,7 +2371,6 @@ def fn_gen_web_ml_inference(path, build_typ):
 
         is_rf = model_typ == 'rf'
         fn_gen_pred(path, loaded_model, model_sel, df_F, build_typ, is_rf)
-
 
     else:
         st.write(f'No models found in {model_fdr}')
