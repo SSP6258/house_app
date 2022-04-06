@@ -13,6 +13,7 @@ from geopy.distance import geodesic
 from collections import defaultdict
 from workalendar.asia import Taiwan
 from shapely.geometry import shape, Point
+# from tabula import read_pdf
 
 dic_of_path = {
     # 'root': r'D:\05_Database\house_data',
@@ -177,7 +178,7 @@ def fn_cn_2_an(string):
     return string_an
 
 
-def fn_get_admin_dist(addr):
+def fn_get_admin_dist(addr, is_trc=True):
     city = addr.split('市')[0] + '市'
     dist = addr.split(city)[-1].split('區')[0] + '區'
     vil = addr.split(dist)[-1].split('里')[0] + '里' if '里' in addr and '八里區' not in dist else 'NA'
@@ -242,14 +243,16 @@ def fn_get_admin_dist(addr):
             pass
         else:
             # 7.9號 / 39，41號 / 8，10號 / 四小段11號 / 二小段0618-0000號
-            number = num.split('號')[0].split('之')[0].split('-')[0].split('~')[0].split('.')[0].split('，')[0].split('段')[-1]
+            number = num.split('號')[0].split('之')[0].split('-')[0].split('~')[0].split('.')[0].split('，')[0].split('段')[
+                -1]
             if number.isnumeric():
                 num = number + '號'
             else:
                 n = ''
                 for i, v in enumerate(num.split('號')[0]):
                     n += v if v.isnumeric() else ''
-                print('Review this addr num !', num, '-->', n + '號')
+                if is_trc:
+                    print('Review this addr num !', num, '-->', n + '號')
                 num = n + '號'
 
     if section != 'NA':
@@ -288,8 +291,8 @@ def fn_get_admin_dist(addr):
     return dic_of_dist
 
 
-def fn_get_coor_fr_db(addr, df_coor):
-    dic_of_dist = fn_get_admin_dist(addr)
+def fn_get_coor_fr_db(addr, df_coor, is_trc=True):
+    dic_of_dist = fn_get_admin_dist(addr, is_trc)
 
     for k, v in dic_of_dist.items():
         if v != 'NA' and k in df_coor.columns and v in df_coor[k].values:
@@ -319,17 +322,19 @@ def fn_get_coor_fr_db(addr, df_coor):
                     sel = diff.index(min(diff))
                     matched = True
                     df_coor = df_coor_sel
-                    print(a, num, nums, sel, nums[sel], matched, len(diff))
+                    if is_trc:
+                        print(a, num, nums, sel, nums[sel], matched, len(diff))
                     break
 
     coor = df_coor[['lat', 'lon']].iloc[sel, :]
     coor = tuple(coor)
     addr_match = df_coor.index[sel]
 
-    if matched:
-        print('Coor From DB: ', addr, ' --> ', addr_match, coor)
-    else:
-        print(f'can NOT find similar addr of {addr}')
+    if is_trc:
+        if matched:
+            print('Coor From DB: ', addr, ' --> ', addr_match, coor)
+        else:
+            print(f'can NOT find similar addr of {addr}')
 
     return coor, matched, addr_match
 
@@ -475,6 +480,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
         lat = round(df_addr_coor.loc[addr]['lat'], 5)
         lon = round(df_addr_coor.loc[addr]['lon'], 5)
         addr_coor = (lat, lon)
+        is_save = False  # ?
         # print(addr, '--> known coor: ', addr_coor)
     else:
         try:
@@ -665,6 +671,11 @@ def fn_get_school_total(df, df_ps, year):
         k = '私立立人國(中)小' if k == '私立立人國際國民中小學' else k
         k = '國立台北教育大學附小' if k == '國立北教大' else k
 
+        if year >= 110:
+            k = '私立復興實驗高中附設國小部' if k == '私立復興國小' else k
+            k = '私立靜心高中附設國小部' if k == '私立靜心小學' else k
+            k = '私立華興中學附設國小部' if k == '私立華興小學' else k
+
         df_d = df_ps[df_ps['縣市名稱'] == c.replace('台', '臺')].copy()
         df_d.reset_index(inplace=True)
 
@@ -674,7 +685,7 @@ def fn_get_school_total(df, df_ps, year):
                 df.at[idx, f'{year}_Total'] = total
                 break
 
-            if i == df_d.shape[0] - 1 and '小' in s:
+            if i == df_d.shape[0] - 1 and '小' in s and '淡水區' not in d:
                 print(f'Year:{year} can NOT find peoples for {d, s, k}')
 
     return df
@@ -708,7 +719,7 @@ def fn_gen_school_info(path, years):
 
 def fn_gen_school_data():
     path = dic_of_path['database']
-    years = range(100, 110, 1)
+    years = range(100, 111, 1)
     fn_gen_school_coor(path)
     fn_gen_school_peoples(path, years)
     fn_gen_school_filter(path)
@@ -764,12 +775,83 @@ def fn_coor_2_vill(lon, lat):
     return vill
 
 
+def fn_read_pdf(src, pages='all'):
+    list_of_df = read_pdf(src, pages=pages)
+
+    return list_of_df
+
+
+def fn_gen_tax_file():
+    url = 'https://www.fia.gov.tw/WEB/fia/ias/isa108s/isa108/108_165-A.pdf'
+    list_of_pdf = fn_read_pdf(url)
+
+    dic_of_dist = {
+        1: '松山區',
+        2: '大安區',
+        3: '中正區',
+        4: '萬華區',
+        5: '大同區',
+        6: '中山區',
+        7: '文山區',
+        8: '南港區',
+        9: '內湖區',
+        10: '士林區',
+        11: '北投區',
+        12: '信義區',
+    }
+
+    df_tax = pd.DataFrame()
+    for p in range(len(list_of_pdf)):
+        df = list_of_pdf[p]
+        col_f = df.columns[0]
+
+        if str(df[col_f][0]) == 'nan':
+            for idx in df.index:
+                if str(df.loc[idx, col_f]) == 'nan' or str(df.loc[idx, col_f]) == '南港區':
+                    for c in range(len(df.columns) - 1):
+                        df.at[idx, df.columns[c]] = df.loc[idx, df.columns[c + 1]]
+
+        # if p == 8:
+        #     print(p, len(df.columns))
+        #     print(df.columns[2])
+        #     print(df.iloc[:8, -2])
+        df.rename(columns={'Unnamed: 0': '里'}, inplace=True)
+
+        if len(df.columns) > 9:
+            df.drop(columns=[df.columns[-1]], inplace=True)
+
+        df_tax = pd.concat([df_tax, df], axis=0)
+
+    df_tax.reset_index(drop=True, inplace=True)
+    count = 1
+    for idx in df_tax.index:
+        vill = df_tax.loc[idx, '里']
+        if vill.endswith('計') and count < 12:
+            count += 1
+        df_tax.at[idx, '行政區'] = dic_of_dist[count]
+
+        # print(idx, vill, count, dic_of_dist[count])
+
+    df_tax = df_tax[df_tax['里'].apply(lambda x: x.endswith('里'))].copy()
+    df_tax.sort_values(by='中位數', ascending=False, inplace=True, ignore_index=True)
+    df_tax.reset_index(drop=True, inplace=True)
+
+    cols_old = df_tax.columns.tolist()
+    cols = cols_old[-1:] + cols_old[:-1]
+    df_tax = df_tax[cols]
+    df_tax['平均_減_中位'] = df_tax['平均數'] - df_tax['中位數']
+
+    df_tax.to_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), encoding='utf-8-sig', index=False)
+
+
 def fn_main():
     # fn_gen_mrt_coor()
     # fn_get_travel_time()
-    # fn_get_mrt_tput('進站', 6, 10)
-    # fn_get_mrt_tput('出站', 6, 10)
-    fn_gen_school_data()
+    fn_get_mrt_tput('進站', 6, 10)
+    fn_get_mrt_tput('出站', 6, 10)
+    # fn_gen_school_data()
+    # fn_gen_tax_file()
+    pass
 
 
 if __name__ == '__main__':
