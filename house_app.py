@@ -784,6 +784,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                             f'{dist_sel} {admin_vills}個 里 v.s. 每坪單價(萬)'))
 
     df_sort = df.sort_values(by='DIST_ave', ascending=False)
+    df_gb = pd.DataFrame(df_sort.groupby('鄉鎮市區', as_index=True)['每坪單價(萬)'].mean())
+    df_gb = df_gb[['每坪單價(萬)']].apply(lambda x: round(x, 2))
     df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
     hover_text = fn_get_hover_text(df_sort)
@@ -802,6 +804,12 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_hl['鄉鎮市區'], df_hl['每坪單價(萬)'],
                                     margin=margin, color='red', text=hover_txt1, opacity=1, row=1, size=8)
 
+    hover_text = fn_get_hover_text(df_gb)
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_gb.index, df_gb['每坪單價(萬)'],
+                                    margin=margin, color='tomato', text=hover_text,
+                                    opacity=0.6, row=1, size=12, marker_sym=24,
+                                    legend=True, name='每坪均價(區)')
+
     df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
 
     df_vill = pd.DataFrame()
@@ -819,7 +827,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
                                     margin=margin, color='violet', text=hover_text,
                                     opacity=0.6, row=2, size=12, marker_sym=24,
-                                    legend=True, name='每坪均價')
+                                    legend=True, name='每坪均價(里)')
 
     if tax == '所得平均數' or tax == '全選':
         df_tax_ave = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_平均數'].values[0] / 10))
