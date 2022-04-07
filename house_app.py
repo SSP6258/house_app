@@ -412,15 +412,16 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             vill = ''
             if addr in df_coor_read.index:
                 vill = df_coor_read.loc[addr, '里']
-            else:
+
+            if vill == '' or str(vill) == 'nan':
                 try:
                     addr_coor, is_match, add_fr_db = fn_get_coor_fr_db(addr, df_coor_read.copy(), is_trc=False)
                 except:
                     is_match = False
 
                 if is_match:
-                    print(addr, 'not in coor addr, try', add_fr_db)
                     vill = df_coor_read.loc[add_fr_db, '里']
+                    # print(addr, 'not in coor addr, try', add_fr_db, vill)
 
             if str(vill).endswith('里'):
                 df.at[idx, '里'] = vill
