@@ -604,7 +604,7 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     X = df[Feature_sel]
 
     for c in X.columns:
-        if X[c].dtype == object:
+        if X[c].dtype == object and is_inference:
             print(c, X[c].dtype, 'change typ to float !')
             X[c] = X[c].astype(float)
         if X[c].isna().any() and is_inference:
