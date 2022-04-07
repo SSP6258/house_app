@@ -1706,7 +1706,7 @@ def fn_gen_web_eda(df):
                                     op=0.55,
                                     size='交易量')
 
-    latest_rel = '0321'
+    latest_rel = '0401'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -1718,7 +1718,7 @@ def fn_gen_web_eda(df):
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析 (更新至: {To})')
     st.plotly_chart(fig_map_all)
     st.write('')
-    area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=0)
+    area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=1)
     fn_set_radio_2_hor()
     if area == '交易筆數':
         st.plotly_chart(fig_tm)
