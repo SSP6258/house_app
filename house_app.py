@@ -443,7 +443,11 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                     print(i)
 
             X, df_cat = fn_gen_training_data(df.copy(), path, is_inference=True, df_F=df_F)
-            df['模型預估(萬/坪)'] = model.predict(X)
+            try:
+                df['模型預估(萬/坪)'] = model.predict(X)
+            except:
+                print(X.dtypes)
+                df['模型預估(萬/坪)'] = model.predict(X)
 
             if is_rf:
                 trees, conf = fn_gen_model_confidence(model, X)
@@ -463,16 +467,20 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
 
             # st.dataframe(df_show)
 
-            if is_rf:
+            if True:  # is_rf:
                 config = {'scrollZoom': True,
                           'toImageButtonOptions': {'height': None, 'width': None}}
 
                 st.write('')
                 st.subheader(f'模型可信度分析')
                 c1, c2 = st.columns(2)
-                ths = c2.slider('信心門檻', min_value=90, max_value=100, value=(96, 100))
-                th_l, th_h = ths[0], ths[1]
-                df_sel = df[df['信心指標'].apply(lambda x: th_h >= x >= th_l)]
+                if is_rf:
+                    ths = c2.slider('信心門檻', min_value=90, max_value=100, value=(96, 100))
+                    th_l, th_h = ths[0], ths[1]
+                    df_sel = df[df['信心指標'].apply(lambda x: th_h >= x >= th_l)]
+                else:
+                    # df['信心指標'] = df['鄉鎮市區'].apply(lambda x: 100)
+                    df_sel = df
 
                 colors = ['無', f'依行政區({len(df["鄉鎮市區"].unique())})', '依捷運距離', '依通勤時間']
                 color_by = c1.selectbox('著色條件:', colors)
@@ -481,43 +489,52 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                 fig = make_subplots()
                 color_set, opacity = fn_set_color_by(color_by, df)
                 hover_text = fn_get_hover_text(df)
+
+                if is_rf:
+                    title = f'模型: ml_model{model_name.split("ml_model")[-1]} 的 可信度評估 <br>' \
+                            f'( 此模型進行{df.shape[0]}筆預測, 信心指標介於 {th_l} ~ {th_h} ' \
+                            f'的 有{df_sel.shape[0]}筆, 約{int(100 * df_sel.shape[0] / df.shape[0])}% )'
+                else:
+                    title = f'模型: ml_model{model_name.split("ml_model")[-1]} 的 可信度評估'
+
                 fig = fn_gen_plotly_scatter(fig, df['每坪單價(萬)'], df['模型預估(萬/坪)'], margin=margin,
-                                            color=color_set, text=hover_text, opacity=0.6)
+                                            color=color_set, text=hover_text, opacity=0.6,
+                                            xlabel='實際單價(萬/坪)', ylabel='預估單價(萬/坪)', title=title)
                 color_set, opacity = fn_set_color_by(color_by, df_sel)
                 hover_text = fn_get_hover_text(df_sel)
-                title = f'模型: ml_model{model_name.split("ml_model")[-1]} 的 可信度評估 <br>' \
-                        f'( 此模型進行{df.shape[0]}筆預測, 信心指標介於 {th_l} ~ {th_h} ' \
-                        f'的 有{df_sel.shape[0]}筆, 約{int(100 * df_sel.shape[0] / df.shape[0])}% )'
 
-                fig = fn_gen_plotly_scatter(fig, df_sel['每坪單價(萬)'], df_sel['模型預估(萬/坪)'], margin=margin,
-                                            color=color_set, text=hover_text, opacity=1,
-                                            xlabel='實際單價(萬/坪)', ylabel='預估單價(萬/坪)', title=title)
+                if is_rf:
+                    fig = fn_gen_plotly_scatter(fig, df_sel['每坪單價(萬)'], df_sel['模型預估(萬/坪)'], margin=margin,
+                                                color=color_set, text=hover_text, opacity=1,
+                                                xlabel='實際單價(萬/坪)', ylabel='預估單價(萬/坪)', title=title)
+
                 st.write('')
                 st.plotly_chart(fig, config=config)
 
-                fig = make_subplots(rows=2, cols=2, specs=[[{"rowspan": 1, "colspan": 2}, None], [{}, {}]],
-                                    subplot_titles=('信心指標v.s.絕對誤差', '信心分佈', '誤差(萬/坪)分佈'))
+                if is_rf:
+                    fig = make_subplots(rows=2, cols=2, specs=[[{"rowspan": 1, "colspan": 2}, None], [{}, {}]],
+                                        subplot_titles=('信心指標v.s.絕對誤差', '信心分佈', '誤差(萬/坪)分佈'))
 
-                fig = fn_gen_plotly_hist(fig, df['信心指標'], '信心指標', row=2, col=1, margin=margin)
-                fig = fn_gen_plotly_hist(fig, df['誤差(萬/坪)'], '誤差分布(萬/坪)', row=2, col=2, margin=margin)
+                    fig = fn_gen_plotly_hist(fig, df['信心指標'], '信心指標', row=2, col=1, margin=margin)
+                    fig = fn_gen_plotly_hist(fig, df['誤差(萬/坪)'], '誤差分布(萬/坪)', row=2, col=2, margin=margin)
 
-                color_set, opacity = fn_set_color_by(color_by, df)
+                    color_set, opacity = fn_set_color_by(color_by, df)
 
-                # hover_text = df['鄉鎮市區']
-                hover_text = fn_get_hover_text(df)
+                    # hover_text = df['鄉鎮市區']
+                    hover_text = fn_get_hover_text(df)
 
-                fig = fn_gen_plotly_scatter(fig, df['信心指標'], abs(df['誤差(萬/坪)']), row=1, margin=margin,
-                                            color=color_set, text=hover_text, opacity=0.6,
-                                            xlabel='信心指標(分)', ylabel='絕對誤差(萬/坪)')
-                # fig.add_vline(x=96, row=2, line dash="dash", line_color-"red")
+                    fig = fn_gen_plotly_scatter(fig, df['信心指標'], abs(df['誤差(萬/坪)']), row=1, margin=margin,
+                                                color=color_set, text=hover_text, opacity=0.6,
+                                                xlabel='信心指標(分)', ylabel='絕對誤差(萬/坪)')
+                    # fig.add_vline(x=96, row=2, line dash="dash", line_color-"red")
 
-                if df_sel.shape[0] > 0:
-                    err_max = max(abs(df_sel['誤差(萬/坪)']))
-                    fig.add_vrect(x0=-1 * err_max, row=2, col=2, x1=err_max, line_width=0, fillcolor="red", opacity=0.1)
-                    fig.add_vrect(x0=th_l, row=2, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
-                    fig.add_vrect(x0=th_l, row=1, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
+                    if df_sel.shape[0] > 0:
+                        err_max = max(abs(df_sel['誤差(萬/坪)']))
+                        fig.add_vrect(x0=-1 * err_max, row=2, col=2, x1=err_max, line_width=0, fillcolor="red", opacity=0.1)
+                        fig.add_vrect(x0=th_l, row=2, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
+                        fig.add_vrect(x0=th_l, row=1, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
 
-                st.plotly_chart(fig, config=config)
+                    st.plotly_chart(fig, config=config)
 
             st.write('')
             AgGrid(df_show, theme='blue')
@@ -586,6 +603,9 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     X = df[Feature_sel]
 
     for c in X.columns:
+        if X[c].dtype == object:
+            print(c, X[c].dtype, 'change typ to float !')
+            X[c] = X[c].astype(float)
         if X[c].isna().any() and is_inference:
             print(c, X[[c]].shape, X.shape)
             for i, v in enumerate(X[c].tolist()):
