@@ -513,7 +513,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
 
                 if is_rf:
                     fig = make_subplots(rows=2, cols=2, specs=[[{"rowspan": 1, "colspan": 2}, None], [{}, {}]],
-                                        subplot_titles=('信心指標v.s.絕對誤差', '信心分佈', '誤差(萬/坪)分佈'))
+                                        subplot_titles=('信心指標 v.s. 絕對誤差', '信心分佈', '誤差(萬/坪)分佈'))
 
                     fig = fn_gen_plotly_hist(fig, df['信心指標'], '信心指標', row=2, col=1, margin=margin)
                     fig = fn_gen_plotly_hist(fig, df['誤差(萬/坪)'], '誤差分布(萬/坪)', row=2, col=2, margin=margin)
