@@ -2231,11 +2231,33 @@ def fn_gen_web_ml_inference(path, build_typ):
                 except:
                     print(f'date parsing fail ! -->  {latest}')
 
-    keep = dates.index(max(dates))
+    # keep = dates.index(max(dates))
+
+    dic_keep = {}
+    dates.sort(reverse=True)
+    for d in dates:
+        m_id = [i for i, n in enumerate(dates) if n == d]
+
+        for i in m_id:
+            m = models[i]
+
+            if '_rf_' in m and 'rf' not in dic_keep.keys():
+                dic_keep['rf'] = m
+
+            if '_xgb_' in m and 'xgb' not in dic_keep.keys():
+                dic_keep['xgb'] = m
+
+        print(d, dic_keep)
+
     for m in models:
-        drop = os.path.join(ml_model, m)
-        os.remove(drop) if models.index(m) != keep else None
-        print(models.index(m) != keep, m, keep, dates[keep], drop, dates, models)
+        if m not in dic_keep.values():
+            print(f' {m} not in {dic_keep.values()} remove it !')
+            os.remove(os.path.join(ml_model, m))
+            os.remove(os.path.join(ml_model, m.replace('.sav', '.csv')))
+
+        # drop = os.path.join(ml_model, m)
+        # os.remove(drop) if models.index(m) != keep else None
+        # print(models.index(m) != keep, m, keep, dates[keep], drop, dates, models)
 
     if len(models) > 0:
         st.write('')
