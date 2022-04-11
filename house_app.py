@@ -2097,6 +2097,15 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
             if len(df['台北市'].unique()) == 1:
                 city = 'tpe' if df['台北市'].unique() == 1 else 'new_tpe'
 
+            # Remove existed models before saving new model ( save memory space in cloud side )
+            model_fdr = os.path.dirname(model_file)
+            for i, j, files in os.walk(model_fdr):
+                for f in files:
+                    if model_typ in f:
+                        remove_file = os.path.join(model_fdr, f)
+                        os.remove(remove_file)
+                        print(f'{remove_file} removed !')
+
             good_model = model_file.split('.sav')[
                              0] + f'_{city}_{model_typ}_mse_{str(mse).replace(".", "p")}_{date_str}.sav'
             df_F.to_csv(good_model.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
