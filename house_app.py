@@ -2498,7 +2498,7 @@ def fn_gen_web_ref():
     st.write("- 小學 - 各校地址(新北市): [政府資料開放平台 - 新北市學校通訊資料](https://data.gov.tw/dataset/123020)")
     st.write("- 歴史利率: [臺灣銀行存放款利率歷史資料表](https://www.cbc.gov.tw/tw/public/data/a13rate.xls)")
     st.write("- 歷史匯率: [臺灣期貨交易所 - 每日外幣参考匯率查詢](https://www.taifex.com.tw/cht/3/dailyFXRate)")
-    st.write("- 經濟成長: [行政院主計總處 - 中華民國統計資訊網]")
+    st.write("- 經濟成長: [行政院主計總處 - 中華民國統計資訊網](https://www.stat.gov.tw/point.asp?index=1)")
     st.write("- 人口普查: [行政院主計總處 - 109年普查初步統計結果表](https://www.stat.gov.tw/ct.asp?mp=4&xItem=47698&ctNode=549)")
     st.write("- 單點坐標回傳行政區: [政府資料開放平台 - 坐標回傳行政區API](https://data.gov.tw/dataset/101898)")
     st.write("- 鄉鎮市區界線: [政府資料開放平台 - 我國各鄉(鎮、市、區)行政區城界線圖資](https://data.gov.tw/dataset/441)")
