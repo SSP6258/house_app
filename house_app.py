@@ -2517,6 +2517,8 @@ def fn_gen_web_ref():
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
     st.write("- 房價指標: [臺北市地政局 房市指標溫度計](https://emuseum.land.gov.taipei/TaipeiLandRealEstate/)")
+    st.write("- 裁判書查詢: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)")
+    st.write("- 耐震標章: [台灣建築中心 耐震標章](https://www.tabc.org.tw/sab/modules/news/article.php?storyid=7)")
 
     st.write('')
     st.subheader('相關競賽:')
