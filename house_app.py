@@ -2595,7 +2595,6 @@ def fn_app(page='data'):
     if not os.path.exists(ml_model):
         os.makedirs(ml_model)
 
-    # page = 'eda'
     if page == 'eda':
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
