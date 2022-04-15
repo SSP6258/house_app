@@ -2549,6 +2549,8 @@ def fn_gen_web_tools():
     st.write(
         "- Streamlit multi page framework: [streamlit-multiapps](https://github.com/upraneelnihar/streamlit-multiapps)")
     st.write("- 畫文字 表情符號: [Emojipedia](https://emojipedia.org/)")
+    st.write("- 影音嵌入: [Streamlit-player](https://github.com/okld/streamlit-player)")
+    st.write("- 音樂庫: [SoundCloud](https://soundcloud.com/)")
 
     st.write('')
     st.subheader('函式庫:')
