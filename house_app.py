@@ -1939,6 +1939,8 @@ def fn_gen_web_ml_train(df, path):
         else:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, stratify=df['cat'])
 
+        del X
+
         with st.expander(f'👓 檢視 資料篩選'):
             if drop_sel != '包含':
                 st.markdown(f'{"#" * 5} 排除分佈少於{limit * 100} % 的目標: 共{drop_num}筆')
@@ -1958,7 +1960,7 @@ def fn_gen_web_ml_train(df, path):
             fn_gen_plotly_hist(fig, y_test[watch], '測試', row=2, margin=margin)
             st.plotly_chart(fig)
 
-            if 'MRT' in X.columns:
+            if 'MRT' in X_train.columns:  # X.columns:
                 for col_2_check in ['MRT']:  # ,移轉層次,交易年
                     st.markdown(f'{"#" * 5} 特徵 *“{col_2_check}”* 在 訓練 與 測試 樣本的佈狀況:')
                     fig = make_subplots(rows=2, cols=1)
@@ -1969,8 +1971,8 @@ def fn_gen_web_ml_train(df, path):
                                        margin=margin)
                     st.plotly_chart(fig)
 
-        if 'MRT' in X.columns:
-            X = X.drop(columns='MRT')
+        if 'MRT' in X_train.columns:  # X.columns:
+            # X = X.drop(columns='MRT')
             X_train = X_train.drop(columns='MRT')
             X_test = X_test.drop(columns='MRT')
 
@@ -2076,8 +2078,8 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     mse = round(df_result.loc["MSE", "測試集"], 2)
 
     st.write('')
-    is_model_save = st.button('訓練並儲存 模型')
-    if is_model_save:
+    # is_model_save = st.button('訓練並儲存 模型')
+    if True:  # is_model_save:
         df_F = pd.DataFrame()
         df_F['Features'] = X_train.columns
         # df_F.to_csv(model_file.replace('.sav', '.csv'), encoding='utf-8-sig', index=False)
