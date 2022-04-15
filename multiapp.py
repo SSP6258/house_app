@@ -3,7 +3,10 @@
 import streamlit as st
 from house_app import fn_chrome_96_workaround, fn_show_img
 from house_utils import dic_of_path
-from streamlit_player import st_player
+try:
+    from streamlit_player import st_player
+except:
+    pass
 
 
 class MultiApp:
@@ -47,12 +50,13 @@ class MultiApp:
         fn_chrome_96_workaround()
         st.set_page_config(page_title="尋找夢想家", page_icon="🏠")
 
-        with st.sidebar:
-            music_url="https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-            st_player(music_url, playing=True, loop=True, volume=0.5, height=200 )
-
-        # imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
-        # fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
+        try:
+            with st.sidebar:
+                music_url="https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+                st_player(music_url, playing=True, loop=True, volume=0.5, height=200)
+        except:
+            imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
+            fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
 
         st.sidebar.title("👨‍🏫 [Jack.Pan's](https://www.facebook.com/jack.pan.96/) 房市看板 ")
         st.sidebar.write('- ✉️ ssp6258@yahoo.com.tw')

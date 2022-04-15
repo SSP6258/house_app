@@ -2567,7 +2567,7 @@ def fn_gen_web_tools():
     st.write('')
     st.subheader('其它工具:')
     st.write("- 圖轉文字: [LINE OCR](https://www.tech-girlz.com/2021/01/line-ocr.html)")
-    st.write("- 圖轉CSV: [誠華OCR](https://zhtw.109876543210.com/)")
+    st.write("- 圖轉CSV: [誠華 OCR](https://zhtw.109876543210.com/)")
 
 
 def fn_gen_web_projs():
