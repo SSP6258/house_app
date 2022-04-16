@@ -52,8 +52,9 @@ class MultiApp:
 
         try:
             with st.sidebar:
+                play = st.checkbox('▶️', value=True)
                 music_url="https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-                st_player(music_url, playing=True, loop=True, volume=0.5, height=250)
+                st_player(music_url, playing=play, loop=True, volume=0.5, height=220)
         except:
             imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
             fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
