@@ -2526,8 +2526,8 @@ def fn_gen_web_ref():
     st.subheader('相關競賽:')
     st.write(
         "- 交通部: [交通數據創新應用競賽](https://tdx-contest.tca.org.tw) [TDX交通資料育成網](https://startup.transportdata.tw/) [隊名: 傑克潘 (TD-81670023)](https://tdx-contest.tca.org.tw/)")
-    st.write("- 玉山人工智慧公開挑戰賽2019夏季賽:[台灣不動產AI神預測](https://tbrain.trendmicro.com.tw/competitions/Details/6)")
-    st.write("- 經濟部中小企業處:[2021城市數據實境賽](https://data.startupterrace.tw/data-contest)")
+    st.write("- 玉山人工智慧公開挑戰賽2019夏季賽: [台灣不動產AI神預測](https://tbrain.trendmicro.com.tw/competitions/Details/6)")
+    st.write("- 經濟部中小企業處: [2021城市數據實境賽](https://data.startupterrace.tw/data-contest)")
 
     st.write("")
     st.subheader('專利:')
