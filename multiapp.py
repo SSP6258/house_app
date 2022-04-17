@@ -52,10 +52,12 @@ class MultiApp:
 
         try:
             with st.sidebar:
-                music_url = "https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-                music_url = "https://soundcloud.com/user-443256645/esther-abrami-no-9-esthers?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+                music = {
+                    1: "https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+                    2: "https://soundcloud.com/user-443256645/esther-abrami-no-9-esthers?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+                }
 
-                st_player(music_url, playing=True, loop=True, volume=0.3, height=220)
+                st_player(music[1], playing=True, loop=True, volume=0.3, height=220)
         except:
             imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
             fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
