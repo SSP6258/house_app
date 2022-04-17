@@ -53,7 +53,7 @@ class MultiApp:
         try:
             with st.sidebar:
                 music_url = "https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
-                music_url = "https://youtu.be/BU_xZs7rvr0?list=PLySGbWJPNLA8cYNWc-qTp-hePGRWdPDMQ"
+                music_url = "https://soundcloud.com/user-443256645/esther-abrami-no-9-esthers?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
 
                 st_player(music_url, playing=True, loop=True, volume=0.3, height=220)
         except:
