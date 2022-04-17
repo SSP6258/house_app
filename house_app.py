@@ -2590,6 +2590,7 @@ def fn_app(page='data'):
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
+    price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
     c1, c2 = st.sidebar.columns(2)
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
     root = dic_of_path['root']
@@ -2602,6 +2603,7 @@ def fn_app(page='data'):
     if page == 'eda':
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
+        df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
         build_typ = c2.selectbox('建物型態', ['大樓', '華廈', '不限'], index=0)
         df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
 
@@ -2621,6 +2623,7 @@ def fn_app(page='data'):
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
+        df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
         build_typ = c2.selectbox('建物型態', ['大樓', '華廈', '不限'], index=0)
         df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
 
