@@ -1,8 +1,12 @@
 """Frameworks for running multiple Streamlit applications as a single app.
 """
+import random
+
 import streamlit as st
+from random import randint
 from house_app import fn_chrome_96_workaround, fn_show_img
 from house_utils import dic_of_path
+
 try:
     from streamlit_player import st_player
 except:
@@ -56,8 +60,8 @@ class MultiApp:
                     1: "https://soundcloud.com/audio-library-478708792/leaning-on-the-everlasting-arms-zachariah-hickman-audio-library-free-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
                     2: "https://soundcloud.com/user-443256645/esther-abrami-no-9-esthers?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
                 }
-
-                st_player(music[1], playing=True, loop=True, volume=0.3, height=220)
+                i = random.randint(1,2)
+                st_player(music[i], playing=True, loop=True, volume=0.3, height=220)
         except:
             imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
             fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
