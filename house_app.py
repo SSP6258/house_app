@@ -1564,7 +1564,6 @@ def fn_gen_web_eda(df):
                                      mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     df_sel = df.copy()
-
     Latest_date = str(df_sel['交易年月日'].iloc[0])
     Latest_date = Latest_date[0:-4] + '年' + Latest_date[-4].replace('0', '') + Latest_date[-3] + '月'
 
