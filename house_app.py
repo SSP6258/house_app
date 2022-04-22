@@ -2586,6 +2586,7 @@ def fn_gen_web_ref():
         st.write("- 內政部 營建署: [建築執照申請審核書](https://www.cpami.gov.tw/%E6%9C%80%E6%96%B0%E6%B6%88%E6%81%AF/%E6%B3%95%E8%A6%8F%E5%85%AC%E5%91%8A/30-%E5%BB%BA%E7%AF%89%E7%AE%A1%E7%90%86%E7%AF%87/28578-%E5%BB%BA%E7%AF%89%E5%9F%B7%E7%85%A7%E7%94%B3%E8%AB%8B%E5%AF%A9%E6%A0%B8%E6%9B%B8%E8%A1%A8.html)")
         st.write("- 台北市 建築管理工程處-建照科 [建照執照申請表](https://dba.gov.taipei/News_Content.aspx?n=5B651B337CE7F386&sms=59F8DF70DEAE0B38&s=162C96AA9A55DB66)")
 
+
 def fn_gen_web_tools():
     st.write("")
     st.subheader('機器學習:')
