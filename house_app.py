@@ -2536,6 +2536,50 @@ def fn_gen_web_ref():
     st.subheader('專利:')
     st.write("- 智能不動產估價專利: [中華民國專利資訊檢索系統](https://twpat2.tipo.gov.tw/twpatc/twpatkm?@@642176895)")
 
+    st.write('')
+    st.subheader('當你要買預售屋...')
+    with st.expander('簽約之前 的 注意事項'):
+
+        st.write('')
+        st.subheader('建商/營造商 的 規模/履歷? 一案建商?')
+        st.write("- 經濟部 商業司: [商工登記公示資料查詢服務](https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do)")
+        st.write("- 內政部 營建署: [建築工程履歷查詢系統](http://cpabm.cpami.gov.tw/cers/SearchLicForm.do)")
+        st.write("- 透明足跡: [掃了再買－讓企業負起責任](https://thaubing.gcaa.org.tw/)")
+
+        st.write('')
+        st.subheader('廣告不實 怎麼辦?')
+        st.write("- 台北市 地政局: [地權及不動產交易科](https://land.gov.taipei/News_Content.aspx?n=8C8F186F23B3BE43&sms=1EA0BE6515958939&s=88696428E9FB14CA)")
+        st.write("- 內政部 地政司: [不動產交易管理科](https://www.land.moi.gov.tw/chhtml/mailbox/54)")
+        st.write("- 行政院 公平會: [服務信箱](https://www.ftc.gov.tw/internet/main/mailbox/notice.aspx)")
+        st.write("- 行政院 消基會: [線上申訴調解申請](https://appeal.cpc.ey.gov.tw/WWW/Default.aspx)")
+
+        st.write('')
+        st.subheader('訴訟案件 哪裡查?')
+        st.write("- 司法院 法學資料檢索系統: [裁判書查詢](https://law.judicial.gov.tw/FJUD/default.aspx)")
+
+        st.write('')
+        st.subheader('建築標章 哪裡查?')
+        st.write("- 財團法人台灣建築中心: [建築標章](https://www.tabc.org.tw/tw/)")
+
+        st.write('')
+        st.subheader('都更規劃 哪裡查?')
+        st.write("- 內政部 營建署: [都更查詢](https://twur.cpami.gov.tw/zh/urban/rebuild/view/621)")
+        st.write("- 台北市 都更處: [都市更新處](https://uro.gov.taipei/)")
+        st.write("- 財訊: [都更全都通](https://www.urbanrenewal.wealth.com.tw/)")
+
+        st.write('')
+        st.subheader('地質條件 哪裡查?')
+        st.write("- 經濟部 中央地質研究所: [工程地質探勘資料庫](https://www.moeacgs.gov.tw/)")
+        st.write("- 行政院 國家災害防救科技中心: [災害潛勢地圖](https://dmap.ncdr.nat.gov.tw/)")
+
+        st.write('')
+        st.subheader('工安意外 哪裡查?')
+        st.write("- 勞動部 職業安全署: [重大職業災害公開網](https://pacs.osha.gov.tw/17238)")
+
+        st.write('')
+        st.subheader('其他')
+        st.write("- 內政部 營建署: [建築執照申請審核書](https://www.cpami.gov.tw/%E6%9C%80%E6%96%B0%E6%B6%88%E6%81%AF/%E6%B3%95%E8%A6%8F%E5%85%AC%E5%91%8A/30-%E5%BB%BA%E7%AF%89%E7%AE%A1%E7%90%86%E7%AF%87/28578-%E5%BB%BA%E7%AF%89%E5%9F%B7%E7%85%A7%E7%94%B3%E8%AB%8B%E5%AF%A9%E6%A0%B8%E6%9B%B8%E8%A1%A8.html)")
+        st.write("- 台北市 建築管理工程處-建照科 [建照執照申請表](https://dba.gov.taipei/News_Content.aspx?n=5B651B337CE7F386&sms=59F8DF70DEAE0B38&s=162C96AA9A55DB66)")
 
 def fn_gen_web_tools():
     st.write("")
