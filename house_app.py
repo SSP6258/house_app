@@ -2541,7 +2541,7 @@ def fn_gen_web_ref():
     with st.expander('簽約之前 的 注意事項'):
 
         st.write('')
-        st.subheader('建商/營造商 的 規模/履歷? 一案建商?')
+        st.subheader('建商/營造商 的 規模與履歷? 一案建商?')
         st.write("- 經濟部 商業司: [商工登記公示資料查詢服務](https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do)")
         st.write("- 內政部 營建署: [建築工程履歷查詢系統](http://cpabm.cpami.gov.tw/cers/SearchLicForm.do)")
         st.write("- 透明足跡: [掃了再買－讓企業負起責任](https://thaubing.gcaa.org.tw/)")
