@@ -2568,6 +2568,11 @@ def fn_gen_web_ref():
         st.write("- 財訊: [都更全都通](https://www.urbanrenewal.wealth.com.tw/)")
 
         st.write('')
+        st.subheader('土地使用分區 哪裡查?')
+        st.write("- 台北市 工務局: [臺北地理資訊e點通](https://addr.gov.taipei/M2019/indexPwd.aspx)")
+        st.write("- 台北市 都發局: [臺北市歷史圖資展示系統](https://www.historygis.udd.gov.taipei/urban/)")
+
+        st.write('')
         st.subheader('地質條件 哪裡查?')
         st.write("- 經濟部 中央地質研究所: [工程地質探勘資料庫](https://www.moeacgs.gov.tw/)")
         st.write("- 行政院 國家災害防救科技中心: [災害潛勢地圖](https://dmap.ncdr.nat.gov.tw/)")
