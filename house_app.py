@@ -53,7 +53,9 @@ dic_of_cn_2_en = {'經度': 'longitude',
                   '幾房': 'rooms',
                   '利率_15個月前': 'interest rate(15M ago)',
                   '利率_13個月前': 'interest rate(13M ago)',
-                  '使用分區_住': 'land_typ'
+                  '使用分區_住': 'land_typ',
+                  '稅_中位數': 'tax_median',
+                  '稅_平均數': 'tax_mean',
                   }
 
 
