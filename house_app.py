@@ -1146,7 +1146,6 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
 
 
-@fn_profiler
 def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
