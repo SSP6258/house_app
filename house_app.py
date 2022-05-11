@@ -81,6 +81,7 @@ def fn_addr_2_house_num(x):
     return num
 
 
+@fn_profiler
 def fn_addr_2_build_case(addr):
     build_case = 'No_build _case_found'
     build_case_str = 'NA'
@@ -128,6 +129,7 @@ def fn_anomaly_detection(df, n_comp, percent):
     return df
 
 
+@fn_profiler
 def fn_cln_house_data(df):
     df['city'] = df['土地位置建物門牌'].apply(lambda x: x.split('市')[0].replace('臺', '台') + '市')
     df['建物移轉坪數'] = df['建物移轉坪數'].apply(lambda x: round(x, 2))
@@ -188,6 +190,7 @@ def fn_set_color_by(by, df):
 
 
 # @st.cache
+@fn_profiler
 def fn_get_house_data(path):
     df = pd.read_csv(path)
     read_typ = path.replace('\\', '/').split('/')[-3]
@@ -224,6 +227,7 @@ def fn_get_house_data(path):
     return df
 
 
+@fn_profiler
 def fn_get_neighbor(target, neighbors):
     neighbors = list(neighbors)
     path = dic_of_path['database']
@@ -243,6 +247,7 @@ def fn_get_neighbor(target, neighbors):
     return closest
 
 
+@fn_profiler
 def fn_get_sku_people_by_year(df):
     path = dic_of_path['database']
     file = os.path.join(path, 'School_info.csv')
@@ -1584,13 +1589,13 @@ def fn_gen_web_eda(df):
     Latest_date = Latest_date[0:-4] + '年' + Latest_date[-4].replace('0', '') + Latest_date[-3] + '月'
 
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
-    idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
+    idx = options.index('R線_明德站') if 'R線_明德站' in options else 0
     mrt = st.sidebar.selectbox('捷運站', options=options, index=idx)
     df_sel = df_sel.reset_index(drop=True) if mrt == '不限' else df_sel[df_sel['MRT'] == mrt].reset_index(drop=True)
 
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
     build_cases.remove('nan') if 'nan' in build_cases else None
-    build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=len(build_cases) - 1)
+    build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=build_cases.index('華固文林'))
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
 
     floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
@@ -1746,7 +1751,7 @@ def fn_gen_web_eda(df):
                                     op=0.55,
                                     size='交易量')
 
-    latest_rel = '0501'
+    latest_rel = '0511'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
