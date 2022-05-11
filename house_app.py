@@ -21,7 +21,7 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 # from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, func_profiler
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 
@@ -112,7 +112,7 @@ def fn_addr_2_build_case(addr):
 
 
 # Anomaly Detection using Gaussian Mixtures
-@func_profiler
+@fn_profiler
 def fn_anomaly_detection(df, n_comp, percent):
     df_det = df[['MRT_DIST', '總樓層數', '移轉層次', 'lat', 'log', '每坪單價(萬)']]
 
@@ -379,7 +379,7 @@ def fn_get_hover_text(df):
     return txt
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     st.write('')
     st.subheader('批次驗證')
@@ -549,7 +549,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             st.write(f'此檔共有 {n_data}筆 資料, 經篩選後不可進行模型預估 !')
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     le = LabelEncoder()
     # df cat= df[['鄉鎮市區,主要建材',車位類別, 'MRT']]
@@ -621,7 +621,7 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     return X, df_cat
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_model_explain(X, model):
     X.rename(columns={col: dic_of_cn_2_en[col] if col in dic_of_cn_2_en.keys() else col for col in X.columns},
              inplace=True)
@@ -774,7 +774,7 @@ def fn_add_date_line(fig, df, date, mode='lines', width=10, color='lightgreen', 
     return fig
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2, c3 = st.columns(3)
@@ -916,7 +916,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         return [fig_sct]
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -996,7 +996,7 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
     return fig_sct, fig_sct_1
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -1053,7 +1053,7 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
     return fig_sku_1, fig_sku_2
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -1112,7 +1112,7 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
     return fig_sct_3
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_statistic(df):
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
@@ -1146,7 +1146,7 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
@@ -1170,7 +1170,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     return df, bc, color_by
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     df['date'] = df['交易年月日'].apply(lambda x: str(int(x) + 19110000))
     df['date'] = pd.to_datetime(df['date'], format='%Y%m%d').dt.date
@@ -1282,7 +1282,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     return fig, fig_bar
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
@@ -1436,7 +1436,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar, config=config)
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_bc_deals(build_case, dic_df_show):
     if len(dic_df_show.keys()):
         deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
@@ -1519,7 +1519,7 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         st.plotly_chart(fig)
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_model_confidence(loaded_model, X):
     preds = np.stack([t.predict(X.values) for t in loaded_model.estimators_])
     trees = preds.shape[0]
@@ -1533,7 +1533,7 @@ def fn_gen_model_confidence(loaded_model, X):
     return trees, conf
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_web_eda(df):
     # t_s = time.time()
 
@@ -1806,7 +1806,7 @@ def fn_gen_web_eda(df):
     # print(f'fn_gen_web_eda: {dur_t} 秒')
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_web_ml_train(df, path):
     # ts = time.time()
 
@@ -2077,7 +2077,7 @@ def fn_gen_web_ml_train(df, path):
     # print(f'fn_gen_web_ml_train: {dur} 秒')
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df, mse_th):
     # ts = time.time()
     # scores = cross_val_score(regr, x_train, y_train.values.ravel(),cv=5) # st.write(scores)
@@ -2242,7 +2242,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     # print(f'fn_gen_web_ml_eva:{dur}秒')
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_web_ml_inference(path, build_typ):
     # ts = time.time()
 
@@ -2472,7 +2472,7 @@ def fn_gen_web_ml_inference(path, build_typ):
     # print(f'fn_gen_web_inference: {dur} 秒')
 
 
-@func_profiler
+@fn_profiler
 def fn_gen_web_init(path, page=None):
     print('fn_gen_web_init start')
     path_output = os.path.join(path, r'output')

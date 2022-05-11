@@ -23,7 +23,7 @@ dic_of_path = {
 }
 
 
-def func_profiler(func):
+def fn_profiler(func):
     def wrapper(*args, **kwargs):
         ts = datetime.datetime.now()
         val = func(*args, **kwargs)
