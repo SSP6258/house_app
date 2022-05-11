@@ -2474,10 +2474,10 @@ def fn_gen_web_ml_inference(path, build_typ):
 
 @fn_profiler
 def fn_gen_web_init(path, page=None):
-    print('fn_gen_web_init start')
+    # print('fn_gen_web_init start')
     path_output = os.path.join(path, r'output')
     path_output = os.path.join(path_output, r'house_all.csv')
-    print(path_output)
+    # print(path_output)
     if not os.path.exists(path_output):
         assert path_output + ' NOT existed !!!'
     # Initialization
@@ -2504,7 +2504,7 @@ def fn_gen_web_init(path, page=None):
             file = os.path.join(path, f'output\\Feature_{cat}.csv')
             df_cat.to_csv(file, encoding='utf-8-sig')
 
-    print('fn_gen_web_init done')
+    # print('fn_gen_web_init done')
     return df.copy()
 
 

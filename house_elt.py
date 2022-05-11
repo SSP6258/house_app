@@ -83,6 +83,10 @@ dic_of_name_2_addr = {
     '宏國大道城B棟': '台北市大同區承德路二段101號',
     '至仁愛': '台北市中正區仁愛路二段74號',
     '景美聯山-極品區': '台北市文山區羅斯福路六段198號',
+    '義泰吾境': '台北市內湖區南京東路六段389號',
+    '華固大安學府': '台北市大安區復興南路二段37號',
+    '基泰碧湖': '台北市內湖區內湖路一段741號',
+
 }
 
 
@@ -385,7 +389,7 @@ def fn_gen_ave(df):
     df_dist_ave.sort_values(inplace=True)
     df_dist_ave.to_csv(path, encoding='utf-8-sig')
 
-    latest_rel = '111_0211'
+    latest_rel = '111_0501'
     for idx in df.index:
         mrt_1 = df.loc[idx, 'MRT']
         df.at[idx, 'MRT_ave'] = round(df_mrt_ave[mrt_1], 2)
@@ -418,7 +422,7 @@ def fn_get_house_hold(addr):
 
 
 def fn_gen_build_case(df):
-    print('fn_gen_build_case start')
+    # print('fn_gen_build_case start')
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
 
     this_yr = datetime.datetime.now().year - 1911
@@ -445,7 +449,7 @@ def fn_gen_build_case(df):
                     df.at[idx, '建案名稱'] = build_case
                     print(addr, '-->', df.at[idx, '建案名稱'])
 
-    print('fn_gen_build_case end')
+    # print('fn_gen_build_case end')
     return df
 
 
@@ -671,13 +675,13 @@ def fn_gen_tax_info(file):
 def fn_main():
     # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    # fn_gen_raw_data(path, slp=5, is_force=False)
+    fn_gen_raw_data(path, slp=5, is_force=False)
 
     # fn_save_building_name(path)
 
     file = os.path.join(path, 'output', 'house_all.csv')
     # file = os.path.join(dic_of_path['database'], 'House_coor.csv')
-    # fn_gen_vill(file)
+    fn_gen_vill(file)
     fn_gen_tax_info(file)
 
 
