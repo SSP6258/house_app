@@ -1935,6 +1935,7 @@ def fn_gen_web_ml_train(df, path):
                                                    '車位類別' not in c and
                                                    'MRT_ave' not in c and
                                                    'DIST_ave' not in c and
+                                                   'SKU_ave' not in c and
                                                    '稅_第' not in c and
                                                    c != 'MRT'])
             st.write('')
