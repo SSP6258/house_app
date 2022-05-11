@@ -23,6 +23,26 @@ dic_of_path = {
 }
 
 
+def func_profiler(func):
+    def wrapper(*args, **kwargs):
+        ts = datetime.datetime.now()
+        val = func(*args, **kwargs)
+        te = datetime.datetime.now()
+        dur = te - ts
+        dur_us = dur.microseconds
+        if dur_us > 1e6:
+            excu_time = f'{int(dur_us / 1e6)} 秒(sec)'
+        elif dur_us >= 1e3:
+            excu_time = f'{int(dur_us / 1e3)} 毫秒(ms)'
+        else:
+            excu_time = f'{dur_us} 微秒(us)'
+
+        print(func.__name__, excu_time)
+        return val
+
+    return wrapper
+
+
 def fn_get_coordinate(addr, slp=5):
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
