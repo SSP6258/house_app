@@ -1595,7 +1595,7 @@ def fn_gen_web_eda(df):
 
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
     build_cases.remove('nan') if 'nan' in build_cases else None
-    build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=build_cases.index('華固文林'))
+    build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=build_cases.index('華固文臨'))
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
 
     floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
