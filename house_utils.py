@@ -37,7 +37,8 @@ def fn_profiler(func):
         else:
             excu_time = f'{dur_us} 微秒(us)'
 
-        print(func.__name__, excu_time)
+        if dur_us > 500 * 1e3:
+            print(func.__name__, excu_time)
         return val
 
     return wrapper
