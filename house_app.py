@@ -1696,7 +1696,7 @@ def fn_gen_web_eda(df):
     cols = st.sidebar.multiselect('欄位選擇', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數',
                                                                    '每坪單價(萬)', '總價(萬)', '車位坪數',
                                                                    '車位類別', '車位單價(萬)',
-                                                                   '交易年月日', '地址'])
+                                                                   '交易年月日', '地址', 'File'])
 
     df_cols = df_sel[cols]
 
