@@ -1457,6 +1457,8 @@ def fn_gen_bc_deals(build_case, dic_df_show):
 
         df_show = dic_df_show[r] if r in dic_df_show.keys() else None
 
+        df_show = df_show[df_show.index != '1F']
+
         if r == '樓層價差(%)':
             df_show_diff = df_show.copy()
             rows, cols = df_show_diff.shape[0], df_show_diff.shape[1]
