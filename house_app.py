@@ -1662,8 +1662,8 @@ def fn_gen_web_eda(df):
 
     floors = [str(f) + 'F' for f in floors]
     fig_bar2 = go.Figure(data=[
-        go.Bar(name='均價(萬/坪)', x=floors, y=prices, opacity=0.8),
-        go.Bar(name='成交戶數', x=floors, y=deals, opacity=0.8)
+        go.Bar(name='均價(萬/坪)', x=floors, y=prices, opacity=0.7),
+        go.Bar(name='成交戶數', x=floors, y=deals, opacity=0.7)
     ],
         layout={'title': f'{mrt} ({From_To})'})
 
