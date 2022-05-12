@@ -1273,7 +1273,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     fig_bar = go.Figure(data=[
         go.Bar(x=df_ym['Y_M'], y=df_ym['總價(億)'], name='銷售總額(億)', opacity=op),
         go.Line(x=df_area['Y_M'], y=df_area['銷售面積(百坪)'], name='銷售面積(百坪)', mode='lines+markers'),
-        go.Line(x=df_area['Y_M'], y=df_area['均價'], name='均價(萬/坪)', mode='lines+markers'),
+        go.Line(x=df_area['Y_M'], y=df_area['均價'], name='每坪均價(萬/坪)', mode='lines+markers'),
     ])
 
     price_all = int(df_ym['總價(億)'].sum())
