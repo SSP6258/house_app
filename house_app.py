@@ -2240,7 +2240,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     c2.markdown(f'{"#" * 5} 各項指標 對 房價 的影響')
     st.plotly_chart(fig_bot)
 
-    st.write('測試資料集的模型預結果(萬/坪):')
+    st.write('測試資料集 的 模型預估結果(萬/坪):')
     # st.dataframe(df_metrics)
     AgGrid(df_metrics, theme='blue')
 
