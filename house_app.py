@@ -1788,7 +1788,8 @@ def fn_gen_web_eda(df):
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
     st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
-    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
+    # st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
+    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
