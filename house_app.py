@@ -1611,7 +1611,8 @@ def fn_gen_web_eda(df):
     To = str(df_sel['交易年月日'].iloc[0])
     To = To[0:-4] + '年' + To[-4].replace('0', '') + To[-3] + '月'
 
-    From_To = f'{From} ~ {To}, 有 {len(df_sel)} 筆交易'
+    # From_To = f'{From} ~ {To}, 有 {len(df_sel)} 筆交易'
+    From_To = f'{From} ~ {To}, 有 {len(df_sel["戶別"].unique())} 筆交易'
     ave = round(df_sel['每坪單價(萬)'].mean(), 0)
 
     # df_bc = pd.DataFrame()
