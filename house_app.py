@@ -2675,7 +2675,7 @@ def fn_app(page='data'):
     this_yr = datetime.datetime.now().year - 1911
 
     st.sidebar.header(f'🔍 資訊篩選:\n')
-    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 3, this_yr))
+    year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 4, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
     c1, c2 = st.sidebar.columns(2)
     sel = c1.selectbox('交易類別', ['預售屋', '中古屋'], index=0)
