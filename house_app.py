@@ -2327,7 +2327,7 @@ def fn_gen_web_ml_inference(path, build_typ):
 
             input_city = c1.selectbox('城市', ['台北市'], index=0)
             input_dist = c2.selectbox('行政區', tpe_dists, index=tpe_dists.index('北投區'))
-            input_addr = c3.text_input(label='詳細地址', value='大度路三段301巷67號' if input_dist=='北投區' else '')
+            input_addr = c3.text_input(label='詳細地址', value='大度路三段301巷67號')
             addr = input_city+input_dist+input_addr
 
             # addr = st.text_input(label='物件地址', value='台北市北投區大度路三段301巷67號')
