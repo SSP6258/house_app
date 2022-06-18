@@ -2347,7 +2347,7 @@ def fn_gen_web_ml_inference(path, build_typ):
 
                 st.write(f'鄰近地址: {is_match} {addr_fr_db} {vill}')
             else:
-                assert False, f'ToDo: Add vill from addr !'
+                assert False, f'addr error: {addr} ToDo: Add vill from addr !'
 
             # mrt_info, addr_coor, sku_info
             if addr not in df_coor_read.index:
