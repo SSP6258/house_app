@@ -2320,10 +2320,17 @@ def fn_gen_web_ml_inference(path, build_typ):
 
         dic_of_input = {}
         with st.form('Form2'):
-            # 台北市北投區西安街二段197號
-            # 台北市北投區大度路三段301巷
-            # 台北市北投區大度路三段301巷67號
-            addr = st.text_input(label='物件地址', value='台北市北投區大度路三段301巷67號')
+            c1, c2, c3 = st.columns([1, 1, 2])
+
+            tpe_dists = ['中正區', '大同區', '中山區', '松山區', '大安區', '萬華區',
+                         '信義區', '士林區', '北投區', '內湖區', '南港區', '文山區']
+
+            input_city = c1.selectbox('城市', ['台北市'], index=0)
+            input_dist = c2.selectbox('行政區', tpe_dists, index=tpe_dists.index('北投區'))
+            input_addr = c3.st.text_input(label='詳細地址', value='大度路三段301巷67號' if input_dist=='北投區' else '')
+            addr = input_city+input_dist+input_addr
+
+            # addr = st.text_input(label='物件地址', value='台北市北投區大度路三段301巷67號')
 
             addr = fn_addr_handle(addr)
             df_coor_read = fn_house_coor_read()
