@@ -2665,6 +2665,11 @@ def fn_gen_web_tools():
     st.write("- 圖轉文字: [LINE OCR](https://www.tech-girlz.com/2021/01/line-ocr.html)")
     st.write("- 圖轉CSV: [誠華 OCR](https://zhtw.109876543210.com/)")
 
+    st.write('')
+    with st.expander('[機器學習專案流程](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)'):
+        st.write('Test')
+
+
 
 def fn_gen_web_projs():
     st.write('')
