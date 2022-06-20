@@ -2632,6 +2632,7 @@ def fn_gen_web_ref():
 def fn_gen_web_tools():
     st.write("")
     st.subheader('機器學習:')
+    st.write("- 機器學習專案流程: [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
     st.write(
         "- 教科書: [Hands on Machine Learning - 第二章: 美國加州房價預測](https://nbviewer.org/github/DeqianBai/Hands-on-Machine-Learning/blob/master/02_Housing.ipynb)")
     st.write(
