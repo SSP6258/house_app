@@ -2673,8 +2673,8 @@ def fn_gen_web_tools():
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
                 'Regression_0.gif']
 
-        st.write('')
-        fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
+        # st.write('')
+        # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
 
         st.write('')
         fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="ML Workflow Overview")
