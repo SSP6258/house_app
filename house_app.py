@@ -2637,7 +2637,41 @@ def fn_gen_web_tools():
         "- 教科書: [Hands on Machine Learning - 第二章: 美國加州房價預測](https://nbviewer.org/github/DeqianBai/Hands-on-Machine-Learning/blob/master/02_Housing.ipynb)")
     st.write(
         "- 碩士論文: [淡江大學碩士在職專班 應用人工智慧於房價預測模型研究與分析(2019)](https://etds.lib.tku.edu.tw/ETDS/Home/Detail/U0002-2608201910580000)")
-    st.write("- 模型應用: [微軟時空預測模型 FOST(Forecasting open source tool)]")
+    with st.expander('📌 機器學習專案流程介紹'):
+        st.write('')
+        st.write("- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
+        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
+        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
+                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png']
+
+        st.write('')
+        st.write('')
+        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
+
+        st.write('')
+        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
+
+        st.write('')
+        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+
+        st.write('')
+        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
+
+        st.write('')
+        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
+
+        st.write('')
+        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
+
+        st.write('')
+        fn_show_img(img_path, imgs[3], caption="Train Test Split")
+
+        st.write('')
+        fn_show_img(img_path, imgs[10], caption="Classification Metrics - Confusion Matrix")
+
+        st.write('')
+        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     st.write('')
     st.subheader('網頁製作:')
