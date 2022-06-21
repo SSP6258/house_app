@@ -2666,8 +2666,11 @@ def fn_gen_web_tools():
     st.write("- 圖轉CSV: [誠華 OCR](https://zhtw.109876543210.com/)")
 
     st.write('')
-    with st.expander('[機器學習專案流程](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)'):
-        st.write('Test')
+    with st.expander('機器學習專案流程介紹'):
+        st.write('機器學習專案流程')
+        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
+        imgs = ['ML_Flow.PNG', 'house_dora.jpg', 'house_dora_2.jpg']
+        fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="ML Workflow Overview")
 
 
 
