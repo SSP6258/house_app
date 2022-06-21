@@ -2673,7 +2673,7 @@ def fn_gen_web_tools():
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
                 'Regression_0.gif']
 
-        # st.write('')
+        st.write('')
         # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
 
         st.write('')
@@ -2686,12 +2686,6 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning")
 
         st.write('')
-        fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
-
-        st.write('')
-        fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Confusion Matrix")
-
-        st.write('')
         fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Clustering")
 
         st.write('')
@@ -2699,6 +2693,13 @@ def fn_gen_web_tools():
 
         st.write('')
         fn_show_img(img_path, imgs[8], is_sidebar=False, width=None, caption="Regression")
+
+        st.write('')
+        fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
+
+        st.write('')
+        fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Confusion Matrix")
+
 
 
 def fn_gen_web_projs():
