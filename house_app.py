@@ -2683,16 +2683,16 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="Overview of models under categories")
 
         st.write('')
-        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning")
+        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised(labeled data) v.s. Unsupervised(unlabeled data) Learning")
 
         st.write('')
-        fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Clustering")
+        fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
 
         st.write('')
-        fn_show_img(img_path, imgs[7], is_sidebar=False, width=None, caption="Classification")
+        fn_show_img(img_path, imgs[7], is_sidebar=False, width=None, caption="Supervised Learning- Classification")
 
         st.write('')
-        fn_show_img(img_path, imgs[8], is_sidebar=False, width=None, caption="Regression")
+        fn_show_img(img_path, imgs[8], is_sidebar=False, width=None, caption="Supervised Learning - Regression")
 
         st.write('')
         fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
