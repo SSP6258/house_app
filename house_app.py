@@ -2677,10 +2677,10 @@ def fn_gen_web_tools():
         # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
 
         st.write('')
-        fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="ML Workflow Overview")
+        fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="Overview of ML workflow")
 
         st.write('')
-        fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="ML Models")
+        fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="Overview of models under categories")
 
         st.write('')
         fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning")
