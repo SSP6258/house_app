@@ -2672,7 +2672,7 @@ def fn_gen_web_tools():
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
         imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                'Regression_0.gif', 'Clustering_2.png']
+                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png']
 
         st.write('')
         # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
@@ -2702,7 +2702,8 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
 
         st.write('')
-        fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Confusion Matrix")
+        fn_show_img(img_path, imgs[10], is_sidebar=False, width=None, caption="Evaluation - Confusion Matrix")
+
 
 
 
