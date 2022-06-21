@@ -2675,34 +2675,29 @@ def fn_gen_web_tools():
                 'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png']
 
         st.write('')
-        # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
+        st.write('')
+        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
 
         st.write('')
-        fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="Overview of ML workflow")
+        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
 
         st.write('')
-        fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="Overview of models under categories")
+        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
 
         st.write('')
-        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
 
         st.write('')
-        fn_show_img(img_path, imgs[9], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
-
-        # st.write('')
-        # fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
+        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
 
         st.write('')
-        fn_show_img(img_path, imgs[7], is_sidebar=False, width=None, caption="Supervised Learning- Classification")
+        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
 
         st.write('')
-        fn_show_img(img_path, imgs[8], is_sidebar=False, width=None, caption="Supervised Learning - Regression")
+        fn_show_img(img_path, imgs[3], caption="Train Test Split")
 
         st.write('')
-        fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
-
-        st.write('')
-        fn_show_img(img_path, imgs[10], is_sidebar=False, width=None, caption="Evaluation - Confusion Matrix")
+        fn_show_img(img_path, imgs[10], caption="Evaluation - Confusion Matrix")
 
 
 
