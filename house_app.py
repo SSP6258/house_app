@@ -2669,7 +2669,7 @@ def fn_gen_web_tools():
         st.write('')
         st.write("- 機器學習專案流程: [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.png']
+        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg']
 
         fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
 
