@@ -2691,6 +2691,14 @@ def fn_gen_web_tools():
         st.write('')
         fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Confusion Matrix")
 
+        st.write('')
+        fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Clustering")
+
+        st.write('')
+        fn_show_img(img_path, imgs[7], is_sidebar=False, width=None, caption="Classification")
+
+        st.write('')
+        fn_show_img(img_path, imgs[8], is_sidebar=False, width=None, caption="Regression")
 
 
 def fn_gen_web_projs():
