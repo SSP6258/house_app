@@ -2689,8 +2689,8 @@ def fn_gen_web_tools():
         st.write('')
         fn_show_img(img_path, imgs[9], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
 
-        st.write('')
-        fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
+        # st.write('')
+        # fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
 
         st.write('')
         fn_show_img(img_path, imgs[7], is_sidebar=False, width=None, caption="Supervised Learning- Classification")
