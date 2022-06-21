@@ -2683,9 +2683,7 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="Overview of models under categories")
 
         st.write('')
-        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning"+"<br>"+
-                                                                             "In Supervised learning, an AI system is presented with data which is labelled"+"<br>"+
-                                                                             "In unsupervised learning, an AI system is presented with unlabeled")
+        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning")
 
         st.write('')
         fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Clustering")
