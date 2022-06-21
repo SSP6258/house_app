@@ -2702,7 +2702,7 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
 
         st.write('')
-        fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Evaluation - Confusion Matrix")
+        fn_show_img(img_path, imgs[10], is_sidebar=False, width=None, caption="Evaluation - Confusion Matrix")
 
 
 
