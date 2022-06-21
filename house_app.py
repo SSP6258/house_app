@@ -2667,10 +2667,13 @@ def fn_gen_web_tools():
     st.write('')
     with st.expander('機器學習專案流程介紹'):
         st.write('')
-        st.write("- 機器學習專案流程: [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
+        st.write("- [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg']
+        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
+                'Regression_0.gif']
 
+        st.write('')
         fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
 
         st.write('')
@@ -2678,6 +2681,15 @@ def fn_gen_web_tools():
 
         st.write('')
         fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="ML Models")
+
+        st.write('')
+        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised v.s. Unsupervised Learning")
+
+        st.write('')
+        fn_show_img(img_path, imgs[3], is_sidebar=False, width=None, caption="Train Test Split")
+
+        st.write('')
+        fn_show_img(img_path, imgs[5], is_sidebar=False, width=None, caption="Confusion Matrix")
 
 
 
