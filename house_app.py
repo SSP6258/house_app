@@ -2672,7 +2672,7 @@ def fn_gen_web_tools():
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
         imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                'Regression_0.gif']
+                'Regression_0.gif', 'Clustering_2.png']
 
         st.write('')
         # fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
@@ -2684,7 +2684,10 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="Overview of models under categories")
 
         st.write('')
-        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised(labeled data) v.s. Unsupervised(unlabeled data) Learning")
+        fn_show_img(img_path, imgs[4], is_sidebar=False, width=None, caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+
+        st.write('')
+        fn_show_img(img_path, imgs[9], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
 
         st.write('')
         fn_show_img(img_path, imgs[6], is_sidebar=False, width=None, caption="Unsupervised Learning - Clustering")
