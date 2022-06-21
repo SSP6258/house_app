@@ -61,18 +61,12 @@ dic_of_cn_2_en = {'經度': 'longitude',
 
 def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
     png = os.path.join(IMG_path, IMG_file)
-    img = Image.open(png)
+    img = png if IMG_file.endswith('.gif') else Image.open(png)
 
     if is_sidebar:
-        if IMG_file.endswith('.gif'):
-            st.sidebar.image(png, width=width, caption=caption)
-        else:
-            st.sidebar.image(img, width=width, caption=caption)
+        st.sidebar.image(img, width=width, caption=caption)
     else:
-        if IMG_file.endswith('.gif'):
-            st.image(png, width=width, caption=caption)
-        else:
-            st.image(img, width=width, caption=caption)
+        st.image(img, width=width, caption=caption)
 
 
 def fn_addr_2_house_num(x):
