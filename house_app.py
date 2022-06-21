@@ -2700,7 +2700,7 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[10], caption="Classification Metrics - Confusion Matrix")
 
         st.write('')
-        fn_show_img(img_path, imgs[10], caption="Regression Metrics - MAE/MSE/RMSE/...")
+        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
 
 
