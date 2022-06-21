@@ -2666,7 +2666,8 @@ def fn_gen_web_tools():
     st.write("- 圖轉CSV: [誠華 OCR](https://zhtw.109876543210.com/)")
 
     st.write('')
-    with st.expander('機器學習專案流程介紹'):
+    st.subheader('機器學習專案流程')
+    with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
         st.write("- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
