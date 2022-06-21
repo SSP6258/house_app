@@ -65,12 +65,12 @@ def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
 
     if is_sidebar:
         if IMG_file.endswith('.gif'):
-            st.sidebar.markdown(img, unsafe_allow_html=True)
+            st.sidebar.image(png, width=width, caption=caption)
         else:
             st.sidebar.image(img, width=width, caption=caption)
     else:
         if IMG_file.endswith('.gif'):
-            st.markdown(img, unsafe_allow_html=True)
+            st.image(png, width=width, caption=caption)
         else:
             st.image(img, width=width, caption=caption)
 
