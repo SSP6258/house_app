@@ -2632,7 +2632,6 @@ def fn_gen_web_ref():
 def fn_gen_web_tools():
     st.write("")
     st.subheader('機器學習:')
-    st.write("- 機器學習專案流程: [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
     st.write(
         "- 教科書: [Hands on Machine Learning - 第二章: 美國加州房價預測](https://nbviewer.org/github/DeqianBai/Hands-on-Machine-Learning/blob/master/02_Housing.ipynb)")
     st.write(
@@ -2667,10 +2666,18 @@ def fn_gen_web_tools():
 
     st.write('')
     with st.expander('機器學習專案流程介紹'):
-        st.write('機器學習專案流程')
+        st.write('')
+        st.write("- 機器學習專案流程: [Workflow of a Machine Learning project](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
         imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.png']
+
+        fn_show_img(img_path, imgs[1], is_sidebar=False, width=None, caption="ML")
+
+        st.write('')
         fn_show_img(img_path, imgs[0], is_sidebar=False, width=None, caption="ML Workflow Overview")
+
+        st.write('')
+        fn_show_img(img_path, imgs[2], is_sidebar=False, width=None, caption="ML Models")
 
 
 
