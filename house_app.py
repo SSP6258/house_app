@@ -2642,7 +2642,7 @@ def fn_gen_web_tools():
         st.write('')
         st.write("- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        imgs = ['ML_Flow.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+        imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
                 'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png']
 
