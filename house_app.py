@@ -2669,7 +2669,7 @@ def fn_gen_web_tools():
         fn_show_img(img_path, imgs[3], caption="Train Test Split")
 
         st.write('')
-        fn_show_img(img_path, imgs[10], caption="Classification Metrics - Confusion Matrix")
+        fn_show_img(img_path, imgs[10], caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1/AUC/ROC)")
 
         st.write('')
         fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
