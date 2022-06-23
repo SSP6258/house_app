@@ -2674,7 +2674,7 @@ def fn_gen_web_projs():
 def fn_gen_web_intro():
     with st.expander('📌 開發動機'):
         st.write('')
-        st.subheader('💡 對數據分析有股莫名的興趣 ')
+        st.subheader('💡 對數據分析有股莫名的興趣 ~ ')
         st.subheader('💡 整理目前習得的技法, 應用於生活場景 ~')
         st.write('')
 
