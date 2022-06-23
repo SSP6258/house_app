@@ -2679,7 +2679,7 @@ def fn_gen_web_intro():
     >* 預售屋銷售分析
     >* 預售屋房價預測
 
-    ''')
+    ''', unsafe_allow_html=True)
     st.write('')
     with st.expander('📌 開發動機'):
         st.write('')
