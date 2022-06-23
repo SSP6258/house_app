@@ -2733,7 +2733,7 @@ def fn_gen_web_intro():
     with st.expander('📌 與我聯絡'):
         st.write('')
         st.write("🔗 [Jack Pan](https://www.facebook.com/jack.pan.96/)")
-        st.write('✉️ssp6258@yahoo.com.tw')
+        st.write('✉️ ssp6258@yahoo.com.tw')
         st.write('🚧 [故障報修、意見反饋](https://github.com/SSP6258/house_app/issues/new)')
 
 
