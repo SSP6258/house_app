@@ -2674,10 +2674,10 @@ def fn_gen_web_projs():
 def fn_gen_web_intro():
     st.markdown('''
     
-    > #### 這是一個專注於台北市預售屋交易的網站
-    >* 預售屋交易紀錄
-    >* 預售屋銷售分析
-    >* 預售屋房價預測
+    ##### 這是一個專注於台北市預售屋交易的網站
+    * 預售屋交易紀錄
+    * 預售屋銷售分析
+    * 預售屋房價預測
 
     ''', unsafe_allow_html=True)
     st.write('')
