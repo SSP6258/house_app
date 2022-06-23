@@ -2730,6 +2730,12 @@ def fn_gen_web_intro():
         st.write('')
         fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
+    with st.expander('📌 與我聯絡'):
+        st.write('')
+        st.write("🔗 [Jack Pan](https://www.facebook.com/jack.pan.96/)")
+        st.write('✉️ssp6258@yahoo.com.tw')
+        st.write('🚧 [故障報修、意見反饋](https://github.com/SSP6258/house_app/issues/new)')
+
 
 def fn_chrome_96_workaround():
     # st.write('<style>div{font-weight: normal;}</style>', unsafe_allow_html=True)
