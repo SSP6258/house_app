@@ -2680,12 +2680,12 @@ def fn_gen_web_intro():
 
     with st.expander('📌 網站導覽'):
         st.write('')
-        st.subheader('晚點再寫 ...')
+        st.subheader('🚧 晚點再寫 ...')
         st.write('')
 
     with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
-        st.write(
+        st.subheader(
             "- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
         imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
