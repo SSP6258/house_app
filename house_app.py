@@ -2672,6 +2672,14 @@ def fn_gen_web_projs():
 
 
 def fn_gen_web_intro():
+    with st.expander('📌 開發動機'):
+        st.write('')
+        st.subheader('對數據分析很感興趣 整理之前學習的技法 應用於實際生活場景')
+
+    with st.expander('📌 網站導覽'):
+        st.write('')
+        st.subheader('晚點再寫 ...')
+
     with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
         st.write(
