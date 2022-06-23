@@ -1705,7 +1705,7 @@ def fn_gen_web_eda(df):
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
-    cols = st.sidebar.multiselect('欄位選擇', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數',
+    cols = st.sidebar.multiselect(f'欄位選擇({len(df_sel.columns)})', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數',
                                                                    '每坪單價(萬)', '總價(萬)', '車位坪數',
                                                                    '車位類別', '車位單價(萬)',
                                                                    '交易年月日', '地址', 'File'])
