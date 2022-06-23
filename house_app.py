@@ -2638,42 +2638,6 @@ def fn_gen_web_tools():
     st.write(
         "- 碩士論文: [淡江大學碩士在職專班 應用人工智慧於房價預測模型研究與分析(2019)](https://etds.lib.tku.edu.tw/ETDS/Home/Detail/U0002-2608201910580000)")
 
-    with st.expander('📌 機器學習專案流程介紹'):
-        st.write('')
-        st.write("- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
-        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
-                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png']
-
-        st.write('')
-        st.write('')
-        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
-
-        st.write('')
-        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
-
-        st.write('')
-        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
-
-        st.write('')
-        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
-
-        st.write('')
-        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
-
-        st.write('')
-        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
-
-        st.write('')
-        fn_show_img(img_path, imgs[3], caption="Train Test Split")
-
-        st.write('')
-        fn_show_img(img_path, imgs[10], caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1/AUC/ROC)")
-
-        st.write('')
-        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
-
     st.write('')
     st.subheader('網頁製作:')
     st.write("- 純Python的極速網頁製作套件: [Streamlit](https://streamlit.io/)")
@@ -2705,6 +2669,46 @@ def fn_gen_web_projs():
     st.write('')
     st.subheader('📌 專案: [利用座標查詢行政區](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
     st.subheader('📌 專案: [離散事件模擬器](https://share.streamlit.io/ssp6258/des_app/app.py)')
+
+
+def fn_gen_web_intro():
+    with st.expander('📌 機器學習專案流程介紹'):
+        st.write('')
+        st.write(
+            "- Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
+        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
+        imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
+                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png']
+
+        st.write('')
+        st.write('')
+        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
+
+        st.write('')
+        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
+
+        st.write('')
+        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+
+        st.write('')
+        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
+
+        st.write('')
+        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
+
+        st.write('')
+        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
+
+        st.write('')
+        fn_show_img(img_path, imgs[3], caption="Train Test Split")
+
+        st.write('')
+        fn_show_img(img_path, imgs[10],
+                    caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1/AUC/ROC)")
+
+        st.write('')
+        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
 
 def fn_chrome_96_workaround():
@@ -2775,6 +2779,9 @@ def fn_app(page='data'):
 
     elif page == 'projects':
         fn_gen_web_projs()
+
+    elif page == 'introduce':
+        fn_gen_web_intro()
 
     else:
         st.write(f' page: {page} unhandle yet !!!')

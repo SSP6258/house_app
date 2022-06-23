@@ -4,6 +4,7 @@ from apps import app_eda, app_train, app_inference, app_reference, app_tools, ap
 app = MultiApp()
 
 # Add all your application here
+app.add_app("👨‍🏫 網站導覽", app_eda.app)
 app.add_app("🕵‍♂ 資料探勘", app_eda.app)
 app.add_app("🏋‍♂ 模型訓練", app_train.app)
 app.add_app("🧙 模型推論", app_inference.app)
