@@ -2699,7 +2699,8 @@ def fn_gen_web_intro():
         img_path = os.path.join(dic_of_path['database'], 'ML Flow')
         imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png']
+                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
+                'MNIST.png']
 
         st.write('')
         st.write('')
@@ -2722,6 +2723,9 @@ def fn_gen_web_intro():
 
         st.write('')
         fn_show_img(img_path, imgs[3], caption="Train Test Split")
+
+        st.write('')
+        fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
 
         st.write('')
         fn_show_img(img_path, imgs[10],
