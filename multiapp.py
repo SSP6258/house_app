@@ -62,7 +62,7 @@ class MultiApp:
                     3: "https://soundcloud.com/audio_lava/hulu-ukulele?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
                 }
                 i = random.randint(1, len(music))
-                st_player(music[i], key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+                st_player(music[i], key=str(datetime.datetime.now()), playing=True, loop=True, volume=0.1, height=220)
         except:
             imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg']
             fn_show_img(dic_of_path['database'], imgs[2], is_sidebar=True, width=None, caption="~ by Dora ~")
