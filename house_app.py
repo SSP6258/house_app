@@ -2716,31 +2716,20 @@ def fn_gen_web_intro():
                 'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
                 'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
                 'MNIST.png']
+        url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
 
         st.write('')
         fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
-
         fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
-
-        url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
-        # fn_show_img('', url_sk, caption="A rough guide on finding the right estimator")
         fn_show_img('', url_sk, caption='https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html')
-
         fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
-
         fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
-
         fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
-
         fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
-
         fn_show_img(img_path, imgs[3], caption="Train Test Split")
-
         fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
-
         fn_show_img(img_path, imgs[10],
                     caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
-
         fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     with st.expander('📌 與我聯絡'):
