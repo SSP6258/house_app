@@ -1,3 +1,4 @@
+import random
 import time
 import pandas as pd
 import numpy as np
@@ -2701,11 +2702,7 @@ def fn_gen_web_intro():
         st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
         video_1 = 'https://www.youtube.com/watch?v=XZdzMfqtRh8&list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg&index=3'
-        video_2 = 'https://www.youtube.com/playlist?list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg'
-        video_3 = 'https://youtu.be/UGdG4WpluJ8?list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg'
-        st_player(video_1, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
-        st_player(video_2, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
-        st_player(video_3, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+        st_player(video_1, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.1, height=220)
         # st.video(video)
 
     with st.expander('📌 機器學習專案流程介紹'):
