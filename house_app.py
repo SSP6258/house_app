@@ -2700,8 +2700,7 @@ def fn_gen_web_intro():
         st.write('')
         st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
-        video = 'https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
-        video_2 = 'https://youtu.be/c9k8K1eII4g'
+        video = 'https://www.youtube.com/watch?v=UGdG4WpluJ8&list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg&index=3&t=642s'
         video_3 = 'https://www.youtube.com/playlist?list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg'
         video_4 = 'https://www.youtube.com/c/jasonmel'
         st_player(video, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
