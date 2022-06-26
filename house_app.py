@@ -2697,56 +2697,54 @@ def fn_gen_web_intro():
         st.subheader('🚧 晚點再寫 ...')
         st.write('')
 
-    with st.expander('📌 人工智能'):
+    with st.expander('📌 AI、機器學習、深度學習 原理及應用'):
         st.write('')
-        with st.expander('📌 AI、機器學習、深度學習 原理及應用'):
-            st.write('')
-            st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
-            st.write('')
-            video = 'https://www.youtube.com/watch?v=UGdG4WpluJ8'
-            st_player(video, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.5)
+        st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
+        st.write('')
+        video = 'https://www.youtube.com/watch?v=UGdG4WpluJ8'
+        st_player(video, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.5)
 
-        with st.expander('📌 機器學習專案流程介紹'):
-            st.write('')
-            st.write(
-                "- 引用自 Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
-            img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-            imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
-                    'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                    'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
-                    'MNIST.png']
+    with st.expander('📌 機器學習專案流程介紹'):
+        st.write('')
+        st.write(
+            "- 引用自 Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
+        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
+        imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
+                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
+                'MNIST.png']
 
-            st.write('')
-            st.write('')
-            fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
+        st.write('')
+        st.write('')
+        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
 
-            st.write('')
-            fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
+        st.write('')
+        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
 
-            st.write('')
-            fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+        st.write('')
+        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
 
-            st.write('')
-            fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
+        st.write('')
+        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
 
-            st.write('')
-            fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
+        st.write('')
+        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
 
-            st.write('')
-            fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
+        st.write('')
+        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
 
-            st.write('')
-            fn_show_img(img_path, imgs[3], caption="Train Test Split")
+        st.write('')
+        fn_show_img(img_path, imgs[3], caption="Train Test Split")
 
-            st.write('')
-            fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
+        st.write('')
+        fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
 
-            st.write('')
-            fn_show_img(img_path, imgs[10],
-                        caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
+        st.write('')
+        fn_show_img(img_path, imgs[10],
+                    caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
 
-            st.write('')
-            fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
+        st.write('')
+        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     with st.expander('📌 與我聯絡'):
         st.write('')
