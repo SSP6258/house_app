@@ -2701,7 +2701,10 @@ def fn_gen_web_intro():
         st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
         video = 'https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
-        st_player(video, key=str(datetime.datetime.now()), playing=True, loop=True, volume=0.1, height=220)
+        video_2 = 'https://youtu.be/c9k8K1eII4g'
+        st_player(video, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+        st_player(video_2, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+        # st.video(video)
 
     with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
