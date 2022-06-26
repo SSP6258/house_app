@@ -2704,9 +2704,11 @@ def fn_gen_web_intro():
         video_1 = 'https://www.youtube.com/watch?v=UGdG4WpluJ8&list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
         video_2 = 'https://www.youtube.com/watch?v=UGdG4WpluJ8&list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr&index=64'
         video_3 = 'https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
+        video_4 = 'https://www.youtube.com/watch?v=UGdG4WpluJ8'
         st_player(video_1, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.1, height=220)
         st_player(video_2, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.1, height=220)
         st_player(video_3, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.1, height=220)
+        st_player(video_4, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.1, height=220)
         # st.video(video)
 
     with st.expander('📌 機器學習專案流程介紹'):
