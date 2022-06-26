@@ -2698,6 +2698,7 @@ def fn_gen_web_intro():
         st.write('')
 
     with st.expander('📌 人工智能'):
+        st.write('')
         with st.expander('📌 AI、機器學習、深度學習 原理及應用'):
             st.write('')
             st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
