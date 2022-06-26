@@ -2702,7 +2702,11 @@ def fn_gen_web_intro():
         st.write('')
         video = 'https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
         video_2 = 'https://youtu.be/c9k8K1eII4g'
+        video_3 = 'https://www.youtube.com/playlist?list=PLvoDeKngckdIK956E9oI6awF8I7PVfwjg'
+        video_4 = 'https://www.youtube.com/c/jasonmel'
         st_player(video, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+        st_player(video_3, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
+        st_player(video_4, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
         st_player(video_2, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
         # st.video(video)
 
