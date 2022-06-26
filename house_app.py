@@ -2706,7 +2706,6 @@ def fn_gen_web_intro():
         st_player(video, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
         st_player(video_3, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
         st_player(video_4, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
-        st_player(video_2, key=str(datetime.datetime.now()), playing=False, loop=True, volume=0.1, height=220)
         # st.video(video)
 
     with st.expander('📌 機器學習專案流程介紹'):
