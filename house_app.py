@@ -24,6 +24,10 @@ from collections import defaultdict
 from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
+try:
+    from streamlit_player import st_player
+except:
+    pass
 
 # pip list --format=freeze > requirements.txt
 
@@ -2691,6 +2695,13 @@ def fn_gen_web_intro():
         st.write('')
         st.subheader('🚧 晚點再寫 ...')
         st.write('')
+
+    with st.expander('📌 AI、機器學習、深度學習 原理及應用'):
+        st.write('')
+        st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
+        st.write('')
+        video = 'https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr'
+        st_player(video, key=str(datetime.datetime.now()), playing=True, loop=True, volume=0.1, height=220)
 
     with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
