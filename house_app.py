@@ -2730,8 +2730,8 @@ def fn_gen_web_intro():
         fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
         fn_show_img(img_path, imgs[3], caption="Train Test Split")
         fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
-        fn_show_img('', url_tree, caption="MNIST using Machine Learning ( Ransom Forest")
-        fn_show_img('', url_mnist, caption="MNIST using Deep Learning")
+        fn_show_img('', url_tree, caption="MNIST using Machine Learning (Random Forest)")
+        fn_show_img('', url_mnist, caption="MNIST using Deep Learning (ANN)")
 
         fn_show_img(img_path, imgs[10],
                     caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
