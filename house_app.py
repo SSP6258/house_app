@@ -69,11 +69,12 @@ def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
     img = png if IMG_file.endswith('.gif') or IMG_file.startswith('http') else Image.open(png)
 
     # img = Image.open(png) if IMG_file.endswith('.png') or IMG_file.endswith('.jpeg') else png
-
+    st.write('')
     if is_sidebar:
         st.sidebar.image(img, width=width, caption=caption)
     else:
         st.image(img, width=width, caption=caption)
+
 
 
 def fn_addr_2_house_num(x):
@@ -2717,39 +2718,39 @@ def fn_gen_web_intro():
                 'MNIST.png']
 
         st.write('')
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
 
         url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
-        st.write('')
+        # st.write('')
         fn_show_img('', url_sk, caption="A rough guide on finding the right estimator")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[3], caption="Train Test Split")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[10],
                     caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
 
-        st.write('')
+        # st.write('')
         fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     with st.expander('📌 與我聯絡'):
