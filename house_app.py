@@ -66,7 +66,9 @@ dic_of_cn_2_en = {'經度': 'longitude',
 
 def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
     png = os.path.join(IMG_path, IMG_file)
-    img = png if IMG_file.endswith('.gif') else Image.open(png)
+    # img = png if IMG_file.endswith('.gif') else Image.open(png)
+
+    img = Image.open(png) if IMG_file.endswith('.png') or IMG_file.endswith('.jpeg') else png
 
     if is_sidebar:
         st.sidebar.image(img, width=width, caption=caption)
@@ -2720,6 +2722,10 @@ def fn_gen_web_intro():
 
         st.write('')
         fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
+
+        url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
+        st.write('')
+        fn_show_img('', url_sk, caption="finding the right estimator")
 
         st.write('')
         fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
