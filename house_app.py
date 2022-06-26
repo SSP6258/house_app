@@ -2725,7 +2725,7 @@ def fn_gen_web_intro():
 
         url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
         st.write('')
-        fn_show_img('', url_sk, caption="finding the right estimator")
+        fn_show_img('', url_sk, caption="A rough guide on finding the right estimator")
 
         st.write('')
         fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
