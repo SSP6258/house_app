@@ -2705,37 +2705,62 @@ def fn_gen_web_intro():
         st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
         video = 'https://www.youtube.com/watch?v=UGdG4WpluJ8'
-        st_player(video, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.5)
+        try:
+            st_player(video, key=str(random.randint(0, 1000)), playing=False, loop=True, volume=0.5)
+        except:
+            pass
 
     with st.expander('📌 機器學習專案流程介紹'):
         st.write('')
         st.write(
             "- 引用自 Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
-        img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
-                'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-                'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
-                'MNIST.png']
-        url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
-        url_mnist = 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'
-        url_tree = 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'
+
+        # img_path = os.path.join(dic_of_path['database'], 'ML Flow')
+        # imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
+        #         'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
+        #         'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
+        #         'MNIST.png']
+        # url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
+        # url_mnist = 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'
+        # url_tree = 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'
+
+        dic_of_img = {
+            'ML flow': ['Overview of ML workflow', 'https://miro.medium.com/max/963/1*QV1rVgh3bfaMbtxueS-cgA.png'],
+            'ML models': ['Overview of models under categories', 'https://miro.medium.com/max/656/1*KFQI59Yv7m1f3fwG68KSEA.jpeg'],
+            'SciKit Learn': ['https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html', 'https://scikit-learn.org/stable/_static/ml_map.png'],
+            'Unsupervise': ['Unsupervised Learning - Clustering', 'https://miro.medium.com/max/912/1*NjaQylKN3GUJGLGcdcgHlQ.png'],
+            'Supervise1': ['Supervised Learning- Classification', 'https://miro.medium.com/max/963/1*PQ8tdohapfm-YHlrRIRuOA.gif'],
+            'Supervise2': ['Supervised Learning - Regression', 'https://miro.medium.com/max/963/1*0Ve21Rildq950wRrlJvdLQ.gif'],
+            'Train Test Split': ['Train Test Split', 'https://miro.medium.com/max/963/1*CeALK-1lzIWNJ7wN9DStlw.png'],
+            'ELT': ['Data ELT(Extra Load Transform) for MNIST dataset', 'https://raw.githubusercontent.com/profundo-lab/imagenes/master/uPic/e6dLOp.png'],
+            'MNIST1': ['MNIST using Machine Learning (Random Forest)', 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'],
+            'MNIST2': ['MNIST using Deep Learning (ANN)', 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'],
+            'Confusion Matrix': ['Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)', 'https://media.geeksforgeeks.org/wp-content/uploads/20200821144709/284.PNG'],
+            'Regression Metrics': ['Regression Metrics - MAE/MSE/RMSE/...', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPh7vQxzxj6Ltn4BZ3b0YD3m6V0xfNzT3gnA&usqp=CAU'],
+        }
 
         st.write('')
-        fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
-        fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
-        fn_show_img('', url_sk, caption='https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html')
-        fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
-        fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
-        fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
-        fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
-        fn_show_img(img_path, imgs[3], caption="Train Test Split")
-        fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
-        fn_show_img('', url_tree, caption="MNIST using Machine Learning (Random Forest)")
-        fn_show_img('', url_mnist, caption="MNIST using Deep Learning (ANN)")
 
-        fn_show_img(img_path, imgs[10],
-                    caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
-        fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
+        for k in dic_of_img.keys():
+            fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0])
+
+
+        # st.write('')
+        # fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
+        # fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
+        # fn_show_img('', url_sk, caption='https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html')
+        # fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
+        # fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
+        # fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
+        # fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
+        # fn_show_img(img_path, imgs[3], caption="Train Test Split")
+        # fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
+        # fn_show_img('', url_tree, caption="MNIST using Machine Learning (Random Forest)")
+        # fn_show_img('', url_mnist, caption="MNIST using Deep Learning (ANN)")
+        #
+        # fn_show_img(img_path, imgs[10],
+        #             caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
+        # fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     with st.expander('📌 與我聯絡'):
         st.write('')
