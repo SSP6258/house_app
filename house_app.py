@@ -2734,7 +2734,6 @@ def fn_gen_web_intro():
         for k in dic_of_img.keys():
             fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0])
 
-
     with st.expander('📌 與我聯絡'):
         st.write('')
         st.write("🔗 [Jack Pan](https://www.facebook.com/jack.pan.96/)")
