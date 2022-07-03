@@ -2744,7 +2744,6 @@ def fn_gen_web_intro():
         # url_mnist = 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'
         # url_tree = 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'
 
-
         # st.write('')
         # fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
         # fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
