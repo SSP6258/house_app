@@ -2732,34 +2732,8 @@ def fn_gen_web_intro():
 
         st.write('')
         for k in dic_of_img.keys():
-            fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0]+'  \n  '+dic_of_img[k][1])
+            fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0]+'  <br>  '+dic_of_img[k][1])
 
-
-        # img_path = os.path.join(dic_of_path['database'], 'ML Flow')
-        # imgs = ['ML_Flow_2.png', 'ML.png', 'ML_Models.jpeg', 'Train_Test.png',
-        #         'SU_UNSU.png', 'Confusion.png', 'Clustering_1.png', 'Classification_0.gif',
-        #         'Regression_0.gif', 'Clustering_2.png', 'Confusion_Matrix.png', 'MAE.png',
-        #         'MNIST.png']
-        # url_sk = 'https://scikit-learn.org/stable/_static/ml_map.png'
-        # url_mnist = 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'
-        # url_tree = 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'
-
-        # st.write('')
-        # fn_show_img(img_path, imgs[0], caption="Overview of ML workflow")
-        # fn_show_img(img_path, imgs[2], caption="Overview of models under categories")
-        # fn_show_img('', url_sk, caption='https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html')
-        # fn_show_img(img_path, imgs[4], caption="Supervised(labeled) v.s. Unsupervised(unlabeled) Learning")
-        # fn_show_img(img_path, imgs[9], caption="Unsupervised Learning - Clustering")
-        # fn_show_img(img_path, imgs[7], caption="Supervised Learning- Classification")
-        # fn_show_img(img_path, imgs[8], caption="Supervised Learning - Regression")
-        # fn_show_img(img_path, imgs[3], caption="Train Test Split")
-        # fn_show_img(img_path, imgs[12], caption="Data ELT(Extra Load Transform) for MNIST dataset")
-        # fn_show_img('', url_tree, caption="MNIST using Machine Learning (Random Forest)")
-        # fn_show_img('', url_mnist, caption="MNIST using Deep Learning (ANN)")
-        #
-        # fn_show_img(img_path, imgs[10],
-        #             caption="Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)")
-        # fn_show_img(img_path, imgs[11], caption="Regression Metrics - MAE/MSE/RMSE/...")
 
     with st.expander('📌 與我聯絡'):
         st.write('')
