@@ -2727,7 +2727,7 @@ def fn_gen_web_intro():
             'MNIST1': ['MNIST using Deep Learning (ANN)', 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'],
             'MNIST2': ['MNIST using Machine Learning (Random Forest)', 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'],
              'Confusion Matrix': ['Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)', 'https://media.geeksforgeeks.org/wp-content/uploads/20200821144709/284.PNG'],
-            'Regression Metrics': ['Regression Metrics - MAE/MSE/RMSE/...', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPh7vQxzxj6Ltn4BZ3b0YD3m6V0xfNzT3gnA&usqp=CAU'],
+            'Regression Metrics': ['Regression Metrics - MAE/MSE/RMSE/...', 'https://miro.medium.com/max/875/1*BFzp8uSMk88mDLibU465VA.png'],
         }
 
         st.write('')
