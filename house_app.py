@@ -2732,7 +2732,7 @@ def fn_gen_web_intro():
 
         st.write('')
         for k in dic_of_img.keys():
-            fn_show_img('', dic_of_img[k][1], caption=[dic_of_img[k][0], dic_of_img[k][1]])
+            fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0])
 
 
     with st.expander('📌 與我聯絡'):
