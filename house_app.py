@@ -1857,7 +1857,8 @@ def fn_gen_web_ml_train(df, path):
 
         col2.markdown('##### 模型選擇:')
         ml_model = col2.radio('模型選擇', ('RandomForestRegressor', 'XGBRegressor'), index=0)
-        tune = col2.radio('調校方式', ('Manually', 'GridSearch 🐢', 'RandomizedSearch 🚧'), index=0)
+        tune = col2.radio('調校方式', ('Manually', 'GridSearch (cv=5) 🐢', 'RandomizedSearch 🚧'), index=0)
+        cv = int(tune.split('cv=')[-1].split(')')[0]) if 'cv=' in tune else 0
         tune = tune.split(' ')[0]
         threads = col2.radio('執行緒數量', ('Single-Thread', 'Multi-Threads 💀'), index=0)
         threads = threads.split(' ')[0]
@@ -2041,7 +2042,7 @@ def fn_gen_web_ml_train(df, path):
 
             regr = GridSearchCV(regr_sel,
                                 param_grid,
-                                cv=10,
+                                cv=cv,
                                 scoring='neg_mean_squared_error',
                                 return_train_score=True,
                                 refit=True,
