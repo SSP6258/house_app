@@ -75,6 +75,6 @@ class MultiApp:
             '應用選單',
             self.apps,
             format_func=lambda app: app['title'],
-            index=0)
+            index=1)
 
         app['function']()

@@ -1600,14 +1600,16 @@ def fn_gen_web_eda(df):
     Latest_date = Latest_date[0:-4] + '年' + Latest_date[-4].replace('0', '') + Latest_date[-3] + '月'
 
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
-    idx = options.index('R線_明德站') if 'R線_明德站' in options else 0
+    # idx = options.index('R線_明德站') if 'R線_明德站' in options else 0
+    idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
     mrt = st.sidebar.selectbox('捷運站', options=options, index=idx)
     df_sel = df_sel.reset_index(drop=True) if mrt == '不限' else df_sel[df_sel['MRT'] == mrt].reset_index(drop=True)
 
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
     build_cases.remove('nan') if 'nan' in build_cases else None
 
-    idx_dft = build_cases.index('華固文臨') if '華固文臨' in build_cases else 0
+    # idx_dft = build_cases.index('華固文臨') if '華固文臨' in build_cases else 0
+    idx_dft = build_cases.index('康寶日出印象 ') if '康寶日出印象 ' in build_cases else 0
     build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=idx_dft)
 
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
