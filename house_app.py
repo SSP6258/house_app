@@ -1841,6 +1841,8 @@ def fn_gen_web_eda(df):
     map_style = "open-street-map"
     fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
     st.plotly_chart(fig_map)
+    st.write('')
+    st.write('')
 
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
@@ -1848,9 +1850,7 @@ def fn_gen_web_eda(df):
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False)
 
-
     fn_gen_bc_deals(build_case, dic_df_show)
-
 
     with st.expander('📈 樓層均價 與 成交戶數'):
         # st.subheader('📈 樓層均價 與 成交戶數')
