@@ -1828,7 +1828,7 @@ def fn_gen_web_eda(df):
                 v = v + '年' if i == '完工年度' else v
                 c2.write(f'{i}: {v}')
 
-            submitted = st.form_submit_button("")
+            submitted = st.form_submit_button('')
 
     st.write('')
     st.subheader('🗺️ 建案位置')
