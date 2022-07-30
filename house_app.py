@@ -1808,15 +1808,7 @@ def fn_gen_web_eda(df):
     else:
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
 
-    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
-    st.subheader(f'均價 {int(ave)} 萬/坪')
-    st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
-    df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
-    AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False)
-
-    if build_case != '不限':
         st.write('')
-
         with st.form(key='Form_bc_info'):
             c1, c2 = st.columns(2)
             bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數', '企劃銷售']
@@ -1837,6 +1829,13 @@ def fn_gen_web_eda(df):
                 c2.write(f'{i}: {v}')
 
             submitted = st.form_submit_button("")
+
+    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
+    st.subheader(f'均價 {int(ave)} 萬/坪')
+    st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
+    df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
+    AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False)
+
 
     fn_gen_bc_deals(build_case, dic_df_show)
 
