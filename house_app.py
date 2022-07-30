@@ -1736,7 +1736,7 @@ def fn_gen_web_eda(df):
                 w = max((*w, len(col)))
                 width.append(w)
 
-    for i in range(3):
+    for i in range(6):
         st.sidebar.write('')
 
     # fig_tbl = go.Figure(data=[
