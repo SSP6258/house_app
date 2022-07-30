@@ -293,6 +293,7 @@ def fn_get_sku_people_by_year(df):
     return df
 
 
+
 def fn_get_interest_rate(df, months=1):
     path = dic_of_path['database']
     file = os.path.join(path, 'a13rate.csv')
@@ -1715,10 +1716,11 @@ def fn_gen_web_eda(df):
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
-    cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=['捷運站', '建案名稱', '移轉層次', '建物坪數',
-                                                                   '每坪單價(萬)', '總價(萬)', '車位坪數',
-                                                                   '車位類別', '車位單價(萬)',
-                                                                   '交易年月日', '地址', 'File'])
+    dft_sel = ['建案名稱', '投資建設',  '營造公司','移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+               '車位類別', '車位單價(萬)', '交易年月日', '基地面積(坪)', '地上樓層', '地下樓層', '總戶數']
+
+    cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
+                                  default=dft_sel)
 
     df_cols = df_sel[cols]
 
