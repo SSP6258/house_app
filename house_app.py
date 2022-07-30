@@ -1732,11 +1732,11 @@ def fn_gen_web_eda(df):
         if submitted:
             df_cols = df_sel[cols]
 
-    width = []
-    for col in df_cols.columns:
-        w = df_cols[col].apply(lambda x: len(str(x)))
-        w = max((*w, len(col)))
-        width.append(w)
+            width = []
+            for col in df_cols.columns:
+                w = df_cols[col].apply(lambda x: len(str(x)))
+                w = max((*w, len(col)))
+                width.append(w)
 
     # fig_tbl = go.Figure(data=[
     #     go.Table(columnwidth=width,
