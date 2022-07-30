@@ -1721,10 +1721,16 @@ def fn_gen_web_eda(df):
     dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
                '車位類別', '車位單價(萬)', '交易年月日']
 
-    cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
-                                  default=dft_sel)
+    with st.sidebar.form(key='欄位選擇'):
+        cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
+                                      default=dft_sel)
 
-    df_cols = df_sel[cols]
+        submitted = st.sidebar.form_submit_button('選擇')
+
+        st.write('')
+
+        if submitted:
+            df_cols = df_sel[cols]
 
     width = []
     for col in df_cols.columns:
