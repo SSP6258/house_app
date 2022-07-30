@@ -1738,6 +1738,9 @@ def fn_gen_web_eda(df):
                 w = max((*w, len(col)))
                 width.append(w)
 
+    for i in range(3):
+        st.sidebar.write('')
+
     # fig_tbl = go.Figure(data=[
     #     go.Table(columnwidth=width,
     #              header=dict(values=list(df_cols.columns),
