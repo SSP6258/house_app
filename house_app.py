@@ -1736,9 +1736,8 @@ def fn_gen_web_eda(df):
             #     w = max((*w, len(col)))
             #     width.append(w)
 
-    for i in range(6):
+    for i in range(5):
         st.sidebar.write('')
-
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
     # city = df['土地位置建物門牌'].apply(lambda x:x.split('市')+'市')
