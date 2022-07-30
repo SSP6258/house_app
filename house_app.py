@@ -1716,8 +1716,8 @@ def fn_gen_web_eda(df):
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
-    dft_sel = ['建案名稱', '投資建設',  '營造公司','移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
-               '車位類別', '車位單價(萬)', '交易年月日', '基地面積(坪)', '地上樓層', '地下樓層', '總戶數']
+    dft_sel = ['建案名稱', '移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+               '車位類別', '車位單價(萬)', '交易年月日']
 
     cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
                                   default=dft_sel)
@@ -1807,6 +1807,19 @@ def fn_gen_web_eda(df):
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue')
+
+    if build_case != '不限':
+        st.write('')
+        bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '完工年度', '地上樓層', '地下樓層', '總戶數']
+
+        bc_info_c2 = ['建蔽率(%)', '容積率(%)', '公設比(%)', '平面車位', '機械車位', '座向規劃']
+
+        c1, c2 = st.columns(2)
+        for i in bc_info_c1:
+            c1.write(f'{i}: {df_sel[i].values[0]}')
+
+        for i in bc_info_c2:
+            c2.write(f'{i}: {df_sel[i].values[0]}')
 
     fn_gen_bc_deals(build_case, dic_df_show)
 
