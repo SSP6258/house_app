@@ -1822,6 +1822,8 @@ def fn_gen_web_eda(df):
             for i in bc_info_c2:
                 c2.write(f'{i}: {df_sel[i].values[0]}')
 
+            st.form_submit_button("")
+
     fn_gen_bc_deals(build_case, dic_df_show)
 
     st.write('')
