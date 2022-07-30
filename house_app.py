@@ -1725,7 +1725,7 @@ def fn_gen_web_eda(df):
         cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
                                       default=dft_sel)
 
-        submitted = st.form_submit_button('選擇')
+        submitted = st.form_submit_button('選 擇')
 
         st.write('')
 
