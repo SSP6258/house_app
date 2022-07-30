@@ -1727,8 +1727,6 @@ def fn_gen_web_eda(df):
 
         submitted = st.form_submit_button('選 擇')
 
-        st.write('')
-
         if submitted:
             df_cols = df_sel[cols]
 
