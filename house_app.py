@@ -1826,12 +1826,14 @@ def fn_gen_web_eda(df):
                 v = str(df_sel[i].values[0])
                 v = v + '%' if '%' in i else v
                 v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
+                v = v + '年' if i == '完工年度' else v
                 c1.write(f'{i}: {v}')
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
                 v = v + '%' if '%' in i else v
                 v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
+                v = v + '年' if i == '完工年度' else v
                 c2.write(f'{i}: {v}')
 
             submitted = st.form_submit_button("")
