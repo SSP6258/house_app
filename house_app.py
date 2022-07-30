@@ -1532,7 +1532,9 @@ def fn_gen_bc_deals(build_case, dic_df_show):
         for k in dic_values_sort.keys():
             fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
                                      line_color='black', showlegend=True)
-        st.plotly_chart(fig)
+
+        with st.expander('銷售分析'):
+            st.plotly_chart(fig)
 
 
 @fn_profiler
