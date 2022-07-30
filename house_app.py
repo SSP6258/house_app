@@ -1800,10 +1800,11 @@ def fn_gen_web_eda(df):
     st.write('')
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
-    if build_case != '不限':
-        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 {build_case}')
-    else:
+
+    if build_case == '不限':
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
+    else:
+        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
 
     # st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
