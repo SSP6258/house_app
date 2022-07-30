@@ -1812,7 +1812,7 @@ def fn_gen_web_eda(df):
         st.write('')
 
         with st.form(key='Form_bc_info'):
-            c1, c2 = st.columns(3)
+            c1, c2 = st.columns(2)
             bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數']
             bc_info_c2 = ['基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)', '公設比(%)', '平面車位', '機械車位', '座向規劃', '企劃銷售', '土地分區']
 
@@ -1822,7 +1822,7 @@ def fn_gen_web_eda(df):
             for i in bc_info_c2:
                 c2.write(f'{i}: {df_sel[i].values[0]}')
 
-            submitted = st.form_submit_button(" ")
+            submitted = st.form_submit_button("")
 
     fn_gen_bc_deals(build_case, dic_df_show)
 
