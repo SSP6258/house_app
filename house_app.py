@@ -1722,7 +1722,7 @@ def fn_gen_web_eda(df):
                '車位類別', '車位單價(萬)', '交易年月日']
 
     with st.sidebar.form(key='欄位選擇'):
-        cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
+        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
                                       default=dft_sel)
 
         submitted = st.form_submit_button('選 擇')
