@@ -2818,17 +2818,19 @@ def fn_app(page='data'):
         df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
 
         c1, c2 = st.sidebar.columns(2)
-        city = c1.selectbox('城市', ['台北市', '不限'], index=0)
-        is_tpe = city == '台北市'
-        df = df[df['台北市'] == is_tpe] if city != '不限' else df
+        with st.sidebar.form(''):
+            city = c1.selectbox('城市', ['台北市', '不限'], index=0)
+            is_tpe = city == '台北市'
+            df = df[df['台北市'] == is_tpe] if city != '不限' else df
 
-        d = c2.selectbox('鄉鎮市區', ['不限'] + df['鄉鎮市區'].unique().tolist(), index=0)
-        df = df[df['鄉鎮市區'] == d] if d != '不限' else df
+            d = c2.selectbox('鄉鎮市區', ['不限'] + df['鄉鎮市區'].unique().tolist(), index=0)
+            df = df[df['鄉鎮市區'] == d] if d != '不限' else df
 
-        land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
-        df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
+            land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
+            df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
-        fn_gen_web_eda(df)
+            if st.form_submit_button('選擇'):
+                fn_gen_web_eda(df)
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
