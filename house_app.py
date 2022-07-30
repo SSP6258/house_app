@@ -1716,7 +1716,7 @@ def fn_gen_web_eda(df):
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
-    dft_sel = ['建案名稱', '移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+    dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
                '車位類別', '車位單價(萬)', '交易年月日']
 
     cols = st.sidebar.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
@@ -1800,7 +1800,11 @@ def fn_gen_web_eda(df):
     st.write('')
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
-    st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
+    if build_case != '不限':
+        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 {build_case}')
+    else:
+        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
+
     # st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel) / period, 2)} 筆/月')
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
