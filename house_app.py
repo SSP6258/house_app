@@ -1823,10 +1823,16 @@ def fn_gen_web_eda(df):
             bc_info_c2 = ['基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)', '公設比(%)', '平面車位', '機械車位', '座向規劃', '土地分區']
 
             for i in bc_info_c1:
-                c1.write(f'{i}: {df_sel[i].values[0]}')
+                v = str(df_sel[i].values[0])
+                v = v + '%' if '%' in i else v
+                v = v.split('.')[0] if '.' in v else v
+                c1.write(f'{i}: {v}')
 
             for i in bc_info_c2:
-                c2.write(f'{i}: {df_sel[i].values[0]}')
+                v = str(df_sel[i].values[0])
+                v = v + '%' if '%' in i else v
+                v = v.split('.')[0] if '.' in v else v
+                c2.write(f'{i}: {v}')
 
             submitted = st.form_submit_button("")
 
