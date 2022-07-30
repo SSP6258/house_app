@@ -1840,14 +1840,16 @@ def fn_gen_web_eda(df):
                   '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
     map_style = "open-street-map"
     fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
-
     st.plotly_chart(fig_map)
-    st.subheader('📈 樓層均價 與 成交戶數')
-    st.plotly_chart(fig_bar2)
 
-    # t_e = time.time()
-    # dur_t = round(t_e - t_s, 5)
-    # print(f'fn_gen_web_eda: {dur_t} 秒')
+    with st.expander('📈 樓層均價 與 成交戶數'):
+        # st.subheader('📈 樓層均價 與 成交戶數')
+        st.write('')
+        st.plotly_chart(fig_bar2)
+
+        # t_e = time.time()
+        # dur_t = round(t_e - t_s, 5)
+        # print(f'fn_gen_web_eda: {dur_t} 秒')
 
 
 @fn_profiler
