@@ -1726,15 +1726,13 @@ def fn_gen_web_eda(df):
 
     df_cols = df_sel[st.session_state['feature_sel']]
     with st.sidebar.form(key='欄位選擇'):
-        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
-                                      default=dft_sel)
+        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
 
         submitted = st.form_submit_button('選 擇')
 
         if submitted:
             df_cols = df_sel[cols]
             st.session_state['feature_sel'] = cols
-
 
     for i in range(5):
         st.sidebar.write('')
