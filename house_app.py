@@ -1733,7 +1733,7 @@ def fn_gen_web_eda(df):
         if submitted:
             df_cols = df_sel[cols]
             st.session_state['feature_sel'] = cols
-            st.write(f'{len(st.session_state["feature_sel"])}')
+            st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
 
     st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
 
