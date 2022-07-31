@@ -1724,7 +1724,7 @@ def fn_gen_web_eda(df):
     if len(st.session_state['feature_sel']) == 0:
         st.session_state['feature_sel'] = dft_sel
 
-    df_cols = df_sel[st.session_state['feature_sel']['features']]
+    df_cols = df_sel[st.session_state['feature_sel']]
     with st.sidebar.form(key='欄位選擇'):
         cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
                                       default=dft_sel)
