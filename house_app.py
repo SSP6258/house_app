@@ -1733,6 +1733,7 @@ def fn_gen_web_eda(df):
         if submitted:
             df_cols = df_sel[cols]
             st.session_state['feature_sel'] = cols
+            st.write(f'{len(st.session_state["feature_sel"])}')
 
     for i in range(5):
         st.sidebar.write('')
