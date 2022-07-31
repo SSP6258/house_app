@@ -1720,7 +1720,11 @@ def fn_gen_web_eda(df):
 
     dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
                '車位類別', '車位單價(萬)', '交易年月日']
-    df_cols = df_sel[dft_sel]
+
+    if len(st.session_state['feature_sel'].keys() == 0):
+        st.session_state['feature_sel']['features'] = dft_sel
+
+    df_cols = df_sel[st.session_state['feature_sel']['features']]
     with st.sidebar.form(key='欄位選擇'):
         cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
                                       default=dft_sel)
@@ -1729,12 +1733,8 @@ def fn_gen_web_eda(df):
 
         if submitted:
             df_cols = df_sel[cols]
+            st.session_state['feature_sel']['features'] = cols
 
-            # width = []
-            # for col in df_cols.columns:
-            #     w = df_cols[col].apply(lambda x: len(str(x)))
-            #     w = max((*w, len(col)))
-            #     width.append(w)
 
     for i in range(5):
         st.sidebar.write('')
@@ -2555,6 +2555,9 @@ def fn_gen_web_init(path, page=None):
 
     if 'pred_para' not in st.session_state:
         st.session_state['pred_para'] = {}
+
+    if 'feature_sel' not in st.session_state:
+        st.session_state['feature_sel'] = {}
 
     # print(f'session_state: {st.session_state}')
     df = fn_get_house_data(path_output)
