@@ -1721,7 +1721,7 @@ def fn_gen_web_eda(df):
     dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
                '車位類別', '車位單價(萬)', '交易年月日']
 
-    if len(st.session_state['feature_sel'].keys() == 0):
+    if len(st.session_state['feature_sel'] == 0):
         st.session_state['feature_sel']['features'] = dft_sel
 
     df_cols = df_sel[st.session_state['feature_sel']['features']]
