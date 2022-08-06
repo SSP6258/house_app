@@ -1831,7 +1831,7 @@ def fn_gen_web_eda(df):
             submitted = st.form_submit_button("")
 
         df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
-        if builder in df_lg['建商營造']:
+        if builder in df_lg['建商營造'].values:
             df_lg_b = df_lg[df_lg['建商營造'] == builder]
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
@@ -1839,7 +1839,7 @@ def fn_gen_web_eda(df):
             with st.expander(f'⚖️建商 最新裁判案件:{lg_latest} 歷史裁判案件數: {lg_total}件'):
                 AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
-        if constructor in df_lg['建商營造']:
+        if constructor in df_lg['建商營造'].values:
             df_lg_c = df_lg[df_lg['建商營造'] == constructor]
             lg_latest = df_lg_c['裁判日期'].values[0]
             lg_total = df_lg_c['歷年案件'].values[0]
