@@ -557,7 +557,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                     st.plotly_chart(fig, config=config)
 
             st.write('')
-            AgGrid(df_show, theme='blue')
+            AgGrid(df_show, theme='blue', enable_enterprise_modules=True)
 
             del df
         else:
@@ -1845,7 +1845,7 @@ def fn_gen_web_eda(df):
     st.subheader(f'均價 {int(ave)} 萬/坪')
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
-    AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False)
+    AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
 
     fn_gen_bc_deals(build_case, dic_df_show)
 
@@ -2024,7 +2024,7 @@ def fn_gen_web_ml_train(df, path):
             if '無' not in ano_det:
                 st.markdown(f'{"#" * 5} {ano_det} 的資料: 共{df_ano.shape[0]}筆')
                 df_screen = df_ano[['MRT', '地址', '每坪單價(萬)', '交易年月日', '備註']]
-                AgGrid(df_screen, theme='blue')
+                AgGrid(df_screen, theme='blue', enable_enterprise_modules=True)
 
         with st.expander(f'👓 檢視 資料分佈'):
             watch = "每坪單價(萬)"
@@ -2290,7 +2290,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
     # st.dataframe(df_metrics)
-    AgGrid(df_metrics, theme='blue')
+    AgGrid(df_metrics, theme='blue', enable_enterprise_modules=True)
 
     # te = time.time()
     # dur = round(te - ts, 5)
