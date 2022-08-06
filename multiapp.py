@@ -54,7 +54,7 @@ class MultiApp:
         fn_chrome_96_workaround()
         st.set_page_config(page_title="尋找夢想家", page_icon="🏠")
 
-        imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg', 'house_dora_88.JPG']
+        imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg', 'house_dora_88.jpg']
         fn_show_img(dic_of_path['database'], imgs[3], is_sidebar=True, width=None, caption="~ 女兒蓋了棟別墅送我 💛 ~", rorate=90)
 
         # try:
