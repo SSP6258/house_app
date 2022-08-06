@@ -1799,29 +1799,30 @@ def fn_gen_web_eda(df):
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
 
+    st.write('')
+    st.subheader('🗺️ 建案位置')
+    if build_case != '不限':
+        st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
+        st.write(
+            f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])})')
+        st.write(f'- 捷運距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺 ({df_sel["捷運站"].values[0]})')
+        st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分 (MRT)')
+
+    df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
+
+    title = ''
+    hover_name = '建案名稱'
+    hover_data = ['交易年', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
+                  '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
+    map_style = "open-street-map"
+    fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
+    st.plotly_chart(fig_map)
+    st.write('')
+
     if build_case == '不限':
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
     else:
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
-
-        st.write('')
-        st.subheader('🗺️ 建案位置')
-        if build_case != '不限':
-            st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
-            st.write(
-                f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])})')
-            st.write(f'- 捷運距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺 ({df_sel["捷運站"].values[0]})')
-            st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分 (MRT)')
-
-        df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
-
-        title = ''
-        hover_name = '建案名稱'
-        hover_data = ['交易年', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
-                      '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
-        map_style = "open-street-map"
-        fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
-        st.plotly_chart(fig_map)
 
         st.write('')
         builder = 'NA'
