@@ -64,7 +64,7 @@ dic_of_cn_2_en = {'經度': 'longitude',
                   }
 
 
-def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None, rotate=0):
+def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
     png = os.path.join(IMG_path, IMG_file)
     img = png if IMG_file.endswith('.gif') or IMG_file.startswith('http') else Image.open(png)
     # img = Image.open(png) if IMG_file.endswith('.png') or IMG_file.endswith('.jpeg') else png
