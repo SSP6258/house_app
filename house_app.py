@@ -1768,7 +1768,7 @@ def fn_gen_web_eda(df):
                                     op=0.55,
                                     size='交易量')
 
-    latest_rel = '0511'
+    latest_rel = '0801'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -1805,6 +1805,8 @@ def fn_gen_web_eda(df):
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
 
         st.write('')
+        builder = 'NA'
+        constructor = 'NA'
         with st.form(key='Form_bc_info'):
             c1, c2 = st.columns(2)
             bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數', '企劃銷售']
@@ -1816,6 +1818,8 @@ def fn_gen_web_eda(df):
                 v = v + '%' if '%' in i else v
                 v = v + '年' if i == '完工年度' else v
                 c1.write(f'{i}: {v}')
+                builder = v if i == '投資建設' else builder
+                constructor = v if i == '營造公司' else constructor
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
@@ -1825,6 +1829,23 @@ def fn_gen_web_eda(df):
                 c2.write(f'{i}: {v}')
 
             submitted = st.form_submit_button("")
+
+        df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
+        if builder in df_lg['建商營造']:
+            df_lg_b = df_lg[df_lg['建商營造'] == builder]
+            lg_latest = df_lg_b['裁判日期'].values[0]
+            lg_total = df_lg_b['歷年案件'].values[0]
+
+            with st.expander(f'⚖️建商 最新裁判案件:{lg_latest} 歷史裁判案件數: {lg_total}件'):
+                AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
+
+        if constructor in df_lg['建商營造']:
+            df_lg_c = df_lg[df_lg['建商營造'] == constructor]
+            lg_latest = df_lg_c['裁判日期'].values[0]
+            lg_total = df_lg_c['歷年案件'].values[0]
+
+            with st.expander(f'⚖️營造商 最新裁判案件:{lg_latest} 歷史裁判案件數: {lg_total}件'):
+                AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
 
     st.write('')
     st.subheader('🗺️ 建案位置')
