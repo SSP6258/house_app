@@ -1872,6 +1872,9 @@ def fn_gen_web_eda(df):
 
     st.write('')
     st.subheader('🗺️ 建案位置')
+    if build_case == '不限':
+        st.write(f'{df_sel["地址"].values[0]}')
+
     df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
 
     title = ''
