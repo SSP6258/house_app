@@ -1803,7 +1803,7 @@ def fn_gen_web_eda(df):
     if build_case == '不限':
         st.subheader('🗺️ 建案位置')
     else:
-        st.subheader(f'🗺️ 建案 👉 {build_case} 位置')
+        st.subheader(f'🗺️ 建案位置 👉 {build_case}')
         st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
         st.write(
             f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])}人)')
