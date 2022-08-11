@@ -1848,7 +1848,8 @@ def fn_gen_web_eda(df):
                 v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
                 v = v + '%' if '%' in i else v
                 v = v + '年' if i == '完工年度' else v
-                v = '[參考公式](https://www.hbhousing.com.tw/News/Detail.aspx?Num=5044&utm_source=gsm&utm_medium=cpc&utm_content=word&utm_campaign=201901hbcue&ctype=B&cid=words&oid=gsm&gclid=Cj0KCQjw_7KXBhCoARIsAPdPTfhs4zRHqUrHu26rpRRl1RaWymm0iNi04nTTKiA9pNtWRqWQnmKutLwaAr_OEALw_wcB)' if i=='容積率(%)' else v
+                # v = '[參考公式](https://www.hbhousing.com.tw/News/Detail.aspx?Num=5044&utm_source=gsm&utm_medium=cpc&utm_content=word&utm_campaign=201901hbcue&ctype=B&cid=words&oid=gsm&gclid=Cj0KCQjw_7KXBhCoARIsAPdPTfhs4zRHqUrHu26rpRRl1RaWymm0iNi04nTTKiA9pNtWRqWQnmKutLwaAr_OEALw_wcB)' if i=='容積率(%)' else v
+                v = v + ' [臺北市土地使用分區管制](https://www.udd.gov.taipei/laws/rdpqpr5-5426)' if i == '容積率(%)' else v
                 c2.write(f'{i}: {v}')
 
             submitted = st.form_submit_button("")
