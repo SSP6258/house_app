@@ -1538,6 +1538,85 @@ def fn_gen_bc_deals(build_case, dic_df_show):
             st.plotly_chart(fig)
 
 
+def fn_gen_bc_deals_2(build_case, dic_df_show, tab):
+    if len(dic_df_show.keys()):
+
+        r = tab
+
+        dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
+
+        df_show = dic_df_show[r] if r in dic_df_show.keys() else None
+
+        df_show = df_show[df_show.index != '1F']
+
+        if r == '樓層價差(%)':
+            df_show_diff = df_show.copy()
+            rows, cols = df_show_diff.shape[0], df_show_diff.shape[1]
+            for idx in range(rows - 1):
+                for col in range(cols):
+                    son = df_show.iloc[idx, col]
+                    mom = df_show.iloc[idx + 1, col]
+                    f = df_show.index[idx]
+                    f_1 = df_show.index[idx + 1]
+                    is_f_cont = abs(int(f.split('F')[0]) - int(f_1.split('F')[0])) == 1
+                    if is_f_cont and son > 0 and mom > 0:
+                        df_show_diff.at[f, df_show.columns[col]] = round(son / mom, 4) - 1
+
+            for col in df_show_diff:
+                df_show_diff[col] = df_show_diff[col].apply(lambda x: 0 if x > 2 else x)
+
+            df_show = df_show_diff
+
+        assert df_show is not None, f'{r} not in dic_df_show {dic_df_show.keys()}'
+
+        if r in ['每坪單價(萬)', '建物坪數', '車位坪數']:
+            fmt = "{:.2f}"
+        elif r in ['樓層價差(%)']:
+            fmt = "{:.1%}"
+        else:
+            fmt = None
+
+        df_show = df_show.astype(int) if r == '交易日期' else df_show
+        df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
+
+        sorts = []
+        for col in df_show.columns:
+            sorts += list(df_show[col].values)
+
+        sorts = [v for v in sorts if v > 0]
+        sorts.sort()
+
+        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=sorts[0])
+        df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
+
+        st.dataframe(df_show_fig, width=768, height=540)
+        dic_values = defaultdict(list)
+        for col in df_show.columns:
+            for idx in df_show.index:
+                v = df_show.loc[idx, col]
+                a = int(dic_df_show['建物坪數'].loc[idx, col])
+                if v > 0:
+                    if r == '交易日期':
+                        year = int(v / 100)
+                        month = v - 100 * year
+                        v = datetime.date(year=year, month=month, day=1)
+                    dic_values[a].append(v)
+
+        fig = make_subplots(rows=1, cols=1,
+                            subplot_titles=(
+                                f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
+
+        dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
+
+        margin = {'l': 40}
+        for k in dic_values_sort.keys():
+            fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
+                                     line_color='black', showlegend=True)
+
+        with st.expander('銷售分析'):
+            st.plotly_chart(fig)
+
+
 @fn_profiler
 def fn_gen_model_confidence(loaded_model, X):
     preds = np.stack([t.predict(X.values) for t in loaded_model.estimators_])
@@ -1770,7 +1849,7 @@ def fn_gen_web_eda(df):
                                     op=0.55,
                                     size='交易量')
 
-    latest_rel = '0801'
+    latest_rel = '0811'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -1895,26 +1974,6 @@ def fn_gen_web_eda(df):
                     st.write('')
                     AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
 
-    # st.write('')
-    # st.subheader('🗺️ 建案位置')
-    # if build_case != '不限':
-    #     st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
-    #     st.write(f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])})')
-    #     st.write(f'- 捷運距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺 ({df_sel["捷運站"].values[0]})')
-    #     st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分 (MRT)')
-    #
-    # df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
-    #
-    # title = ''
-    # hover_name = '建案名稱'
-    # hover_data = ['交易年', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
-    #               '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
-    # map_style = "open-street-map"
-    # fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
-    # st.plotly_chart(fig_map)
-    # st.write('')
-    # st.write('')
-
     st.write('')
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
@@ -1922,7 +1981,21 @@ def fn_gen_web_eda(df):
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
 
-    fn_gen_bc_deals(build_case, dic_df_show)
+    # fn_gen_bc_deals(build_case, dic_df_show)
+
+    deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
+    st.write('')
+    st.subheader(f'🏡 建案: {build_case}'
+                 f' 📝 登錄: {deals} 筆'
+                 f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+
+    tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
+
+    for tab in tabs:
+        with tab:
+            fn_gen_bc_deals_2(build_case, dic_df_show, tab.text())
+
+
 
     with st.expander('📈 樓層均價 與 成交戶數'):
         # st.subheader('📈 樓層均價 與 成交戶數')
