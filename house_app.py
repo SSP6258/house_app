@@ -1300,7 +1300,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
 
-    tabs = st.tabs(['單價分布', '特徵分布', '相關分析' '行政區分析', '捷運分析', '小學分析', '建物分析', '銷售分析'])
+    tabs = st.tabs(['單價分布', '特徵分布', '相關分析', '行政區分析', '捷運分析', '小學分析', '建物分析', '銷售分析'])
     tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
 
     with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
