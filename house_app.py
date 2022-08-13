@@ -1452,7 +1452,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
 
 @fn_profiler
-def fn_gen_bc_deals(build_case, dic_df_show):
+def fn_gen_bc_deals_old(build_case, dic_df_show):
     if len(dic_df_show.keys()):
         deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
         st.write('')
@@ -1538,7 +1538,8 @@ def fn_gen_bc_deals(build_case, dic_df_show):
             st.plotly_chart(fig)
 
 
-def fn_gen_bc_deals_2(build_case, dic_df_show, r):
+@fn_profiler
+def fn_gen_bc_deals(build_case, dic_df_show, r):
     if len(dic_df_show.keys()):
 
         dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
@@ -1862,7 +1863,6 @@ def fn_gen_web_eda(df):
     st.plotly_chart(fig_map_all)
     st.write('')
 
-
     # area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=1)
     # fn_set_radio_2_hor()
     #
@@ -1874,7 +1874,6 @@ def fn_gen_web_eda(df):
     #     st.plotly_chart(fig_tm_m)
     # else:
     #     st.plotly_chart(fig_tm_2)
-
 
     tabs = st.tabs(['交易筆數', '最小坪數', '最大坪數'])
     tab_deals, tab_area_min, tab_area_max = tabs
