@@ -1662,21 +1662,21 @@ def fn_gen_web_eda(df):
     df_tm.rename(columns={'建案名稱': '交易筆數'}, inplace=True)
     df_tm.reset_index(inplace=True)
     df_tm.rename(columns={'index': '建案名稱', '每坪單價(萬)': '每坪均價(萬)'}, inplace=True)
-    fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
-                                   color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-                                   mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-
-    fig_tm_2 = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='建物坪數',
-                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-
-    fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
-                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-
-    fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
-                                     color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-                                     mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+    # fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
+    #                                color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+    #                                mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+    #
+    # fig_tm_2 = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='建物坪數',
+    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+    #
+    # fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
+    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+    #
+    # fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
+    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     df_sel = df.copy()
     Latest_date = str(df_sel['交易年月日'].iloc[0])
@@ -1861,16 +1861,41 @@ def fn_gen_web_eda(df):
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄分析 (更新至: {Latest_date})')
     st.plotly_chart(fig_map_all)
     st.write('')
-    area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=1)
-    fn_set_radio_2_hor()
-    if area == '交易筆數':
+
+
+    # area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=1)
+    # fn_set_radio_2_hor()
+    #
+    # if area == '交易筆數':
+    #     st.plotly_chart(fig_tm)
+    # elif area == '最小坪數':
+    #     st.plotly_chart(fig_tm_n)
+    # elif area == '最大坪數':
+    #     st.plotly_chart(fig_tm_m)
+    # else:
+    #     st.plotly_chart(fig_tm_2)
+
+
+    tabs = st.tabs(['交易筆數', '最小坪數', '最大坪數'])
+    tab_deals, tab_area_min, tab_area_max = tabs
+
+    with tab_deals:
+        fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
+                                       color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                       mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
-    elif area == '最小坪數':
+
+    with tab_area_min:
+        fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
+                                         color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                         mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm_n)
-    elif area == '最大坪數':
+
+    with tab_area_max:
+        fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
+                                         color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                         mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm_m)
-    else:
-        st.plotly_chart(fig_tm_2)
 
     st.write('')
     st.subheader(f'📊 數據分析')
