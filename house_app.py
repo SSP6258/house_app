@@ -2018,28 +2018,28 @@ def fn_gen_web_eda(df):
     tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
     with tab_price:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '每坪單價(萬)')
+        fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
     with tab_diff:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '樓層價差(%)')
+        fn_gen_bc_deals(build_case, dic_df_show, '樓層價差(%)')
 
     with tab_wo_pk:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '總價-車位(萬)')
+        fn_gen_bc_deals(build_case, dic_df_show, '總價-車位(萬)')
 
     with tab_total:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '總價(萬)')
+        fn_gen_bc_deals(build_case, dic_df_show, '總價(萬)')
 
     with tab_pk:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '車位總價(萬)')
+        fn_gen_bc_deals(build_case, dic_df_show, '車位總價(萬)')
 
     with tab_area:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '建物坪數')
+        fn_gen_bc_deals(build_case, dic_df_show, '建物坪數')
 
     with tab_pk_area:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '車位坪數')
+        fn_gen_bc_deals(build_case, dic_df_show, '車位坪數')
 
     with tab_date:
-        fn_gen_bc_deals_2(build_case, dic_df_show, '交易日期')
+        fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
 
 
     with st.expander('📈 樓層均價 與 成交戶數'):
