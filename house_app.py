@@ -1588,31 +1588,33 @@ def fn_gen_bc_deals_2(build_case, dic_df_show, r):
         df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
 
         st.dataframe(df_show_fig, width=768, height=540)
-        dic_values = defaultdict(list)
-        for col in df_show.columns:
-            for idx in df_show.index:
-                v = df_show.loc[idx, col]
-                a = int(dic_df_show['建物坪數'].loc[idx, col])
-                if v > 0:
-                    if r == '交易日期':
-                        year = int(v / 100)
-                        month = v - 100 * year
-                        v = datetime.date(year=year, month=month, day=1)
-                    dic_values[a].append(v)
 
-        fig = make_subplots(rows=1, cols=1,
-                            subplot_titles=(
-                                f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
-
-        dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
-
-        margin = {'l': 40}
-        for k in dic_values_sort.keys():
-            fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
-                                     line_color='black', showlegend=True)
-
-        with st.expander('銷售分析'):
-            st.plotly_chart(fig)
+        #
+        # dic_values = defaultdict(list)
+        # for col in df_show.columns:
+        #     for idx in df_show.index:
+        #         v = df_show.loc[idx, col]
+        #         a = int(dic_df_show['建物坪數'].loc[idx, col])
+        #         if v > 0:
+        #             if r == '交易日期':
+        #                 year = int(v / 100)
+        #                 month = v - 100 * year
+        #                 v = datetime.date(year=year, month=month, day=1)
+        #             dic_values[a].append(v)
+        #
+        # fig = make_subplots(rows=1, cols=1,
+        #                     subplot_titles=(
+        #                         f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
+        #
+        # dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
+        #
+        # margin = {'l': 40}
+        # for k in dic_values_sort.keys():
+        #     fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
+        #                              line_color='black', showlegend=True)
+        #
+        # with st.expander('銷售分析'):
+        #     st.plotly_chart(fig)
 
 
 @fn_profiler
@@ -2015,14 +2017,12 @@ def fn_gen_web_eda(df):
     with tab_date:
         fn_gen_bc_deals_2(build_case, dic_df_show, '交易日期')
 
+
     with st.expander('📈 樓層均價 與 成交戶數'):
         # st.subheader('📈 樓層均價 與 成交戶數')
         st.write('')
         st.plotly_chart(fig_bar2)
 
-        # t_e = time.time()
-        # dur_t = round(t_e - t_s, 5)
-        # print(f'fn_gen_web_eda: {dur_t} 秒')
 
 
 @fn_profiler
