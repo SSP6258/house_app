@@ -1962,8 +1962,10 @@ def fn_gen_web_eda(df):
         df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
         if builder in df_lg['建商營造'].values:
             df_lg_b = df_lg[df_lg['建商營造'] == builder]
+            df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
+
 
             with st.expander(f'⚖️建商:{builder} 👉 最新裁判案件:{lg_latest}, 歷史裁判案件數: {lg_total}件'):
                 st.write('')
@@ -1989,6 +1991,7 @@ def fn_gen_web_eda(df):
         for c in constructors:
             if c in df_lg['建商營造'].values:
                 df_lg_c = df_lg[df_lg['建商營造'] == c]
+                df_lg_c = df_lg_c[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
                 lg_latest = df_lg_c['裁判日期'].values[0]
                 lg_total = df_lg_c['歷年案件'].values[0]
 
