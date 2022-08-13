@@ -1300,7 +1300,10 @@ def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
 
-    with st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
+    tabs = st.tabs(['單價分布', '特徵分布', '相關分析' '行政區分析', '捷運分析', '小學分析', '建物分析', '銷售分析'])
+    tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
+
+    with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr')
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
@@ -1317,7 +1320,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
 
-    with st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
+    with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch')
 
         fig_bar, fig_bar_2, fig_bar_3, fig_bar_4 = fn_gen_analysis_statistic(df_1)
@@ -1326,7 +1329,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar_3, config=config)
         st.plotly_chart(fig_bar_4, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
+    with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
 
         options = ['捷運', '小學', '建物', '均價', '所得1', '所得2']
@@ -1400,7 +1403,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         st.plotly_chart(fig, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
+    with tab_ana_dist:  # st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
         # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
         # fn_set_radio_2_hor()
         figs = fn_gen_analysis_admin(df, bc_name=[build_case])
@@ -1408,7 +1411,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         if len(figs) > 1:
             st.plotly_chart(figs[1], config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "捷運" 指標 的關係'):
+    with tab_ana_mrt:  # st.expander(f'👓 檢視 每坪單價 與 "捷運" 指標 的關係'):
         colors = ['無', '依捷運距離', '依通勤時間', f'依最新登錄({latest_records})']
         # color_by = st.radio('著色條件:', options=colors, index=0)
         # fn_set_radio_2_hor()
@@ -1419,7 +1422,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_sct, config=config)
         st.plotly_chart(fig_sct_1, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "小學" 指標 的關係'):
+    with tab_ana_ele:  # st.expander(f'👓 檢視 每坪單價 與 "小學" 指標 的關係'):
         colors = ['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})']
         # color_by = st.radio('著色條件:', options=colors, index=0)
         # fn_set_radio_2_hor()
@@ -1431,7 +1434,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_sku_1, config=config)
         st.plotly_chart(fig_sku_2, config=config)
 
-    with st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
+    with tab_ana_bd:  # st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records)
         r = st.radio('價格選項', ['每坪單價(萬)', '總價(萬)'], index=0)
         if r == '每坪單價(萬)':
@@ -1441,7 +1444,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
             st.plotly_chart(fig_sct_3, config=config)
 
-    with st.expander(f'👓 檢視 "銷售分析"'):
+    with tab_ana_sell:  # st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
         fig_gantt, fig_bar = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
