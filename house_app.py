@@ -1426,7 +1426,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         colors = ['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})']
         # color_by = st.radio('著色條件:', options=colors, index=0)
         # fn_set_radio_2_hor()
-
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='sku',
                                                                colors=colors)
 
