@@ -1602,7 +1602,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
                         v = datetime.date(year=year, month=month, day=1)
                     dic_values[a].append(v)
 
-        if r == '銷售分析':
+        if r == '每坪單價(萬)':
             deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             fig = make_subplots(rows=1, cols=1,
                                 subplot_titles=(
@@ -2015,9 +2015,9 @@ def fn_gen_web_eda(df):
                  f' 📝 登錄: {deals} 筆'
                  f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-    tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期', '銷售分析'])
+    tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
 
-    tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date, tab_sell = tabs
+    tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
     with tab_price:
         fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
@@ -2042,9 +2042,6 @@ def fn_gen_web_eda(df):
 
     with tab_date:
         fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
-
-    with tab_sell:
-        fn_gen_bc_deals(build_case, dic_df_show, '銷售分析')
 
     with st.expander('📈 樓層均價 與 成交戶數'):
         # st.subheader('📈 樓層均價 與 成交戶數')
