@@ -1885,6 +1885,7 @@ def fn_gen_web_eda(df):
     #                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
     #     st.plotly_chart(fig_tm)
 
+
     with tab_price:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
