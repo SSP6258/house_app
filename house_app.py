@@ -1876,18 +1876,18 @@ def fn_gen_web_eda(df):
     # else:
     #     st.plotly_chart(fig_tm_2)
 
-    tabs = st.tabs(['每坪均價(萬)', '交易筆數', '最小坪數', '最大坪數'])
-    tab_price, tab_deals, tab_area_min, tab_area_max = tabs
+    tabs = st.tabs(['台北市-每坪均價(萬)', '行政區-每坪均價(萬)', '交易筆數', '最小坪數', '最大坪數'])
+    tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
 
-    # with tab_price:
-    #     fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
-    #                                    color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-    #                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-    #     st.plotly_chart(fig_tm)
+    with tab_price_tpe:
+        fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '建案名稱'], values='每坪均價(萬)',
+                                       color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+                                       mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+        st.plotly_chart(fig_tm)
 
 
     with tab_price:
-        fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '建案名稱'], values='每坪均價(萬)',
+        fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
