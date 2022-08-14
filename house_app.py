@@ -1590,32 +1590,33 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
 
         st.dataframe(df_show_fig, width=768, height=540)
 
-        #
-        # dic_values = defaultdict(list)
-        # for col in df_show.columns:
-        #     for idx in df_show.index:
-        #         v = df_show.loc[idx, col]
-        #         a = int(dic_df_show['建物坪數'].loc[idx, col])
-        #         if v > 0:
-        #             if r == '交易日期':
-        #                 year = int(v / 100)
-        #                 month = v - 100 * year
-        #                 v = datetime.date(year=year, month=month, day=1)
-        #             dic_values[a].append(v)
-        #
-        # fig = make_subplots(rows=1, cols=1,
-        #                     subplot_titles=(
-        #                         f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
-        #
-        # dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
-        #
-        # margin = {'l': 40}
-        # for k in dic_values_sort.keys():
-        #     fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
-        #                              line_color='black', showlegend=True)
-        #
-        # with st.expander('銷售分析'):
-        #     st.plotly_chart(fig)
+
+        dic_values = defaultdict(list)
+        for col in df_show.columns:
+            for idx in df_show.index:
+                v = df_show.loc[idx, col]
+                a = int(dic_df_show['建物坪數'].loc[idx, col])
+                if v > 0:
+                    if r == '交易日期':
+                        year = int(v / 100)
+                        month = v - 100 * year
+                        v = datetime.date(year=year, month=month, day=1)
+                    dic_values[a].append(v)
+
+        if r == '銷售分析':
+            fig = make_subplots(rows=1, cols=1,
+                                subplot_titles=(
+                                    f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
+
+            dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
+
+            margin = {'l': 40}
+            for k in dic_values_sort.keys():
+                fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
+                                         line_color='black', showlegend=True)
+
+            with st.expander('銷售分析'):
+                st.plotly_chart(fig)
 
 
 @fn_profiler
@@ -1966,13 +1967,11 @@ def fn_gen_web_eda(df):
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
 
-
             with st.expander(f'⚖️建商:{builder} 👉 最新裁判案件:{lg_latest},  歷史裁判案件數: {lg_total}件'):
                 st.write('')
                 st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                 st.write('')
                 AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
-
 
         # sep = ['、', ',', '-', '/', 'X', '(']
         if '/' in constructor:
@@ -2016,9 +2015,9 @@ def fn_gen_web_eda(df):
                  f' 📝 登錄: {deals} 筆'
                  f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-    tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
+    tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期', '銷售分析'])
 
-    tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
+    tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date, tab_sell = tabs
 
     with tab_price:
         fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
@@ -2044,6 +2043,8 @@ def fn_gen_web_eda(df):
     with tab_date:
         fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
 
+    with tab_sell:
+        fn_gen_bc_deals(build_case, dic_df_show, '銷售分析')
 
     with st.expander('📈 樓層均價 與 成交戶數'):
         # st.subheader('📈 樓層均價 與 成交戶數')
