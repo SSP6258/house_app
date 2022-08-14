@@ -1590,7 +1590,6 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
 
         st.dataframe(df_show_fig, width=768, height=540)
 
-
         dic_values = defaultdict(list)
         for col in df_show.columns:
             for idx in df_show.index:
@@ -1604,6 +1603,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
                     dic_values[a].append(v)
 
         if r == '銷售分析':
+            deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             fig = make_subplots(rows=1, cols=1,
                                 subplot_titles=(
                                     f'建案-{build_case}: {len(dic_values.keys())}種坪數 共{deals}筆交易 的 "{r}" 分布',))
@@ -1615,8 +1615,8 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
                 fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
                                          line_color='black', showlegend=True)
 
-            with st.expander('銷售分析'):
-                st.plotly_chart(fig)
+            # with st.expander('銷售分析'):
+            st.plotly_chart(fig)
 
 
 @fn_profiler
