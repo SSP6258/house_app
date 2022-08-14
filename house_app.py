@@ -2925,19 +2925,23 @@ def fn_gen_web_intro():
     * 預售屋 **房價預測**
 
     ''', unsafe_allow_html=True)
+
+    tabs = st.tabs(['開發動機', '網站導覽', 'AI、機器學習、深度學習 原理及應用', '機器學習專案流程介紹', '與我聯絡'])
+    tab_why, tab_intro, tab_ml, tab_ml_flow, tab_contact = tabs
+
     st.write('')
-    with st.expander('📌 開發動機'):
+    with tab_why:  # st.expander('📌 開發動機'):
         st.write('')
         st.subheader('💡 對數據分析有股莫名的興趣 ~ ')
         st.subheader('💡 整理目前習得的技法, 應用於生活場景中 ~')
         st.write('')
 
-    with st.expander('📌 網站導覽'):
+    with tab_intro:  # st.expander('📌 網站導覽'):
         st.write('')
         st.subheader('🚧 晚點再寫 ...')
         st.write('')
 
-    with st.expander('📌 AI、機器學習、深度學習 原理及應用'):
+    with tab_ml:  # st.expander('📌 AI、機器學習、深度學習 原理及應用'):
         st.write('')
         st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
@@ -2947,7 +2951,7 @@ def fn_gen_web_intro():
         except:
             pass
 
-    with st.expander('📌 機器學習專案流程介紹'):
+    with tab_ml_flow:  # tab_ml_flow:  # st.expander('📌 機器學習專案流程介紹'):
         st.write('')
         st.write(
             "- 引用自 Medium - Towards Data Science: [Workflow of a Machine Learning project - Ayush Pant](https://towardsdatascience.com/workflow-of-a-machine-learning-project-ec1dba419b94)")
@@ -2971,7 +2975,7 @@ def fn_gen_web_intro():
         for k in dic_of_img.keys():
             fn_show_img('', dic_of_img[k][1], caption=dic_of_img[k][0])
 
-    with st.expander('📌 與我聯絡'):
+    with tab_contact:  # st.expander('📌 與我聯絡'):
         st.write('')
         st.write("🔗 [Jack Pan](https://www.facebook.com/jack.pan.96/)")
         st.write('✉️ ssp6258@yahoo.com.tw')
