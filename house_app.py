@@ -1157,6 +1157,9 @@ def fn_gen_analysis_statistic(df):
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df_typ['都市土地使用分區'], '土地使用分區', row=1, col=1, bins=50, margin=margin)
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['鄉鎮市區'], '行政區', row=1, col=2, bins=50, margin=margin)
 
+    fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['地下樓層'], '地下樓層', row=2, col=1, bins=50, margin=margin)
+    fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['總戶數'], '總戶數', row=2, col=2, bins=50, margin=margin)
+
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
 
 
