@@ -1174,7 +1174,10 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
 
-def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=[]):
+    bc = 'NA'
+    color_by = 'NA'
+
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist_dft = 0
@@ -1190,9 +1193,13 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
     build_cases = ['不限'] + list(df['建案名稱'].unique())
     build_cases = [b for b in build_cases if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
-    bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
-    colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
-    color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
+
+    if 'build_case' in sel_option:
+        bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
+
+    if 'color_by' in sel_option:
+        colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
+        color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
 
     return df, bc, color_by
 
@@ -1312,8 +1319,6 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
 
-
-
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
 
@@ -1338,7 +1343,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_c)
 
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch')
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch', sel_option=['dist'])
 
         fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
         st.plotly_chart(fig_bar, config=config)
