@@ -1128,6 +1128,9 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
 
 @fn_profiler
 def fn_gen_analysis_statistic(df):
+    df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan' and '地' not in str(x))]
+    df['地下樓層'] = df['地下樓層'].astype(int)
+
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
@@ -1301,8 +1304,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
 
-    df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan' and '地' not in str(x))]
-    df['地下樓層'] = df['地下樓層'].astype(int)
+
 
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
