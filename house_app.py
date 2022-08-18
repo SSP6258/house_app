@@ -1153,7 +1153,7 @@ def fn_gen_analysis_statistic(df):
 
     dists = len(df['鄉鎮市區'].unique())
     df_typ = df[df['都市土地使用分區'].apply(lambda x: x == '住' or x == '商')]
-    fig_bar_4 = make_subplots(rows=2, cols=2, subplot_titles=(f'土地使用分區', f'行政區({dists}個)', '', ''))
+    fig_bar_4 = make_subplots(rows=2, cols=2, subplot_titles=(f'土地使用分區', f'行政區({dists}個)', '地下樓層', '總戶數'))
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df_typ['都市土地使用分區'], '土地使用分區', row=1, col=1, bins=50, margin=margin)
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['鄉鎮市區'], '行政區', row=1, col=2, bins=50, margin=margin)
 
@@ -1301,7 +1301,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
 
-    df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan')]
+    df = df[df['地下樓層'].apply(lambda x: type(x) == int)]
 
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
