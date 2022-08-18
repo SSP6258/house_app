@@ -1174,7 +1174,7 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
 
-def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=[]):
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=['dist', 'build_case', 'color_by']):
     bc = 'NA'
     color_by = 'NA'
 
