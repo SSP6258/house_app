@@ -1353,9 +1353,9 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar_5, config=config)
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
 
-        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2']
+        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案']
         cmp = st.radio('比較指標:', options=options, index=0)
         fn_set_radio_2_hor()
 
