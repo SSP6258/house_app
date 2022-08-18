@@ -1128,7 +1128,7 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
 
 @fn_profiler
 def fn_gen_analysis_statistic(df):
-    df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan' and '地' not in str(x))]
+    df = df[df['地下樓層'].apply(lambda x: str(x).isnumeric())]
     df['地下樓層'] = df['地下樓層'].astype(int)
 
     df = df[df['容積率(%)'].apply(lambda x: str(x).isnumeric())]
@@ -1355,7 +1355,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
 
-        df_1 = df_1[df_1['地下樓層'].apply(lambda x: str(x) != 'nan' and '地' not in str(x))]
+        df_1 = df_1[df_1['地下樓層'].apply(lambda x: str(x).isnumeric())]
         df_1['地下樓層'] = df_1['地下樓層'].astype(int)
 
         df_1 = df_1[df_1['容積率(%)'].apply(lambda x: str(x).isnumeric())]
