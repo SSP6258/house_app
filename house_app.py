@@ -3031,7 +3031,7 @@ def fn_app(page='data'):
         land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
-        df = df[df['地下樓層']!='']
+        df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan')]
 
         fn_gen_web_eda(df)
 
