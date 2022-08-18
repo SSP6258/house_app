@@ -1885,7 +1885,6 @@ def fn_gen_web_eda(df):
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
 
-
     with tab_price:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
@@ -3031,6 +3030,8 @@ def fn_app(page='data'):
 
         land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
+
+        df = df[df['地下樓層']!='']
 
         fn_gen_web_eda(df)
 
