@@ -1159,11 +1159,16 @@ def fn_gen_analysis_statistic(df):
     fig_bar_4 = make_subplots(rows=2, cols=2, subplot_titles=(f'土地使用分區', f'行政區({dists}個)', '地下樓層', '總戶數'))
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df_typ['都市土地使用分區'], '土地使用分區', row=1, col=1, bins=50, margin=margin)
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['鄉鎮市區'], '行政區', row=1, col=2, bins=50, margin=margin)
-
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['地下樓層'], '地下樓層', row=2, col=1, bins=50, margin=margin)
     fig_bar_4 = fn_gen_plotly_hist(fig_bar_4, df['總戶數'], '總戶數', row=2, col=2, bins=50, margin=margin)
 
-    return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4
+    fig_bar_5 = make_subplots(rows=2, cols=2, subplot_titles=(f'基地面積(坪)', f'容積率(%)', '建蔽率(%)', '公設比(%)'))
+    fig_bar_5 = fn_gen_plotly_hist(fig_bar_5, df_typ['基地面積(坪)'], '基地面積(坪)', row=1, col=1, bins=50, margin=margin)
+    fig_bar_5 = fn_gen_plotly_hist(fig_bar_5, df['容積率(%)'], '容積率(%)', row=1, col=2, bins=50, margin=margin)
+    fig_bar_5 = fn_gen_plotly_hist(fig_bar_5, df['建蔽率(%)'], '建蔽率(%)', row=2, col=1, bins=50, margin=margin)
+    fig_bar_5 = fn_gen_plotly_hist(fig_bar_5, df['公設比(%)'], '公設比(%)', row=2, col=2, bins=50, margin=margin)
+
+    return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
 
 def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None):
@@ -1332,11 +1337,12 @@ def fn_gen_analysis(df, latest_records, build_case):
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch')
 
-        fig_bar, fig_bar_2, fig_bar_3, fig_bar_4 = fn_gen_analysis_statistic(df_1)
+        fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
         st.plotly_chart(fig_bar, config=config)
         st.plotly_chart(fig_bar_2, config=config)
         st.plotly_chart(fig_bar_3, config=config)
         st.plotly_chart(fig_bar_4, config=config)
+        st.plotly_chart(fig_bar_5, config=config)
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all')
