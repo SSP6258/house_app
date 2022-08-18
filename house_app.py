@@ -1302,6 +1302,7 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 def fn_gen_analysis(df, latest_records, build_case):
 
     df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan' and '地' not in str(x))]
+    df['地下樓層'] = df['地下樓層'].astype(int)
 
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
