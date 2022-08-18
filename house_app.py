@@ -1392,6 +1392,11 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='各里所得_第三分位', values=df_1['稅_第三分位數']),
             dict(label='各里所得_標準差', values=df_1['稅_標準差']),
             dict(label='各里所得_變異數', values=df_1['稅_變異係數']),
+
+            dict(label='地下樓層', values=df_1['地下樓層']),
+            dict(label='總戶數', values=df_1['總戶數']),
+            dict(label='基地面積(坪)', values=df_1['基地面積(坪)']),
+            dict(label='容積率(%)', values=df_1['容積率(%)']),
         ]
 
         figs = 4
@@ -1401,8 +1406,9 @@ def fn_gen_analysis(df, latest_records, build_case):
         d4 = dimensions[3 * figs: 4 * figs]
         d5 = dimensions[4 * figs: 5 * figs]
         d6 = dimensions[5 * figs: 6 * figs]
+        d7 = dimensions[6 * figs: 7 * figs]
 
-        plots = [d1, d2, d3, d4, d5, d6]
+        plots = [d1, d2, d3, d4, d5, d6, d7]
         dic_of_show = {k: plots[options.index(k)] for k in options}
         d = dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
