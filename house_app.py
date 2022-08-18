@@ -1297,6 +1297,9 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
 
 @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
+
+    df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan')]
+
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
 
@@ -1911,7 +1914,7 @@ def fn_gen_web_eda(df):
 
     st.write('')
     st.subheader(f'📊 數據分析')
-    fn_gen_analysis(df, latest_records, build_case)
+    fn_gen_analysis(df.copy(), latest_records, build_case)
 
     st.write('')
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
@@ -3030,8 +3033,6 @@ def fn_app(page='data'):
 
         land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
-
-        df = df[df['地下樓層'].apply(lambda x: str(x) != 'nan')]
 
         fn_gen_web_eda(df)
 
