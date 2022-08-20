@@ -3164,6 +3164,8 @@ def fn_app(page='data'):
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
         fn_gen_web_eda(df)
+        for i in range(5):
+            st.sidebar.write('')
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
@@ -3176,10 +3178,15 @@ def fn_app(page='data'):
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
         fn_gen_web_ml_train(df, path)
+        for i in range(5):
+            st.sidebar.write('')
 
     elif page == 'inference':
         build_typ = c2.selectbox('建物型態', ['大樓', '華廈', '不限'], index=0)
         fn_gen_web_ml_inference(path, build_typ)
+
+        for i in range(5):
+            st.sidebar.write('')
 
     elif page == 'reference':
         fn_gen_web_ref()
