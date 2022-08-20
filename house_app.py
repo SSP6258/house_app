@@ -1355,7 +1355,6 @@ def fn_gen_analysis(df, latest_records, build_case):
     fn_dbg('fn_gen_web_eda 3-1-1')
     with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr')
-        fn_dbg('fn_gen_web_eda 3-1-2')
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
@@ -1370,7 +1369,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
-        fn_dbg('fn_gen_web_eda 3-1-3')
+        fn_dbg('fn_gen_web_eda 3-1-2')
 
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch', sel_option=['dist'])
@@ -1398,6 +1397,8 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         with tb_pk:
             st.plotly_chart(fig_bar_3, config=config)
+
+        fn_dbg('fn_gen_web_eda 3-1-3')
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
@@ -1518,6 +1519,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         #                   hovermode='closest')
         #
         # st.plotly_chart(fig, config=config)
+        fn_dbg('fn_gen_web_eda 3-1-4')
 
     with tab_ana_dist:  # st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
         # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
@@ -1526,6 +1528,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(figs[0], config=config)
         if len(figs) > 1:
             st.plotly_chart(figs[1], config=config)
+        fn_dbg('fn_gen_web_eda 3-1-5')
 
     with tab_ana_mrt:  # st.expander(f'👓 檢視 每坪單價 與 "捷運" 指標 的關係'):
         colors = ['無', '依捷運距離', '依通勤時間', f'依最新登錄({latest_records})']
@@ -1537,6 +1540,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_sct, fig_sct_1 = fn_gen_analysis_mrt(df_sel, color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sct, config=config)
         st.plotly_chart(fig_sct_1, config=config)
+        fn_dbg('fn_gen_web_eda 3-1-6')
 
     with tab_ana_ele:  # st.expander(f'👓 檢視 每坪單價 與 "小學" 指標 的關係'):
         colors = ['無', '依小學距離', '依小學人數', f'依最新登錄({latest_records})']
@@ -1548,6 +1552,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_sku_1, fig_sku_2 = fn_gen_analysis_sku(df_sel, color_by, bc_name=[build_case_sel])
         st.plotly_chart(fig_sku_1, config=config)
         st.plotly_chart(fig_sku_2, config=config)
+        fn_dbg('fn_gen_web_eda 3-1-7')
 
     with tab_ana_bd:  # st.expander(f'👓 檢視 每坪單價 與 "建物" 指標 的關係'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records)
@@ -1559,13 +1564,17 @@ def fn_gen_analysis(df, latest_records, build_case):
             fig_sct_3 = fn_gen_analysis_building(df_sel, '總價(萬)', color_by, bc_name=[build_case_sel])
             st.plotly_chart(fig_sct_3, config=config)
 
+        fn_dbg('fn_gen_web_eda 3-1-8')
+
     with tab_ana_sell:  # st.expander(f'👓 檢視 "銷售分析"'):
         df_sel, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='period')
         fig_gantt, fig_bar = fn_gen_analysis_sale_period(df_sel, build_case_sel)
         st.plotly_chart(fig_gantt, config=config)
         st.write('')
         st.plotly_chart(fig_bar, config=config)
+        fn_dbg('fn_gen_web_eda 3-1-9')
 
+    fn_dbg('fn_gen_web_eda 3-1-10')
 
 @fn_profiler
 def fn_gen_bc_deals_old(build_case, dic_df_show):
