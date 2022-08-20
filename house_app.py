@@ -1815,6 +1815,9 @@ def fn_gen_web_eda(df):
     floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
     df_sel = df_sel[df_sel['移轉層次'] == floor].reset_index(drop=True) if floor != 0 else df_sel
 
+    for i in range(5):
+        st.sidebar.write('')
+
     From = str(df_sel['交易年月日'].iloc[-1])
     From = From[0:-4] + '年' + From[-4].replace('0', '') + From[-3] + '月'
     To = str(df_sel['交易年月日'].iloc[0])
@@ -3175,8 +3178,7 @@ def fn_app(page='data'):
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
         fn_gen_web_eda(df)
-        for i in range(5):
-            st.sidebar.write('')
+
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
