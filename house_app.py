@@ -2081,13 +2081,12 @@ def fn_gen_web_eda(df):
                 if i == '投資建設' and builder in df_lg['建商營造'].values:
                     df_lg_b = df_lg[df_lg['建商營造'] == builder]
                     lg_latest = df_lg_b['裁判日期'].values[0]
-                    c1.write(f'最新訴訟: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗')
+                    c1.write(f'訴訟案件: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) (最新) ❗')
 
                 if i == '營造公司' and constructor in df_lg['建商營造'].values:
                     df_lg_b = df_lg[df_lg['建商營造'] == builder]
                     lg_latest = df_lg_b['裁判日期'].values[0]
-                    c1.write(f'最新訴訟: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗')
-
+                    c1.write(f'訴訟案件: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) (最新) ❗')
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
