@@ -1346,11 +1346,20 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch', sel_option=['dist'])
 
         fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
-        st.plotly_chart(fig_bar, config=config)
-        st.plotly_chart(fig_bar_2, config=config)
-        st.plotly_chart(fig_bar_3, config=config)
-        st.plotly_chart(fig_bar_4, config=config)
-        st.plotly_chart(fig_bar_5, config=config)
+        # st.plotly_chart(fig_bar, config=config)
+        # st.plotly_chart(fig_bar_2, config=config)
+        # st.plotly_chart(fig_bar_3, config=config)
+        # st.plotly_chart(fig_bar_4, config=config)
+        # st.plotly_chart(fig_bar_5, config=config)
+
+        tb_trade, tb_build = st.tabs(['交易特徵', '建物特徵'])
+
+        with tb_trade:
+            st.plotly_chart(fig_bar, config=config)
+
+        with tb_build:
+            st.plotly_chart(fig_bar_2, config=config)
+
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
@@ -1403,8 +1412,8 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='地下樓層', values=df_1['地下樓層']),
             # dict(label='總戶數', values=df_1['總戶數']),
             dict(label='建蔽率(%)', values=df_1['建蔽率(%)']),
-            # dict(label='容積率(%)', values=df_1['容積率(%)']),
-            dict(label='公設比(%)', values=df_1['公設比(%)']),
+            dict(label='容積率(%)', values=df_1['容積率(%)']),
+            # dict(label='公設比(%)', values=df_1['公設比(%)']),
         ]
 
         figs = 4
