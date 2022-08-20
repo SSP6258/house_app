@@ -2038,10 +2038,10 @@ def fn_gen_web_eda(df):
 
     fn_dbg('fn_gen_web_eda 3')
 
-
     st.write('')
     st.subheader(f'📊 數據分析')
     fn_gen_analysis(df.copy(), latest_records, build_case)
+    fn_dbg('fn_gen_web_eda 3-1')
 
     st.write('')
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
@@ -2066,6 +2066,7 @@ def fn_gen_web_eda(df):
                   '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
     map_style = "open-street-map"
     fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
+    fn_dbg('fn_gen_web_eda 3-2')
     st.plotly_chart(fig_map)
     st.write('')
 
