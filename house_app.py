@@ -1316,6 +1316,31 @@ def fn_gen_analysis_sale_period(df, bc, margin=None, op=0.8):
     return fig, fig_bar
 
 
+def fn_corr_util(dic_of_show, df_1, cmp, target, config):
+    d = dic_of_show[cmp]
+    hovertext = fn_get_hover_text(df_1)
+
+    fig = go.Figure(data=go.Splom(
+        dimensions=d + target,
+        diagonal=dict(visible=False),
+        hovertext=hovertext,
+        showupperhalf=False,
+        marker=dict(color=df_1['每坪單價(萬)'],
+                    size=6,
+                    colorscale='Bluered',
+                    line=dict(width=0.5,
+                              color='rgb(230,230,230)'))))
+
+    title = f'每坪單價 與 "{cmp}" 指標 的關係'
+    fig.update_layout(title=title,
+                      dragmode='select',
+                      width=800,
+                      height=800,
+                      hovermode='closest')
+
+    st.plotly_chart(fig, config=config)
+
+
 @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
 
@@ -1440,47 +1465,54 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         with tb_mrt:
             cmp = options[0]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_sku:
             cmp = options[1]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_build:
             cmp = options[2]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_ave:
             cmp = options[3]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_income1:
             cmp = options[4]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_income2:
             cmp = options[5]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         with tb_build_case:
             cmp = options[6]
-
-        d = dic_of_show[cmp]
-        hovertext = fn_get_hover_text(df_1)
-
-        fig = go.Figure(data=go.Splom(
-            dimensions=d + target,
-            diagonal=dict(visible=False),
-            hovertext=hovertext,
-            showupperhalf=False,
-            marker=dict(color=df_1['每坪單價(萬)'],
-                        size=6,
-                        colorscale='Bluered',
-                        line=dict(width=0.5,
-                                  color='rgb(230,230,230)'))))
-
-        title = f'每坪單價 與 "{cmp}" 指標 的關係'
-        fig.update_layout(title=title,
-                          dragmode='select',
-                          width=800,
-                          height=800,
-                          hovermode='closest')
-
-        st.plotly_chart(fig, config=config)
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
+        #
+        # d = dic_of_show[cmp]
+        # hovertext = fn_get_hover_text(df_1)
+        #
+        # fig = go.Figure(data=go.Splom(
+        #     dimensions=d + target,
+        #     diagonal=dict(visible=False),
+        #     hovertext=hovertext,
+        #     showupperhalf=False,
+        #     marker=dict(color=df_1['每坪單價(萬)'],
+        #                 size=6,
+        #                 colorscale='Bluered',
+        #                 line=dict(width=0.5,
+        #                           color='rgb(230,230,230)'))))
+        #
+        # title = f'每坪單價 與 "{cmp}" 指標 的關係'
+        # fig.update_layout(title=title,
+        #                   dragmode='select',
+        #                   width=800,
+        #                   height=800,
+        #                   hovermode='closest')
+        #
+        # st.plotly_chart(fig, config=config)
 
     with tab_ana_dist:  # st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
         # color_by = st.radio('著色條件:', options=['無', f'依最新登錄({latest_records})'], index=0)
