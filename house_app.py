@@ -3172,7 +3172,7 @@ def fn_app(page='data'):
         df = df[df['台北市'] == is_tpe] if city != '不限' else df
 
         dists = ['不限'] + df['鄉鎮市區'].unique().tolist()
-        d = c2.selectbox('鄉鎮市區', dists, index=dists.index('北投區'))
+        d = c2.selectbox('鄉鎮市區', dists, index=dists.index('不限'))
         df = df[df['鄉鎮市區'] == d] if d != '不限' else df
 
         land_typ = st.sidebar.selectbox('土地分區', ['不限', '住', '商'], index=0)
