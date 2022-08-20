@@ -1369,7 +1369,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         with tb_pk:
             st.plotly_chart(fig_bar_3, config=config)
 
-
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
 
@@ -1380,10 +1379,12 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1['容積率(%)'] = df_1['容積率(%)'].astype(int)
 
         options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案']
-        cmp = st.radio('比較指標:', options=options, index=6)
-        fn_set_radio_2_hor()
+        # cmp = st.radio('比較指標:', options=options, index=6)
+        # fn_set_radio_2_hor()
 
-        title = f'每坪單價 與 "{cmp}" 指標 的關係'
+        tb_mrt, tb_sku, tb_build, tb_ave, tb_income1, tb_income2, tb_build_case = st.tabs(options)
+
+        # title = f'每坪單價 與 "{cmp}" 指標 的關係'
         target = [dict(label='每坪單價', values=df_1['每坪單價(萬)'])]
 
         dimensions = [
@@ -1436,6 +1437,28 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         plots = [d1, d2, d3, d4, d5, d6, d7]
         dic_of_show = {k: plots[options.index(k)] for k in options}
+
+        with tb_mrt:
+            cmp = options[0]
+
+        with tb_sku:
+            cmp = options[1]
+
+        with tb_build:
+            cmp = options[2]
+
+        with tb_ave:
+            cmp = options[3]
+
+        with tb_income1:
+            cmp = options[4]
+
+        with tb_income2:
+            cmp = options[5]
+
+        with tb_build_case:
+            cmp = options[6]
+
         d = dic_of_show[cmp]
         hovertext = fn_get_hover_text(df_1)
 
@@ -1450,6 +1473,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                         line=dict(width=0.5,
                                   color='rgb(230,230,230)'))))
 
+        title = f'每坪單價 與 "{cmp}" 指標 的關係'
         fig.update_layout(title=title,
                           dragmode='select',
                           width=800,
