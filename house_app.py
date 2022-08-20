@@ -1328,7 +1328,9 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
         showlowerhalf=True,
         marker=dict(color=df_1['每坪單價(萬)'],
                     size=6,
-                    colorscale='Bluered',
+                    # colorscale='Bluered',
+                    # colorscale='Bluered',
+                    colorscale='coolwarm',
                     line=dict(width=0.5,
                               color='rgb(230,230,230)'))))
 
