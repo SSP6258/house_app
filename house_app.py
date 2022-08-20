@@ -1752,7 +1752,6 @@ def fn_dbg(msg='', is_dbg=True):
         None if msg == '' else st.sidebar.write(msg)
 
 
-
 @fn_profiler
 def fn_gen_web_eda(df):
     # t_s = time.time()
