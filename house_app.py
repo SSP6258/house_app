@@ -1749,7 +1749,7 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg='', is_dbg=True):
     if is_dbg:
-        None if msg == '' else st.sidebar.write(msg)
+        None if msg == '' else st.sidebar.write(f'--> {msg}')
 
 
 @fn_profiler
@@ -2067,6 +2067,8 @@ def fn_gen_web_eda(df):
     st.plotly_chart(fig_map)
     st.write('')
 
+    fn_dbg('fn_gen_web_eda 4')
+
     if build_case == '不限':
         st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
     else:
@@ -2153,6 +2155,8 @@ def fn_gen_web_eda(df):
                     st.write('')
                     AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
 
+    fn_dbg('fn_gen_web_eda 5')
+
     st.write('')
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
@@ -2178,11 +2182,13 @@ def fn_gen_web_eda(df):
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
 
+    fn_dbg('fn_gen_web_eda 6')
+
     if build_case == '不限':
         pass
     else:
         # fn_gen_bc_deals(build_case, dic_df_show)
-
+        fn_dbg('fn_gen_web_eda 7')
         deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
         st.write('')
         st.subheader(f'🏡 建案: {build_case}'
