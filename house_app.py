@@ -1749,7 +1749,7 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg='', is_dbg=True):
     if is_dbg:
-        None if msg == '' else st.sidebar.write(f'--> {msg} (at {datetime.datetime.now().minute}分{datetime.datetime.now().second}秒)')
+        None if msg == '' else st.sidebar.write(f'{msg} --> {datetime.datetime.now().minute}分{datetime.datetime.now().second}秒')
 
 
 @fn_profiler
