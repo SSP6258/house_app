@@ -1913,28 +1913,28 @@ def fn_gen_web_eda(df):
     df_sel['MRT_DIST'] = df_sel['MRT_DIST'].astype(int)
 
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
-
-    dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
-               '車位類別', '車位單價(萬)', '交易年月日']
-
-    if len(st.session_state['feature_sel']) == 0:
-        st.session_state['feature_sel'] = dft_sel
-
-    df_cols = df_sel[st.session_state['feature_sel']]
-    with st.sidebar.form(key='欄位選擇'):
-        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
-
-        submitted = st.form_submit_button('選 擇')
-
-        if submitted:
-            df_cols = df_sel[cols]
-            st.session_state['feature_sel'] = cols
-            st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
-
-    st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
-
-    for i in range(5):
-        st.sidebar.write('')
+    #
+    # dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+    #            '車位類別', '車位單價(萬)', '交易年月日']
+    #
+    # if len(st.session_state['feature_sel']) == 0:
+    #     st.session_state['feature_sel'] = dft_sel
+    #
+    # df_cols = df_sel[st.session_state['feature_sel']]
+    # with st.sidebar.form(key='欄位選擇'):
+    #     cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
+    #
+    #     submitted = st.form_submit_button('選 擇')
+    #
+    #     if submitted:
+    #         df_cols = df_sel[cols]
+    #         st.session_state['feature_sel'] = cols
+    #         st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
+    #
+    # st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
+    #
+    # for i in range(5):
+    #     st.sidebar.write('')
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
     # city = df['土地位置建物門牌'].apply(lambda x:x.split('市')+'市')
@@ -2129,6 +2129,35 @@ def fn_gen_web_eda(df):
     st.write('')
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
+
+
+
+
+    dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+               '車位類別', '車位單價(萬)', '交易年月日']
+
+    if len(st.session_state['feature_sel']) == 0:
+        st.session_state['feature_sel'] = dft_sel
+
+    df_cols = df_sel[st.session_state['feature_sel']]
+    with st.form(key='欄位選擇'):
+        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
+
+        submitted = st.form_submit_button('選 擇')
+
+        if submitted:
+            df_cols = df_sel[cols]
+            st.session_state['feature_sel'] = cols
+            st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
+
+    # st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
+
+    # for i in range(5):
+    #     st.sidebar.write('')
+
+
+
+
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
@@ -2176,7 +2205,6 @@ def fn_gen_web_eda(df):
         # st.subheader('📈 樓層均價 與 成交戶數')
         st.write('')
         st.plotly_chart(fig_bar2)
-
 
 
 @fn_profiler
