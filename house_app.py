@@ -1330,7 +1330,7 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
                     size=6,
                     # colorscale='Bluered',
                     # colorscale='Bluered',
-                    colorscale='bwr',
+                    colorscale='Bluered',
                     line=dict(width=0.5,
                               color='rgb(230,230,230)'))))
 
