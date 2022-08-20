@@ -1344,7 +1344,7 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
     st.plotly_chart(fig, config=config)
 
 
-@fn_profiler
+# @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
 
     config = {'scrollZoom': True,
