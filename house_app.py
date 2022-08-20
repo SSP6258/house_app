@@ -1933,8 +1933,9 @@ def fn_gen_web_eda(df):
     #
     # st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
     #
-    # for i in range(5):
-    #     st.sidebar.write('')
+
+    for i in range(5):
+        st.sidebar.write('')
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
     # city = df['土地位置建物門牌'].apply(lambda x:x.split('市')+'市')
@@ -2130,9 +2131,6 @@ def fn_gen_web_eda(df):
     st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
     st.subheader(f'均價 {int(ave)} 萬/坪')
 
-
-
-
     dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
                '車位類別', '車位單價(萬)', '交易年月日']
 
@@ -2150,17 +2148,9 @@ def fn_gen_web_eda(df):
             st.session_state['feature_sel'] = cols
             st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
 
-    # st.sidebar.write(f'{len(st.session_state["feature_sel"])}')
-
-    # for i in range(5):
-    #     st.sidebar.write('')
-
-
-
-
-    st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
+    st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
 
     if build_case == '不限':
         pass
