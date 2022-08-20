@@ -1403,7 +1403,8 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='地下樓層', values=df_1['地下樓層']),
             # dict(label='總戶數', values=df_1['總戶數']),
             dict(label='建蔽率(%)', values=df_1['建蔽率(%)']),
-            dict(label='容積率(%)', values=df_1['容積率(%)']),
+            # dict(label='容積率(%)', values=df_1['容積率(%)']),
+            dict(label='公設比(%)', values=df_1['公設比(%)']),
         ]
 
         figs = 4
