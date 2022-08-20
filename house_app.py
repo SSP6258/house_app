@@ -1364,10 +1364,10 @@ def fn_gen_analysis(df, latest_records, build_case):
             st.plotly_chart(fig_bar_5, config=config)
 
         with tb_build_3:
-            st.plotly_chart(fig_bar_3, config=config)
+            st.plotly_chart(fig_bar_4, config=config)
 
         with tb_pk:
-            st.plotly_chart(fig_bar_4, config=config)
+            st.plotly_chart(fig_bar_3, config=config)
 
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
