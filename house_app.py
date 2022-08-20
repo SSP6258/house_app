@@ -1352,7 +1352,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         # st.plotly_chart(fig_bar_4, config=config)
         # st.plotly_chart(fig_bar_5, config=config)
 
-        tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(['交易特徵', '建物特徵1', '建物特徵2', '建物特徵3', '車位特徵'])
+        tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(['交易特徵分布', '建物特徵分布1', '建物特徵分布2', '建物特徵3分布', '車位特徵分布'])
 
         with tb_trade:
             st.plotly_chart(fig_bar_1, config=config)
