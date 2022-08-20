@@ -1134,9 +1134,9 @@ def fn_gen_analysis_statistic(df):
     df = df[df['容積率(%)'].apply(lambda x: str(x).isnumeric())]
     df['容積率(%)'] = df['容積率(%)'].astype(int)
 
-    fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
+    fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
@@ -1345,20 +1345,29 @@ def fn_gen_analysis(df, latest_records, build_case):
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch', sel_option=['dist'])
 
-        fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
-        # st.plotly_chart(fig_bar, config=config)
+        fig_bar_1, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
+        # st.plotly_chart(fig_bar_1, config=config)
         # st.plotly_chart(fig_bar_2, config=config)
         # st.plotly_chart(fig_bar_3, config=config)
         # st.plotly_chart(fig_bar_4, config=config)
         # st.plotly_chart(fig_bar_5, config=config)
 
-        tb_trade, tb_build = st.tabs(['交易特徵', '建物特徵'])
+        tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(['交易特徵', '建物特徵1', '建物特徵2', '建物特徵3', '車位特徵'])
 
         with tb_trade:
-            st.plotly_chart(fig_bar, config=config)
+            st.plotly_chart(fig_bar_1, config=config)
 
-        with tb_build:
+        with tb_build_1:
             st.plotly_chart(fig_bar_2, config=config)
+
+        with tb_build_2:
+            st.plotly_chart(fig_bar_5, config=config)
+
+        with tb_build_3:
+            st.plotly_chart(fig_bar_3, config=config)
+
+        with tb_pk:
+            st.plotly_chart(fig_bar_4, config=config)
 
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
