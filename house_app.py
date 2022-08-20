@@ -31,7 +31,7 @@ except:
     pass
 
 # pip list --format=freeze > requirements.txt
-
+dic_of_cfg = {'is_dbg': False}
 dic_of_cn_2_en = {'經度': 'longitude',
                   '緯度': 'latitude',
                   '移轉層次': 'Floor',
@@ -1761,10 +1761,9 @@ def fn_gen_model_confidence(loaded_model, X):
     return trees, conf
 
 
-def fn_dbg(msg='', is_dbg=True):
-    if is_dbg:
+def fn_dbg(msg=''):
+    if dic_of_cfg['is_dbg']:
         now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒'
-
         None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
@@ -2055,7 +2054,6 @@ def fn_gen_web_eda(df):
     st.write('')
     st.subheader(f'📊 數據分析')
     fn_gen_analysis(df.copy(), latest_records, build_case)
-    fn_dbg('fn_gen_web_eda 3-1')
 
     st.write('')
     period = 12 * (int(To.split('年')[0]) - int(From.split('年')[0])) + \
@@ -3181,7 +3179,7 @@ def fn_app(page='data'):
     # st.legacy_caching.clear_cache()
 
     this_yr = datetime.datetime.now().year - 1911
-
+    dic_of_cfg['is_dbg'] = st.sidebar.checkbox('開啟工程模式')
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
