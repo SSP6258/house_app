@@ -1749,7 +1749,9 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg='', is_dbg=True):
     if is_dbg:
-        None if msg == '' else st.sidebar.write(f'{msg} --> {datetime.datetime.now().minute}分{datetime.datetime.now().second}秒')
+        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒'
+
+        None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
 @fn_profiler
@@ -2182,7 +2184,7 @@ def fn_gen_web_eda(df):
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
     st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
 
-    fn_dbg('fn_gen_web_eda 6')
+    fn_dbg(f'fn_gen_web_eda 6 {build_case}')
 
     if build_case == '不限':
         pass
