@@ -1990,7 +1990,7 @@ def fn_gen_web_eda(df):
     # else:
     #     st.plotly_chart(fig_tm_2)
 
-    tabs = st.tabs(['台北市-每坪均價(萬)', '行政區-每坪均價(萬)', '交易筆數', '最小坪數', '最大坪數'])
+    tabs = st.tabs(['台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
     tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
 
     with tab_price_tpe:
