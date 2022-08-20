@@ -2061,6 +2061,9 @@ def fn_gen_web_eda(df):
         st.write('')
         builder = 'NA'
         constructor = 'NA'
+        df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False,
+                            encoding='utf-8-sig')
+
         with st.form(key='Form_bc_info'):
             c1, c2 = st.columns(2)
             bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數', '企劃銷售']
@@ -2075,6 +2078,17 @@ def fn_gen_web_eda(df):
                 builder = v if i == '投資建設' else builder
                 constructor = v if i == '營造公司' else constructor
 
+                if i == '投資建設' and builder in df_lg['建商營造'].values:
+                    df_lg_b = df_lg[df_lg['建商營造'] == builder]
+                    lg_latest = df_lg_b['裁判日期'].values[0]
+                    c1.write(f'最新訴訟: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗')
+
+                if i == '營造公司' and constructor in df_lg['建商營造'].values:
+                    df_lg_b = df_lg[df_lg['建商營造'] == builder]
+                    lg_latest = df_lg_b['裁判日期'].values[0]
+                    c1.write(f'最新訴訟: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗')
+
+
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
                 v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
@@ -2086,7 +2100,7 @@ def fn_gen_web_eda(df):
 
             submitted = st.form_submit_button("")
 
-        df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
+        # df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
         if builder in df_lg['建商營造'].values:
             df_lg_b = df_lg[df_lg['建商營造'] == builder]
             df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
