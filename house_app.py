@@ -1747,6 +1747,11 @@ def fn_gen_model_confidence(loaded_model, X):
     return trees, conf
 
 
+def fn_dbg(msg='', is_dbg=True):
+    if is_dbg:
+        None if msg == '' and else st.sidebar.write(msg)
+
+
 @fn_profiler
 def fn_gen_web_eda(df):
     # t_s = time.time()
@@ -1817,6 +1822,8 @@ def fn_gen_web_eda(df):
 
     for i in range(5):
         st.sidebar.write('')
+
+    fn_dbg('fn_gen_web_eda 1')
 
     From = str(df_sel['交易年月日'].iloc[-1])
     From = From[0:-4] + '年' + From[-4].replace('0', '') + From[-3] + '月'
@@ -1992,6 +1999,8 @@ def fn_gen_web_eda(df):
     # else:
     #     st.plotly_chart(fig_tm_2)
 
+    fn_dbg('fn_gen_web_eda 2')
+
     tabs = st.tabs(['台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
     tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
 
@@ -2024,6 +2033,9 @@ def fn_gen_web_eda(df):
                                          color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                          mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm_m)
+
+    fn_dbg('fn_gen_web_eda 3')
+
 
     st.write('')
     st.subheader(f'📊 數據分析')
