@@ -3179,7 +3179,7 @@ def fn_app(page='data'):
     # st.legacy_caching.clear_cache()
 
     this_yr = datetime.datetime.now().year - 1911
-    # dic_of_cfg['is_dbg'] = st.sidebar.checkbox('工程模式')
+    dic_of_cfg['is_dbg'] = st.sidebar.checkbox('工程模式')
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
@@ -3212,7 +3212,6 @@ def fn_app(page='data'):
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
         fn_gen_web_eda(df)
-
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
@@ -3250,5 +3249,4 @@ def fn_app(page='data'):
     else:
         st.write(f' page: {page} unhandle yet !!!')
 
-    dic_of_cfg['is_dbg'] = st.sidebar.checkbox('工程模式')
     print(f'fn_app() done, page = {page}')
