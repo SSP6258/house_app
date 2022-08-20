@@ -1827,7 +1827,7 @@ def fn_gen_web_eda(df):
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
     build_cases.remove('nan') if 'nan' in build_cases else None
 
-    idx_dft = build_cases.index('康寶日出印象') if '康寶日出印象' in build_cases else -1
+    idx_dft = build_cases.index('康寶日出印象') if '康寶日出印象' in build_cases else len(build_cases)-1
     build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=idx_dft)
 
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
