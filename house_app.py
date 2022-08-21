@@ -2126,9 +2126,9 @@ def fn_gen_web_eda(df):
                 v = v + '年' if i == '完工年度' else v
                 c1.write(f'{i}: {v}')
                 builder = v if i == '投資建設' else builder
-                builders = fn_util_split(builder) if i == '投資建設' else builder
+                builders = fn_util_split(builder) if i == '投資建設' else builders
                 constructor = v if i == '營造公司' else constructor
-                constructors = fn_util_split(constructor) if i == '營造公司' else constructor
+                constructors = fn_util_split(constructor) if i == '營造公司' else constructors
 
                 for builder in builders:
                     if i == '投資建設' and builder in df_lg['建商營造'].values:
