@@ -1767,6 +1767,25 @@ def fn_dbg(msg=''):
         None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
+def fn_util_split(constructor):
+    # sep = ['、', ',', '-', '/', 'X', '(']
+    if '/' in constructor:
+        constructors = constructor.split('/')
+    elif ',' in constructor:
+        constructors = constructor.split(',')
+    elif '、' in constructor:
+        constructors = constructor.split('、')
+    elif '-' in constructor:
+        constructors = constructor.split('-')
+    elif 'X' in constructor:
+        constructors = constructor.split('X')
+    else:
+        constructors = [constructor]
+
+    return constructors
+
+
+
 @fn_profiler
 def fn_gen_web_eda(df):
     # t_s = time.time()
@@ -2108,16 +2127,18 @@ def fn_gen_web_eda(df):
                 c1.write(f'{i}: {v}')
                 builder = v if i == '投資建設' else builder
                 constructor = v if i == '營造公司' else constructor
+                constructors = fn_util_split(constructor) if i == '營造公司' else [constructor]
 
                 if i == '投資建設' and builder in df_lg['建商營造'].values:
                     df_lg_b = df_lg[df_lg['建商營造'] == builder]
                     lg_latest = df_lg_b['裁判日期'].values[0]
                     c1.write(f'訴訟案件: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) (最新) ❗')
 
-                if i == '營造公司' and constructor in df_lg['建商營造'].values:
-                    df_lg_b = df_lg[df_lg['建商營造'] == constructor]
-                    lg_latest = df_lg_b['裁判日期'].values[0]
-                    c1.write(f'訴訟案件: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) (最新) ❗')
+                for constructor in constructors:
+                    if i == '營造公司' and constructor in df_lg['建商營造'].values:
+                        df_lg_b = df_lg[df_lg['建商營造'] == constructor]
+                        lg_latest = df_lg_b['裁判日期'].values[0]
+                        c1.write(f'訴訟案件: [{lg_latest}](https://law.judicial.gov.tw/FJUD/default.aspx) (最新) ❗')
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
@@ -2143,19 +2164,7 @@ def fn_gen_web_eda(df):
                 st.write('')
                 AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
-        # sep = ['、', ',', '-', '/', 'X', '(']
-        if '/' in constructor:
-            constructors = constructor.split('/')
-        elif ',' in constructor:
-            constructors = constructor.split(',')
-        elif '、' in constructor:
-            constructors = constructor.split('、')
-        elif '-' in constructor:
-            constructors = constructor.split('-')
-        elif 'X' in constructor:
-            constructors = constructor.split('X')
-        else:
-            constructors = [constructor]
+        # constructors = fn_util_split(constructor)
 
         for c in constructors:
             if c in df_lg['建商營造'].values:
