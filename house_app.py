@@ -2171,8 +2171,6 @@ def fn_gen_web_eda(df):
                 st.write('')
                 AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
-        # constructors = fn_util_split(constructor)
-
         for c in constructors:
             fn_dbg(c)
             if c in df_lg['建商營造'].values:
