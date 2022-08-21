@@ -2110,7 +2110,10 @@ def fn_gen_web_eda(df):
 
         st.write('')
         builder = 'NA'
+        builders = [builder]
         constructor = 'NA'
+        constructors=[constructor]
+
         df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False,
                             encoding='utf-8-sig')
 
