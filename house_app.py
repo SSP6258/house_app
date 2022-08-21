@@ -726,7 +726,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
-                          legend=False, name=None):
+                          legend=False, name=None, update_layout=True):
 
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
@@ -741,18 +741,19 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
     if margin is not None:
         fig.update_layout(margin=margin)
 
-    fig.update_layout(
-        title={
-            'text': title,
-            'y': 0.95,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'
-        },
-        xaxis_title=xlabel,
-        yaxis_title=ylabel,
-        font=dict(size=13)
-    )
+    if update_layout:
+        fig.update_layout(
+            title={
+                'text': title,
+                'y': 0.95,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'
+            },
+            xaxis_title=xlabel,
+            yaxis_title=ylabel,
+            font=dict(size=13)
+        )
 
     return fig
 
@@ -1374,7 +1375,8 @@ def fn_gen_analysis(df, latest_records, build_case):
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
-                                          color='red', text=build_case_sel, opacity=1.0, marker_sym=17, size=16)
+                                          color='red', text=build_case_sel, opacity=1.0, marker_sym=17, size=16,
+                                          update_layout=False)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
