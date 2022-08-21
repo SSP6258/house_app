@@ -1375,6 +1375,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             # fig_c.add_trace(go.Scatter(x=df_1_sel['經度'], y=df_1_sel['緯度'], mode='markers'))
 
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
+                                          row = None, col = None,
                                           color='royalblue', text=build_case, opacity=1.0)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
