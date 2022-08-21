@@ -1378,7 +1378,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=17, size=16,
                                           update_layout=False)
 
-        fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
+        fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
         st.plotly_chart(fig_c)
         fn_dbg('fn_gen_web_eda 3-1-2')
