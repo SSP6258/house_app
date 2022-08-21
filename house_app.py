@@ -1370,13 +1370,11 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_c = go.Figure(
             data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland'))
 
-        if build_case != '不限':
-            df_1_sel = df_1[df_1['建案名稱'] == build_case]
-            # fig_c.add_trace(go.Scatter(x=df_1_sel['經度'], y=df_1_sel['緯度'], mode='markers'))
-
+        if build_case_sel != '不限':
+            df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
-                                          color='red', text=build_case, opacity=1.0, marker_sym=17, size=14)
+                                          color='red', text=build_case_sel, opacity=1.0, marker_sym=17, size=16)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
