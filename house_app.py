@@ -2156,7 +2156,7 @@ def fn_gen_web_eda(df):
                         df_lg_b = df_lg[df_lg['建商營造'] == builder]
                         lg_latest = df_lg_b['裁判日期'].values[0]
                         lg_reason = df_lg_b['裁判案由'].values[0]
-                        b = '' if len(builders) <= 1 else f' ({builder})'
+                        b = ''  # if len(builders) <= 1 else f' ({builder})'
                         c1.write(f'👉 最新訴訟: [{lg_latest}-{lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
 
                 for constructor in constructors:
