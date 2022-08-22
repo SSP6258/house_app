@@ -19,10 +19,10 @@ from shapely.geometry import shape, Point
 # from tabula import read_pdf
 
 dic_of_path = {
-    'root': r'D:\05_Database\house_data',
-    'database': r'D:\05_Database\house_data\database'
-    # 'root': 'house_data',
-    # 'database': 'house_data/database',
+    # 'root': r'D:\05_Database\house_data',
+    # 'database': r'D:\05_Database\house_data\database'
+    'root': 'house_data',
+    'database': 'house_data/database',
 }
 
 dic_of_bc_info = defaultdict(list)
