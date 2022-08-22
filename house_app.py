@@ -22,7 +22,7 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 # from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler, fn_read_shp
+from house_utils import gpd, fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler, fn_read_shp
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 try:
