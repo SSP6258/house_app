@@ -15,7 +15,6 @@ from geopy.distance import geodesic
 from collections import defaultdict
 from workalendar.asia import Taiwan
 from shapely.geometry import shape, Point
-
 # from tabula import read_pdf
 
 dic_of_path = {
