@@ -2157,7 +2157,7 @@ def fn_gen_web_eda(df):
                         lg_latest = df_lg_b['裁判日期'].values[0]
                         lg_reason = df_lg_b['裁判案由'].values[0]
                         b = ''  # if len(builders) <= 1 else f' ({builder})'
-                        c1.write(f'👉 最新訴訟: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
+                        c1.write(f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
 
                 for constructor in constructors:
                     if i == '營造公司' and constructor in df_lg['建商營造'].values:
@@ -2165,7 +2165,7 @@ def fn_gen_web_eda(df):
                         lg_latest = df_lg_b['裁判日期'].values[0]
                         lg_reason = df_lg_b['裁判案由'].values[0]
                         c = ''  # if len(constructors) <= 1 else f' ({constructor})'
-                        c1.write(f'👉 最新訴訟: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
+                        c1.write(f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
