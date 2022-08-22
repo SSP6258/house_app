@@ -19,10 +19,10 @@ from shapely.geometry import shape, Point
 # from tabula import read_pdf
 
 dic_of_path = {
-    # 'root': r'D:\05_Database\house_data',
-    # 'database': r'D:\05_Database\house_data\database'
-    'root': 'house_data',
-    'database': 'house_data/database',
+    'root': r'D:\05_Database\house_data',
+    'database': r'D:\05_Database\house_data\database'
+    # 'root': 'house_data',
+    # 'database': 'house_data/database',
 }
 
 dic_of_bc_info = defaultdict(list)
@@ -795,8 +795,11 @@ def fn_read_shp():
         s = gis[gis.index == idx]
 
         if county == '臺北市':
-            shapes[idx] = shape(gis.loc[idx, 'geometry'])
-            properties[idx] = f'{county}, {town}, {vill}'
+            if 'geometry' in gis.columns:
+                shapes[idx] = shape(gis.loc[idx, 'geometry'])
+                properties[idx] = f'{county}, {town}, {vill}'
+            else:
+                assert False, f'gis cols = {gis.columns}'
 
     return shapes, properties
 
