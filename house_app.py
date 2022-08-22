@@ -1366,7 +1366,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_3d.update_layout(title='每坪單價 的 分佈狀況', autosize=True,
                              width=700, height=500,
                              margin={'l': 0, 'r': 0, 't': 30, 'b': 20})
-        st.plotly_chart(fig_3d)
+
+        # st.plotly_chart(fig_3d)
 
         fig_c = go.Figure(
             data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland'))
@@ -1381,7 +1382,14 @@ def fn_gen_analysis(df, latest_records, build_case):
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
 
-        st.plotly_chart(fig_c)
+        tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
+
+        with tab_egg:
+            st.plotly_chart(fig_c)
+
+        with tab_3D:
+            st.plotly_chart(fig_3d)
+
         fn_dbg('fn_gen_web_eda 3-1-2')
 
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
@@ -1773,7 +1781,7 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg=''):
     if dic_of_cfg['is_dbg']:
-        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒'
+        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{1000*datetime.datetime.now().microsecond}ms'
         None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
