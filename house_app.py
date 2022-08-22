@@ -22,7 +22,7 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 # from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler, fn_read_shp
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 try:
@@ -3208,6 +3208,11 @@ def fn_chrome_96_workaround():
     pass
 
 
+@st.cache
+def fn_read_shp_wrap():
+    return fn_read_shp()
+
+
 def fn_app(page='data'):
     print(f'fn_app() start, page = {page}')
     fn_chrome_96_workaround()
@@ -3228,6 +3233,7 @@ def fn_app(page='data'):
         os.makedirs(ml_model)
 
     if page == 'eda':
+        shapes, properties = fn_read_shp_wrap()
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
@@ -3247,6 +3253,8 @@ def fn_app(page='data'):
         df = df[df['都市土地使用分區'] == land_typ] if land_typ != '不限' else df
 
         fn_gen_web_eda(df)
+
+        st.sidebar.write(properties)
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
