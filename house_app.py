@@ -1781,7 +1781,7 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg=''):
     if dic_of_cfg['is_dbg']:
-        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{1000*datetime.datetime.now().microsecond}ms'
+        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond/1000)}ms'
         None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
