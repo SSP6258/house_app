@@ -780,8 +780,12 @@ def fn_gen_school_data():
 
 
 def fn_read_shp():
-    path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
-    file = r'VILLAGE_MOI_1101214.shp'
+    # path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
+    # file = r'VILLAGE_MOI_1101214.shp'
+
+    path = os.path.join(dic_of_path['database'], 'mapdata202104280245')
+    file = r'TOWN_MOI_1100415.shp'
+
     g = os.path.join(path, file)
     gis_v = gpd.read_file(g, encoding='utf-8')
 
@@ -792,7 +796,7 @@ def fn_read_shp():
         county = gis.loc[idx, 'COUNTYNAME']
         town = gis.loc[idx, 'TOWNNAME']
         vill = gis.loc[idx, 'VILLNAME'] if 'VILLNAME' in gis.columns else 'NA'
-        s = gis[gis.index == idx]
+        # s = gis[gis.index == idx]
 
         if county == '臺北市':
             if 'geometry' in gis.columns:
