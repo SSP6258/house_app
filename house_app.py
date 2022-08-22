@@ -3208,7 +3208,7 @@ def fn_chrome_96_workaround():
     pass
 
 
-# @st.cache
+@st.cache
 def fn_read_shp_wrap():
     shapes, properties = fn_read_shp()
     return shapes, properties
