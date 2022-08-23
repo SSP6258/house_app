@@ -3236,7 +3236,7 @@ def fn_chrome_96_workaround():
 dic_of_shp = {}
 
 
-@st.cache
+# @st.cache
 def fn_read_shp_wrap():
     shapes, properties = fn_read_shp()
     dic_of_shp['shape'] = shapes
