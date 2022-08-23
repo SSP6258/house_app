@@ -1388,7 +1388,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                 fn_dbg(f'{dist}, {vill}, {dist in vill}')
                 if dist in vill:
                     x, y = dic_of_shp['shape'][k].exterior.xy
-                    fig_c = fn_gen_plotly_scatter(fig_c, x, y,
+                    fig_c = fn_gen_plotly_scatter(fig_c, x[1], y,
                                                   row=None, col=None,
                                                   color='green', opacity=1.0,
                                                   update_layout=False)
