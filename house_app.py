@@ -1188,7 +1188,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, se
 
     if build_case is not None and build_case != '不限':
         df_bc = df[df['建案名稱'] == build_case]
-        dist_dft = '不限'  # df_bc.loc[:, '鄉鎮市區'].values[0]
+        dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
         dist_dft = dists.index(dist_dft)
 
     dist = c1.selectbox('行政區', options=dists, index=dist_dft, key=f'{key}+dist')
