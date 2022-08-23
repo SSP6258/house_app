@@ -1388,8 +1388,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                 fn_dbg(f'{dist}, {vill}, {dist in vill}')
                 if dist in vill:
                     x, y = dic_of_shp['shape'][k].exterior.xy
-
-                    fig_c = fn_gen_plotly_scatter(fig_c, x[-1], y[-1],
+                    fig_c = fn_gen_plotly_scatter(fig_c, x, y,
                                                   row=None, col=None,
                                                   color='green', opacity=1.0,
                                                   update_layout=False)
@@ -1397,7 +1396,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     # fig = plt.figure()
                     # plt.plot(x, y, c="green")
                     # plt.plot(lon, lat, c="red", marker='X')
-                    break
+                    # break
 
 
 
@@ -3233,7 +3232,7 @@ def fn_chrome_96_workaround():
 dic_of_shp = {}
 
 
-# @st.cache
+@st.cache
 def fn_read_shp_wrap():
     shapes, properties = fn_read_shp()
     dic_of_shp['shape'] = shapes
