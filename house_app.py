@@ -3281,7 +3281,7 @@ def fn_app(page='data'):
 
         fn_gen_web_eda(df)
 
-        st.sidebar.write(properties)
+        # st.sidebar.write(properties)
 
     elif page == 'train':
         df = fn_gen_web_init(path, page=page)
