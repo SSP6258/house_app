@@ -1397,9 +1397,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           update_layout=False)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
-                            margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
-                            xaxis_range=[121.4, 121.7], yaxis_range=[24.9, 25.34]
-                            , zaxis_range=[50, 170])
+                            margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
+                            # xaxis_range=[121.4, 121.7], yaxis_range=[24.9, 25.34])
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
