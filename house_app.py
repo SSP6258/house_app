@@ -1380,25 +1380,25 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
 
-            dist = df_1_sel['鄉鎮市區'].values[0]
-            # dic_of_shp['shape']
+        if len(df_1['鄉鎮市區'].unique()) > 1:
+            dist = '不限'
+        else:
+            dist = df_1['鄉鎮市區'].values[0]
 
-            for k in dic_of_shp['shape'].keys():
-                vill = dic_of_shp['properties'][k]
-                fn_dbg(f'{dist}, {vill}, {dist in vill}')
-                if dist in vill:
-                    x, y = dic_of_shp['shape'][k].exterior.xy
-                    fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                                  row=None, col=None,
-                                                  color='green', opacity=1.0,
-                                                  update_layout=False)
-
-                    # fig = plt.figure()
-                    # plt.plot(x, y, c="green")
-                    # plt.plot(lon, lat, c="red", marker='X')
-                    # break
-
-
+        for k in dic_of_shp['shape'].keys():
+            vill = dic_of_shp['properties'][k]
+            fn_dbg(f'{dist}, {vill}, {dist in vill}')
+            x, y = dic_of_shp['shape'][k].exterior.xy
+            if dist == '不限':
+                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                              row=None, col=None,
+                                              color='green', opacity=1.0,
+                                              update_layout=False)
+            elif dist in vill:
+                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                              row=None, col=None,
+                                              color='green', opacity=1.0,
+                                              update_layout=False)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
