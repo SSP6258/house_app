@@ -1393,12 +1393,13 @@ def fn_gen_analysis(df, latest_records, build_case):
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
-                                          color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
+                                          color='red', text=build_case_sel, opacity=0.5, marker_sym=4, size=16,
                                           update_layout=False)
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
-                            xaxis_range=[121.4, 121.7], yaxis_range=[24.9, 25.34])
+                            xaxis_range=[121.4, 121.7], yaxis_range=[24.9, 25.34]
+                            , zaxis_range=[50, 170])
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
