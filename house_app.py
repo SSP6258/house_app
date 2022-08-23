@@ -1388,7 +1388,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                 vill = dic_of_shp['properties'][k]
                 if vill == dist:
                     # vill = properties[k]
-                    coor_2_vill = f'{lon}, {lat} is in {vill}'
+                    # coor_2_vill = f'{lon}, {lat} is in {vill}'
 
                     x, y = dic_of_shp['shape'][k].exterior.xy
 
