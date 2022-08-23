@@ -1373,11 +1373,36 @@ def fn_gen_analysis(df, latest_records, build_case):
             data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland'))
 
         if build_case_sel != '不限':
+
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
+
+            dist = df_1_sel['鄉鎮市區'].values[0]
+            # dic_of_shp['shape']
+
+            for k in dic_of_shp['shape'].keys():
+                # print(k, properties[k])
+                vill = dic_of_shp['properties'][k]
+                if vill == dist:
+                    # vill = properties[k]
+                    coor_2_vill = f'{lon}, {lat} is in {vill}'
+
+                    x, y = dic_of_shp['shape'][k].exterior.xy
+
+                    fig_c = fn_gen_plotly_scatter(fig_c, x, y,
+                                                  row=None, col=None,
+                                                  color='green', opacity=1.0,
+                                                  update_layout=False)
+
+                    # fig = plt.figure()
+                    # plt.plot(x, y, c="green")
+                    # plt.plot(lon, lat, c="red", marker='X')
+                    break
+
+
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
@@ -3208,9 +3233,14 @@ def fn_chrome_96_workaround():
     pass
 
 
+dic_of_shp = {}
+
+
 @st.cache
 def fn_read_shp_wrap():
     shapes, properties = fn_read_shp()
+    dic_of_shp['shape'] = shapes
+    dic_of_shp['properties'] = properties
     return shapes, properties
 
 
