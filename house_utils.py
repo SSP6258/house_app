@@ -778,12 +778,14 @@ def fn_gen_school_data():
     fn_gen_school_info(path, years)
 
 
-def fn_read_shp():
-    path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
-    file = r'VILLAGE_MOI_1101214.shp'
+def fn_read_shp(is_dist_only=False):
 
-    # path = os.path.join(dic_of_path['database'], 'mapdata202104280245')
-    # file = r'TOWN_MOI_1100415.shp'
+    if is_dist_only:
+        path = os.path.join(dic_of_path['database'], 'mapdata202104280245')
+        file = r'TOWN_MOI_1100415.shp'
+    else:
+        path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
+        file = r'VILLAGE_MOI_1101214.shp'
 
     g = os.path.join(path, file)
     gis_v = gpd.read_file(g, encoding='utf-8')
