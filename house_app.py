@@ -1367,8 +1367,6 @@ def fn_gen_analysis(df, latest_records, build_case):
                              width=700, height=500,
                              margin={'l': 0, 'r': 0, 't': 30, 'b': 20})
 
-        # st.plotly_chart(fig_3d)
-
         fig_c = go.Figure(
             data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland',
                             contours=dict(
@@ -1406,7 +1404,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         x_max, x_min = df_1[['經度']].max(), df_1[['經度']].min()
         y_max, y_min = df_1[['緯度']].max(), df_1[['緯度']].min()
 
-        fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
+        fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
                             xaxis_range=[x_min, x_max], yaxis_range=[y_min, y_max])
 
@@ -1545,29 +1543,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         with tb_build_case:
             cmp = options[6]
             fn_corr_util(dic_of_show, df_1, cmp, target, config)
-        #
-        # d = dic_of_show[cmp]
-        # hovertext = fn_get_hover_text(df_1)
-        #
-        # fig = go.Figure(data=go.Splom(
-        #     dimensions=d + target,
-        #     diagonal=dict(visible=False),
-        #     hovertext=hovertext,
-        #     showupperhalf=False,
-        #     marker=dict(color=df_1['每坪單價(萬)'],
-        #                 size=6,
-        #                 colorscale='Bluered',
-        #                 line=dict(width=0.5,
-        #                           color='rgb(230,230,230)'))))
-        #
-        # title = f'每坪單價 與 "{cmp}" 指標 的關係'
-        # fig.update_layout(title=title,
-        #                   dragmode='select',
-        #                   width=800,
-        #                   height=800,
-        #                   hovermode='closest')
-        #
-        # st.plotly_chart(fig, config=config)
+
         fn_dbg('fn_gen_web_eda 3-1-4')
 
     with tab_ana_dist:  # st.expander(f'👓 檢視 每坪單價 與 "行政區" 指標 的關係'):
@@ -1624,6 +1600,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         fn_dbg('fn_gen_web_eda 3-1-9')
 
     fn_dbg('fn_gen_web_eda 3-1-10')
+
 
 @fn_profiler
 def fn_gen_bc_deals_old(build_case, dic_df_show):
