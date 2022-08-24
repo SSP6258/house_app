@@ -1362,7 +1362,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
     fn_dbg('fn_gen_web_eda 3-1-1')
     with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr', dist_default='不限')
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr', dist_default=None)
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
