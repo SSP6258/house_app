@@ -1401,8 +1401,9 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
 
-        x_range = [df_1[['經度']].max(), df_1[['經度']].min()]
-        y_range = [df_1[['緯度']].max(), df_1[['緯度']].min()]
+        x_range = [min(df_1['經度']), max(df_1['經度'])]
+        y_range = [min(df_1['緯度']), max(df_1['緯度'])]
+
         st.write(x_range, y_range)
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
