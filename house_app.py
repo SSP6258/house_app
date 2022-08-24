@@ -3239,12 +3239,9 @@ def fn_chrome_96_workaround():
 dic_of_shp = {}
 
 
-
-# @st.cache
+@st.cache
 def fn_read_shp_wrap(is_dist_only=False):
     shapes, properties = fn_read_shp(is_dist_only=is_dist_only)
-    dic_of_shp['shape'] = shapes
-    dic_of_shp['properties'] = properties
     return shapes, properties
 
 
@@ -3268,7 +3265,7 @@ def fn_app(page='data'):
         os.makedirs(ml_model)
 
     if page == 'eda':
-        shapes, properties = fn_read_shp_wrap(is_dist_only=True)
+        dic_of_shp['shape'], dic_of_shp['properties'] = fn_read_shp_wrap(is_dist_only=True)
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
