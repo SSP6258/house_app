@@ -1179,7 +1179,7 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
 
-def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=['dist', 'build_case', 'color_by']):
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=['dist', 'build_case', 'color_by'], dist_default=None):
     bc = 'NA'
     color_by = 'NA'
 
@@ -1187,7 +1187,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, se
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist_dft = 0
 
-    if build_case is not None and build_case != '不限':
+    if build_case is not None and build_case != '不限' and dist_default is not None:
         df_bc = df[df['建案名稱'] == build_case]
         dist_dft = df_bc.loc[:, '鄉鎮市區'].values[0]
         dist_dft = dists.index(dist_dft)
@@ -1359,7 +1359,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
     fn_dbg('fn_gen_web_eda 3-1-1')
     with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr')
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr', dist_default='不限')
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
