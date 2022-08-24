@@ -1391,18 +1391,22 @@ def fn_gen_analysis(df, latest_records, build_case):
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
                                               color='green', opacity=0.5, size=6,
+                                              text=vill,
                                               update_layout=False)
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
                                               color='green', opacity=0.5, size=6,
+                                              text=vill,
                                               update_layout=False)
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
+            ave_price = df_1_sel['coor_ave'].values[0]
+            text = f'{build_case_sel} {ave_price}萬/坪'
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
-                                          color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
+                                          color='red', text=text, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
 
         x_range = [min(df_1['經度']), max(df_1['經度'])]
