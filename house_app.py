@@ -1386,12 +1386,12 @@ def fn_gen_analysis(df, latest_records, build_case):
             if dist == '不限':
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5,
+                                              color='green', opacity=0.5, size=6,
                                               update_layout=False)
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5,
+                                              color='green', opacity=0.5, size=6,
                                               update_layout=False)
 
         if build_case_sel != '不限':
@@ -1404,7 +1404,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         x_range = [min(df_1['經度']), max(df_1['經度'])]
         y_range = [min(df_1['緯度']), max(df_1['緯度'])]
 
-        st.write(x_range, y_range)
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
                             xaxis_range=x_range, yaxis_range=y_range)
