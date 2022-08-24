@@ -1370,7 +1370,14 @@ def fn_gen_analysis(df, latest_records, build_case):
         # st.plotly_chart(fig_3d)
 
         fig_c = go.Figure(
-            data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland'))
+            data=go.Contour(x=df_1['經度'], y=df_1['緯度'], z=df_1['coor_ave'], line_smoothing=1.2, colorscale='portland',
+                            contours=dict(
+                                showlabels=True,  # show labels on contours
+                                labelfont=dict(  # label font properties
+                                    size=12,
+                                    color='white',
+                                )
+                            )))
 
         dist = '不限' if len(df_1['鄉鎮市區'].unique()) > 1 else df_1['鄉鎮市區'].values[0]
 
@@ -1396,9 +1403,12 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
 
+        x_max, x_min = df_1[['經度']].max(), df_1[['經度']].min()
+        y_max, y_min = df_1[['緯度']].max(), df_1[['緯度']].min()
+
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
-                            # xaxis_range=[121.4, 121.7], yaxis_range=[24.9, 25.34])
+                            xaxis_range=[x_min, x_max], yaxis_range=[y_min, y_max])
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
