@@ -1407,7 +1407,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         y_max, y_min = df_1[['緯度']].max(), df_1[['緯度']].min()
 
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=True,
-                            margin={'l': 50, 'r': 20, 't': 30, 'b': 20})
+                            margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
                             xaxis_range=[x_min, x_max], yaxis_range=[y_min, y_max])
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
