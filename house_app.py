@@ -1401,12 +1401,12 @@ def fn_gen_analysis(df, latest_records, build_case):
                                           color='red', text=build_case_sel, opacity=1.0, marker_sym=4, size=16,
                                           update_layout=False)
 
-        x_max, x_min = df_1[['經度']].max(), df_1[['經度']].min()
-        y_max, y_min = df_1[['緯度']].max(), df_1[['緯度']].min()
-
+        x_range = [df_1[['經度']].max(), df_1[['經度']].min()]
+        y_range = [df_1[['緯度']].max(), df_1[['緯度']].min()]
+        st.write(x_range, y_range)
         fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
-                            xaxis_range=[x_min, x_max], yaxis_range=[y_min, y_max])
+                            xaxis_range=x_range, yaxis_range=y_range)
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
