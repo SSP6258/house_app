@@ -653,12 +653,13 @@ def fn_gen_model_explain(X, model):
     print(X.columns)
 
 
-def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, line_color='white', showlegend=False,
+def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, color_by=None, line_color='white', showlegend=False,
                        hovertext=None, barmode='group', opacity=0.8):
     fig.add_trace(
         go.Histogram(x=data, name=title, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
                      marker=dict(
                          opacity=opacity,
+                         color = color_by,
                          line=dict(
                              color=line_color, width=0.4
                          ),
@@ -1142,7 +1143,7 @@ def fn_gen_analysis_statistic(df):
 
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
-    fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
+    fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin, color_by=df['交易年'])
     fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
 
