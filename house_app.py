@@ -670,6 +670,7 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
         col=col,
     )
 
+
     fig.update_layout(margin=margin,
                       barmode=barmode)
 
