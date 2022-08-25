@@ -1189,14 +1189,11 @@ def fn_gen_analysis_statistic(df):
     years = list(df['交易年'].unique())
     colors = plotly.colors.qualitative._cols
     for yr in years:
-        # df_yr = df[df['交易年'] == yr]
-        # df_pk_1_yr = df_pk_1[df_pk_1['交易年'] == yr]
-        # df_pk_2_yr = df_pk_2[df_pk_2['交易年'] == yr]
-        # df_typ_yr = df_typ[df_typ['交易年'] == yr]
-
         fig_bar = fn_gen_hist_analysis(fig_bar, [df], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr, margin)
+
         fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, [df], ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr,
                                          margin)
+
         fig_bar_3 = fn_gen_hist_analysis(fig_bar_3, [df_pk_1, df_pk_1, df_pk_2, df_pk_2],
                                          ['車位單價(萬)', '車位坪數', '車位單價(萬)', '車位坪數'], colors, years, yr,
                                          margin)
