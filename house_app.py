@@ -1150,7 +1150,7 @@ def fn_gen_analysis_statistic(df):
     colors = plotly.colors.qualitative._cols
     for yr in years:
         df_yr = df[df['交易年'] == yr]
-        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], '交易月', row=1, col=2, bins=50, margin=margin,
+        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], yr, row=1, col=2, bins=50, margin=margin,
                                      showlegend=True,
                                      barmode='stack', color=colors[years.index(yr)])
 
