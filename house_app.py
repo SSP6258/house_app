@@ -1154,13 +1154,6 @@ def fn_gen_analysis_statistic(df):
                                      showlegend=True,
                                      barmode='stack', color=colors[years.index(yr)])
 
-        # fig_h = fn_gen_plotly_hist(fig_h, df_p['delta'], f'{int(p)}級', row=1, col=1, margin=margin,
-        #                            showlegend=True,
-        #                            legendgroup=1, bingroup=1, barmode='stack', color=cols[c])
-        #
-        # fig_h.add_trace(go.Box(x=df_p['delta'], name=f'{int(p)}級', legendgroup=2, marker=dict(color=cols[c]), showlegend=False), row=2, col=1)
-        # c = c + 1
-
     fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
 
@@ -1863,21 +1856,6 @@ def fn_gen_web_eda(df):
     df_tm.rename(columns={'建案名稱': '交易筆數'}, inplace=True)
     df_tm.reset_index(inplace=True)
     df_tm.rename(columns={'index': '建案名稱', '每坪單價(萬)': '每坪均價(萬)'}, inplace=True)
-    # fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
-    #                                color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-    #                                mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-    #
-    # fig_tm_2 = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='建物坪數',
-    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-    #
-    # fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
-    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-    #
-    # fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
-    #                                  color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-    #                                  mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
 
     df_sel = df.copy()
     Latest_date = str(df_sel['交易年月日'].iloc[0])
@@ -2202,7 +2180,7 @@ def fn_gen_web_eda(df):
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
 
-            with st.expander(f' 👉 建商:{builder} ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
+            with st.expander(f' 👉 建商:{builder}    ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
                 st.write('')
                 st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                 st.write('')
@@ -2216,7 +2194,7 @@ def fn_gen_web_eda(df):
                 lg_latest = df_lg_c['裁判日期'].values[0]
                 lg_total = df_lg_c['歷年案件'].values[0]
 
-                with st.expander(f'👉 營造商:{c} ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
+                with st.expander(f'👉 營造商:{c}    ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
                     st.write('')
                     st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                     st.write('')
