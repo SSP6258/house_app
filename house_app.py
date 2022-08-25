@@ -1186,6 +1186,7 @@ def fn_gen_analysis_statistic(df):
     fig_bar_4 = make_subplots(rows=2, cols=2, subplot_titles=(f'土地使用分區', f'行政區({dists}個)', '地下樓層', '總戶數'))
     fig_bar_5 = make_subplots(rows=2, cols=2, subplot_titles=(f'基地面積(坪)', f'容積率(%)', '建蔽率(%)', '公設比(%)'))
 
+    df['交易年'] = df['交易年'].astype(int)
     years = list(df['交易年'].unique())
     colors = plotly.colors.qualitative._cols
     for yr in years:
