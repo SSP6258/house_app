@@ -1152,7 +1152,7 @@ def fn_gen_analysis_statistic(df):
         df_yr = df[df['交易年'] == yr]
 
         fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易年'], f'{yr}年', row=1, col=1, bins=30, margin=margin,
-                                     showlegend=True,
+                                     showlegend=False,
                                      barmode='stack', color=colors[years.index(yr)])
 
         fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], f'{yr}年', row=1, col=2, bins=50, margin=margin,
