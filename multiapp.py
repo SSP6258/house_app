@@ -58,7 +58,7 @@ class MultiApp:
             'house_dora.JPG': '',
             'house_dora.jpg': '',
             'house_dora_2.jpg': '',
-            'house_dora_88.jpg': '~ ❤️父親節禮物 一棟別墅 ~',
+            'house_dora_88.jpg': '~ ❤️女兒小一時送的父親節禮物 一棟別墅 ~',
             'house_sunset.jpg': '~ 🌅 八里夕陽 ~',
 
         }
