@@ -22,9 +22,11 @@ from st_aggrid import AgGrid
 from PIL import Image
 from collections import defaultdict
 # from dataprep.eda import plot_correlation
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler, fn_read_shp
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesic, fn_get_coor_fr_db, fn_profiler, \
+    fn_read_shp
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
+
 try:
     from streamlit_player import st_player
 except:
@@ -73,7 +75,6 @@ def fn_show_img(IMG_path, IMG_file, is_sidebar=False, width=None, caption=None):
         st.sidebar.image(img, width=width, caption=caption)
     else:
         st.image(img, width=width, caption=caption)
-
 
 
 def fn_addr_2_house_num(x):
@@ -292,7 +293,6 @@ def fn_get_sku_people_by_year(df):
     return df
 
 
-
 def fn_get_interest_rate(df, months=1):
     path = dic_of_path['database']
     file = os.path.join(path, 'a13rate.csv')
@@ -388,7 +388,7 @@ def fn_get_hover_text(df):
         txt += df['sku_dist'].astype(int).astype(str) + '公尺<br>'
 
     if '每坪單價(萬)' in cols:
-        txt += '每坪單價 '+df['每坪單價(萬)'].astype(str) + ' 萬元<br>'
+        txt += '每坪單價 ' + df['每坪單價(萬)'].astype(str) + ' 萬元<br>'
 
     return txt
 
@@ -549,7 +549,8 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
 
                     if df_sel.shape[0] > 0:
                         err_max = max(abs(df_sel['誤差(萬/坪)']))
-                        fig.add_vrect(x0=-1 * err_max, row=2, col=2, x1=err_max, line_width=0, fillcolor="red", opacity=0.1)
+                        fig.add_vrect(x0=-1 * err_max, row=2, col=2, x1=err_max, line_width=0, fillcolor="red",
+                                      opacity=0.1)
                         fig.add_vrect(x0=th_l, row=2, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
                         fig.add_vrect(x0=th_l, row=1, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
 
@@ -653,7 +654,8 @@ def fn_gen_model_explain(X, model):
     print(X.columns)
 
 
-def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, color_by=None, line_color='white', showlegend=False,
+def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, color_by=None, line_color='white',
+                       showlegend=False,
                        hovertext=None, barmode='group', opacity=0.8):
     fig.add_trace(
         go.Histogram(x=data, name=title, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
@@ -676,7 +678,6 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, co
 
 def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
                       color_col=None, text_fmt=None, title=None, x_title=None, y_title=None, ccs='agsunset', op=None):
-
     fig = px.bar(df_top, x=x_data_col, y=y_data_col,
                  orientation=v_or_h, title=title,
                  text=text_col, color=color_col,
@@ -728,7 +729,6 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
                           legend=False, name=None, update_layout=True):
-
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              marker=dict(
@@ -967,7 +967,7 @@ def fn_gen_analysis_mrt(df, color_by, margin=None, bc_name=None):
 
     df_sort_ave = df_sort.drop_duplicates(subset=['MRT'], keep='first')
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort_ave['MRT'], df_sort_ave['MRT_ave'], row=1, col=1, margin=margin,
-                                      color='violet', opacity=0.7, marker_sym=24, size=13)
+                                    color='violet', opacity=0.7, marker_sym=24, size=13)
 
     hover_txt1 = fn_get_hover_text(df_hl)
 
@@ -1045,7 +1045,8 @@ def fn_gen_analysis_sku(df, color_by, margin=None, bc_name=None):
                                       color=color_set, text=hover_text, opacity=0.5)
 
     df_sort_ave = df_sort.drop_duplicates(subset=['sku_name'], keep='first')
-    fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort_ave['sku_name'], df_sort_ave['SKU_ave'], row=1, col=1, margin=margin,
+    fig_sku_1 = fn_gen_plotly_scatter(fig_sku_1, df_sort_ave['sku_name'], df_sort_ave['SKU_ave'], row=1, col=1,
+                                      margin=margin,
                                       color='violet', opacity=0.7, marker_sym=24, size=13)
 
     hover_txt1 = fn_get_hover_text(df_hl)
@@ -1179,7 +1180,8 @@ def fn_gen_analysis_statistic(df):
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
 
-def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None, sel_option=['dist', 'build_case', 'color_by'], dist_default=None):
+def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
+                        sel_option=['dist', 'build_case', 'color_by'], dist_default=None):
     bc = 'NA'
     color_by = 'NA'
 
@@ -1354,7 +1356,6 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
 
 # @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
-
     config = {'scrollZoom': True,
               'toImageButtonOptions': {'height': None, 'width': None}}
 
@@ -1362,7 +1363,8 @@ def fn_gen_analysis(df, latest_records, build_case):
     tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
     fn_dbg('fn_gen_web_eda 3-1-1')
     with tab_dist_price:  # st.expander(f'👓 檢視 每坪單價 的 分布狀況'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr', dist_default=None)
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr',
+                                                             dist_default=None)
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
@@ -1427,7 +1429,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         fn_dbg('fn_gen_web_eda 3-1-2')
 
     with tab_dist_char:  # st.expander(f'👓 檢視 物件特徵 的 分布狀況'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch', sel_option=['dist'])
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='ch',
+                                                             sel_option=['dist'])
 
         fig_bar_1, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
         # st.plotly_chart(fig_bar_1, config=config)
@@ -1436,7 +1439,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         # st.plotly_chart(fig_bar_4, config=config)
         # st.plotly_chart(fig_bar_5, config=config)
 
-        tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(['交易特徵分布', '建物特徵分布1', '建物特徵分布2', '建物特徵分布3', '車位特徵分布'])
+        tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(
+            ['交易特徵分布', '建物特徵分布1', '建物特徵分布2', '建物特徵分布3', '車位特徵分布'])
 
         with tb_trade:
             st.plotly_chart(fig_bar_1, config=config)
@@ -1456,7 +1460,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         fn_dbg('fn_gen_web_eda 3-1-3')
 
     with tab_ana_corr:  # st.expander(f'👓 檢視 每坪單價 與 "各項" 指標 的關係'):
-        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all', sel_option=['dist'])
+        df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='all',
+                                                             sel_option=['dist'])
 
         df_1 = df_1[df_1['地下樓層'].apply(lambda x: str(x).isnumeric())]
         df_1['地下樓層'] = df_1['地下樓層'].astype(int)
@@ -1794,7 +1799,7 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg=''):
     if dic_of_cfg['is_dbg']:
-        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond/1000)}ms'
+        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond / 1000)}ms'
         None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
 
 
@@ -1814,7 +1819,6 @@ def fn_util_split(constructor):
         constructors = [constructor]
 
     return constructors
-
 
 
 @fn_profiler
@@ -1877,7 +1881,7 @@ def fn_gen_web_eda(df):
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
     build_cases.remove('nan') if 'nan' in build_cases else None
 
-    idx_dft = build_cases.index('康寶日出印象') if '康寶日出印象' in build_cases else len(build_cases)-1
+    idx_dft = build_cases.index('康寶日出印象') if '康寶日出印象' in build_cases else len(build_cases) - 1
     build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=idx_dft)
 
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
@@ -2052,18 +2056,6 @@ def fn_gen_web_eda(df):
     st.plotly_chart(fig_map_all)
     st.write('')
 
-    # area = st.radio('樹狀圖的面積代表該建案的:', ('交易筆數', '最小坪數', '最大坪數', '建物坪數(已成交物件的平均坪數)'), index=1)
-    # fn_set_radio_2_hor()
-    #
-    # if area == '交易筆數':
-    #     st.plotly_chart(fig_tm)
-    # elif area == '最小坪數':
-    #     st.plotly_chart(fig_tm_n)
-    # elif area == '最大坪數':
-    #     st.plotly_chart(fig_tm_m)
-    # else:
-    #     st.plotly_chart(fig_tm_2)
-
     fn_dbg('fn_gen_web_eda 2')
 
     tabs = st.tabs(['台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
@@ -2143,7 +2135,7 @@ def fn_gen_web_eda(df):
         builder = 'NA'
         builders = [builder]
         constructor = 'NA'
-        constructors=[constructor]
+        constructors = [constructor]
 
         df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False,
                             encoding='utf-8-sig')
@@ -2170,7 +2162,8 @@ def fn_gen_web_eda(df):
                         lg_latest = df_lg_b['裁判日期'].values[0]
                         lg_reason = df_lg_b['裁判案由'].values[0]
                         b = ''  # if len(builders) <= 1 else f' ({builder})'
-                        c1.write(f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
+                        c1.write(
+                            f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
 
                 for constructor in constructors:
                     if i == '營造公司' and constructor in df_lg['建商營造'].values:
@@ -2178,7 +2171,8 @@ def fn_gen_web_eda(df):
                         lg_latest = df_lg_b['裁判日期'].values[0]
                         lg_reason = df_lg_b['裁判案由'].values[0]
                         c = ''  # if len(constructors) <= 1 else f' ({constructor})'
-                        c1.write(f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
+                        c1.write(
+                            f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
 
             for i in bc_info_c2:
                 v = str(df_sel[i].values[0])
@@ -2191,14 +2185,13 @@ def fn_gen_web_eda(df):
 
             submitted = st.form_submit_button("")
 
-        # df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False, encoding='utf-8-sig')
         if builder in df_lg['建商營造'].values:
             df_lg_b = df_lg[df_lg['建商營造'] == builder]
             df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
 
-            with st.expander(f'⚖️建商:{builder} 👉 最新裁判案件:{lg_latest} ❗  歷史裁判案件數: {lg_total}件 ❗'):
+            with st.expander(f' 👉 建商:{builder} ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
                 st.write('')
                 st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                 st.write('')
@@ -2212,7 +2205,7 @@ def fn_gen_web_eda(df):
                 lg_latest = df_lg_c['裁判日期'].values[0]
                 lg_total = df_lg_c['歷年案件'].values[0]
 
-                with st.expander(f'⚖️營造商:{c} 👉 最新裁判案件:{lg_latest} ❗  歷史裁判案件數: {lg_total}件 ❗'):
+                with st.expander(f'👉 營造商:{c} ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
                     st.write('')
                     st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                     st.write('')
@@ -2804,7 +2797,7 @@ def fn_gen_web_ml_inference(path, build_typ):
             input_city = c1.selectbox('城市', ['台北市'], index=0)
             input_dist = c2.selectbox('行政區', tpe_dists, index=tpe_dists.index('北投區'))
             input_addr = c3.text_input(label='詳細地址', value='大度路三段301巷67號')
-            addr = input_city+input_dist+input_addr
+            addr = input_city + input_dist + input_addr
 
             # addr = st.text_input(label='物件地址', value='台北市北投區大度路三段301巷67號')
 
@@ -3060,7 +3053,6 @@ def fn_gen_web_ref():
     st.write('')
     st.subheader('當你要買預售屋...')
     with st.expander('簽約之前 的 注意事項'):
-
         st.write('')
         st.subheader('建商/營造商 的 規模與履歷? 一案建商?')
         st.write("- 經濟部 商業司: [商工登記公示資料查詢服務](https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do)")
@@ -3069,7 +3061,8 @@ def fn_gen_web_ref():
 
         st.write('')
         st.subheader('廣告不實 怎麼辦?')
-        st.write("- 台北市 地政局: [地權及不動產交易科](https://land.gov.taipei/News_Content.aspx?n=8C8F186F23B3BE43&sms=1EA0BE6515958939&s=88696428E9FB14CA)")
+        st.write(
+            "- 台北市 地政局: [地權及不動產交易科](https://land.gov.taipei/News_Content.aspx?n=8C8F186F23B3BE43&sms=1EA0BE6515958939&s=88696428E9FB14CA)")
         st.write("- 內政部 地政司: [不動產交易管理科](https://www.land.moi.gov.tw/chhtml/mailbox/54)")
         st.write("- 行政院 公平會: [服務信箱](https://www.ftc.gov.tw/internet/main/mailbox/notice.aspx)")
         st.write("- 行政院 消基會: [線上申訴調解申請](https://appeal.cpc.ey.gov.tw/WWW/Default.aspx)")
@@ -3104,8 +3097,10 @@ def fn_gen_web_ref():
 
         st.write('')
         st.subheader('其他')
-        st.write("- 內政部 營建署: [建築執照申請審核書](https://www.cpami.gov.tw/%E6%9C%80%E6%96%B0%E6%B6%88%E6%81%AF/%E6%B3%95%E8%A6%8F%E5%85%AC%E5%91%8A/30-%E5%BB%BA%E7%AF%89%E7%AE%A1%E7%90%86%E7%AF%87/28578-%E5%BB%BA%E7%AF%89%E5%9F%B7%E7%85%A7%E7%94%B3%E8%AB%8B%E5%AF%A9%E6%A0%B8%E6%9B%B8%E8%A1%A8.html)")
-        st.write("- 台北市 建管處: [建照執照申請表](https://dba.gov.taipei/News_Content.aspx?n=5B651B337CE7F386&sms=59F8DF70DEAE0B38&s=162C96AA9A55DB66)")
+        st.write(
+            "- 內政部 營建署: [建築執照申請審核書](https://www.cpami.gov.tw/%E6%9C%80%E6%96%B0%E6%B6%88%E6%81%AF/%E6%B3%95%E8%A6%8F%E5%85%AC%E5%91%8A/30-%E5%BB%BA%E7%AF%89%E7%AE%A1%E7%90%86%E7%AF%87/28578-%E5%BB%BA%E7%AF%89%E5%9F%B7%E7%85%A7%E7%94%B3%E8%AB%8B%E5%AF%A9%E6%A0%B8%E6%9B%B8%E8%A1%A8.html)")
+        st.write(
+            "- 台北市 建管處: [建照執照申請表](https://dba.gov.taipei/News_Content.aspx?n=5B651B337CE7F386&sms=59F8DF70DEAE0B38&s=162C96AA9A55DB66)")
 
 
 def fn_gen_web_tools():
@@ -3176,7 +3171,8 @@ def fn_gen_web_intro():
 
     with tab_ml:  # st.expander('📌 AI、機器學習、深度學習 原理及應用'):
         st.write('')
-        st.write('- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
+        st.write(
+            '- [十三分鐘略懂 AI 技術：機器學習、深度學習技術原理及延伸應用](https://youtu.be/UGdG4WpluJ8?list=PLySGbWJPNLA8D17qZx0KVkJaXd3qxncGr)')
         st.write('')
         video = 'https://www.youtube.com/watch?v=UGdG4WpluJ8'
         try:
@@ -3191,17 +3187,27 @@ def fn_gen_web_intro():
 
         dic_of_img = {
             'ML flow': ['Overview of ML workflow', 'https://miro.medium.com/max/963/1*QV1rVgh3bfaMbtxueS-cgA.png'],
-            'ML models': ['Overview of models under categories', 'https://miro.medium.com/max/656/1*KFQI59Yv7m1f3fwG68KSEA.jpeg'],
-            'SciKit Learn': ['https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html', 'https://scikit-learn.org/stable/_static/ml_map.png'],
-            'Unsupervise': ['Unsupervised Learning - Clustering', 'https://miro.medium.com/max/912/1*NjaQylKN3GUJGLGcdcgHlQ.png'],
-            'Supervise1': ['Supervised Learning- Classification', 'https://miro.medium.com/max/963/1*PQ8tdohapfm-YHlrRIRuOA.gif'],
-            'Supervise2': ['Supervised Learning - Regression', 'https://miro.medium.com/max/963/1*0Ve21Rildq950wRrlJvdLQ.gif'],
+            'ML models': ['Overview of models under categories',
+                          'https://miro.medium.com/max/656/1*KFQI59Yv7m1f3fwG68KSEA.jpeg'],
+            'SciKit Learn': ['https://scikit-learn.org/stable/tutorial/machine_learning_map/index.html',
+                             'https://scikit-learn.org/stable/_static/ml_map.png'],
+            'Unsupervise': ['Unsupervised Learning - Clustering',
+                            'https://miro.medium.com/max/912/1*NjaQylKN3GUJGLGcdcgHlQ.png'],
+            'Supervise1': ['Supervised Learning- Classification',
+                           'https://miro.medium.com/max/963/1*PQ8tdohapfm-YHlrRIRuOA.gif'],
+            'Supervise2': ['Supervised Learning - Regression',
+                           'https://miro.medium.com/max/963/1*0Ve21Rildq950wRrlJvdLQ.gif'],
             'Train Test Split': ['Train Test Split', 'https://miro.medium.com/max/963/1*CeALK-1lzIWNJ7wN9DStlw.png'],
-            'ELT': ['Data ELT(Extra Load Transform) for MNIST dataset', 'https://raw.githubusercontent.com/profundo-lab/imagenes/master/uPic/e6dLOp.png'],
+            'ELT': ['Data ELT(Extra Load Transform) for MNIST dataset',
+                    'https://raw.githubusercontent.com/profundo-lab/imagenes/master/uPic/e6dLOp.png'],
             'MNIST1': ['MNIST using Deep Learning (ANN)', 'https://miro.medium.com/max/1160/0*u5-PcKYVfUE5s2by.gif'],
-            'MNIST2': ['MNIST using Machine Learning (Random Forest)', 'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'],
-             'Confusion Matrix': ['Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)', 'https://media.geeksforgeeks.org/wp-content/uploads/20200821144709/284.PNG'],
-            'Regression Metrics': ['Regression Metrics - MAE/MSE/RMSE/...', 'https://miro.medium.com/max/875/1*BFzp8uSMk88mDLibU465VA.png'],
+            'MNIST2': ['MNIST using Machine Learning (Random Forest)',
+                       'https://1.bp.blogspot.com/-Ax59WK4DE8w/YK6o9bt_9jI/AAAAAAAAEQA/9KbBf9cdL6kOFkJnU39aUn4m8ydThPenwCLcBGAsYHQ/s0/Random%2BForest%2B03.gif'],
+            'Confusion Matrix': [
+                'Classification Metrics - Confusion Matrix (Accuracy/Precision/Recall/F1-score/AUC/ROC)',
+                'https://media.geeksforgeeks.org/wp-content/uploads/20200821144709/284.PNG'],
+            'Regression Metrics': ['Regression Metrics - MAE/MSE/RMSE/...',
+                                   'https://miro.medium.com/max/875/1*BFzp8uSMk88mDLibU465VA.png'],
         }
 
         st.write('')
