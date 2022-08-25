@@ -1799,9 +1799,13 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
 
             margin = {'l': 40}
+            colors = plotly.colors.qualitative.Plotly + plotly.colors.qualitative.Set3 + plotly.colors.qualitative.Light24
+            c = 0
             for k in dic_values_sort.keys():
                 fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
-                                         line_color='black', showlegend=True)
+                                         line_color='black', color=colors[c], showlegend=True)
+                c = c+1
+                assert len(colors) > c, f'colors {len(colors)} , c {c} !'
 
             # with st.expander('銷售分析'):
             st.plotly_chart(fig)
