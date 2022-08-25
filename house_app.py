@@ -1144,8 +1144,6 @@ def fn_gen_analysis_statistic(df):
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
-    # fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
-    # fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
     years = list(df['交易年'].unique())
     colors = plotly.colors.qualitative._cols
     for yr in years:
@@ -1159,8 +1157,16 @@ def fn_gen_analysis_statistic(df):
                                      showlegend=True,
                                      barmode='stack', color=colors[years.index(yr)])
 
-    fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
-    fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
+        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['每坪單價(萬)'], f'{yr}年', row=2, col=1, bins=50, margin=margin,
+                                     showlegend=False,
+                                     barmode='stack', color=colors[years.index(yr)])
+
+        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['總價(萬)'], f'{yr}年', row=2, col=2, bins=50, margin=margin,
+                                     showlegend=False,
+                                     barmode='stack', color=colors[years.index(yr)])
+
+    # fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
+    # fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
 
     fig_bar_2 = make_subplots(rows=2, cols=2, subplot_titles=('建物坪數', '總樓層數', '車位類別', '車位單價(萬)'))
     fig_bar_2 = fn_gen_plotly_hist(fig_bar_2, df['建物坪數'], '建物坪數', row=1, col=1, bins=50, margin=margin)
