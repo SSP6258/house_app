@@ -2180,7 +2180,7 @@ def fn_gen_web_eda(df):
             lg_latest = df_lg_b['裁判日期'].values[0]
             lg_total = df_lg_b['歷年案件'].values[0]
 
-            with st.expander(f' 👉 建商:{builder}    ⚖️最新裁判案件:{lg_latest} ❗  📚 歷史裁判案件數: {lg_total}件 ❗'):
+            with st.expander(f' 👉 建商:{builder} {"    "}  ⚖️歷史裁判案件數: {lg_total}件 ❗'):
                 st.write('')
                 st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                 st.write('')
@@ -2194,7 +2194,7 @@ def fn_gen_web_eda(df):
                 lg_latest = df_lg_c['裁判日期'].values[0]
                 lg_total = df_lg_c['歷年案件'].values[0]
 
-                with st.expander(f'👉 營造商:{c}    ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
+                with st.expander(f'👉 營造商:{c} {"    "}  ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
                     st.write('')
                     st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                     st.write('')
