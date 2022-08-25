@@ -656,7 +656,7 @@ def fn_gen_model_explain(X, model):
 
 
 def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, line_color='white',
-                       showlegend=False, hovertext=None, barmode=None, opacity=0.8, color=None):
+                       showlegend=False, hovertext=None, barmode='stack', opacity=0.8, color=None):
     fig.add_trace(
         go.Histogram(x=data, name=title, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
                      marker=dict(
@@ -1150,6 +1150,7 @@ def fn_gen_analysis_statistic(df):
     for yr in years:
         df_yr = df[df['交易年'] == yr]
         fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], '交易月', row=1, col=2, bins=50, margin=margin,
+                                     showlegend=True,
                                      barmode='stack', color=colors[years.index(yr)])
 
         # fig_h = fn_gen_plotly_hist(fig_h, df_p['delta'], f'{int(p)}級', row=1, col=1, margin=margin,
