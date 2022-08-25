@@ -7,6 +7,7 @@ import datetime
 import streamlit as st
 import plotly.graph_objs as go
 import plotly.express as px
+import plotly.colors
 import xgboost as xgb
 import pickle
 import jinja2
@@ -1146,11 +1147,18 @@ def fn_gen_analysis_statistic(df):
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
     # fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
 
-    years = df['交易年'].uniques()
+    years = list(df['交易年'].uniques())
+    colors = plotly.colors.qualitative._cols
     for yr in years:
         df_yr = df[df['交易年']==yr]
-        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], '交易月', row=1, col=2, bins=50, margin=margin, barmode='stack')
+        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], '交易月', row=1, col=2, bins=50, margin=margin, barmode='stack', color=colors[years.index(yr)])
 
+        # fig_h = fn_gen_plotly_hist(fig_h, df_p['delta'], f'{int(p)}級', row=1, col=1, margin=margin,
+        #                            showlegend=True,
+        #                            legendgroup=1, bingroup=1, barmode='stack', color=cols[c])
+        #
+        # fig_h.add_trace(go.Box(x=df_p['delta'], name=f'{int(p)}級', legendgroup=2, marker=dict(color=cols[c]), showlegend=False), row=2, col=1)
+        # c = c + 1
 
     fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
