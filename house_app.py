@@ -1188,22 +1188,24 @@ def fn_gen_analysis_statistic(df):
         fig_bar = fn_gen_hist_analysis(fig_bar, [df_yr], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr, margin)
         fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, [df_yr], ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr, margin)
 
-
-        fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_1_yr['車位單價(萬)'], f'{yr}年', row=1, col=1, bins=50, margin=margin,
-                                     showlegend=False,
-                                     barmode='stack', color=colors[years.index(yr)])
-
-        fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_1_yr['車位坪數'], f'{yr}年', row=1, col=2, bins=50, margin=margin,
-                                     showlegend=True,
-                                     barmode='stack', color=colors[years.index(yr)])
-
-        fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_2_yr['車位單價(萬)'], f'{yr}年', row=2, col=1, bins=50, margin=margin,
-                                     showlegend=False,
-                                     barmode='stack', color=colors[years.index(yr)])
-
-        fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_2_yr['車位坪數'], f'{yr}年', row=2, col=2, bins=50, margin=margin,
-                                     showlegend=False,
-                                     barmode='stack', color=colors[years.index(yr)])
+        fig_bar_3 = fn_gen_hist_analysis(fig_bar_3, [df_pk_1_yr, df_pk_1_yr, df_pk_2_yr, df_pk_2_yr], ['車位單價(萬)', '車位坪數', '車位單價(萬)', '車位坪數'], colors, years, yr,
+                                         margin)
+        #
+        # fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_1_yr['車位單價(萬)'], f'{yr}年', row=1, col=1, bins=50, margin=margin,
+        #                              showlegend=False,
+        #                              barmode='stack', color=colors[years.index(yr)])
+        #
+        # fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_1_yr['車位坪數'], f'{yr}年', row=1, col=2, bins=50, margin=margin,
+        #                              showlegend=True,
+        #                              barmode='stack', color=colors[years.index(yr)])
+        #
+        # fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_2_yr['車位單價(萬)'], f'{yr}年', row=2, col=1, bins=50, margin=margin,
+        #                              showlegend=False,
+        #                              barmode='stack', color=colors[years.index(yr)])
+        #
+        # fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_2_yr['車位坪數'], f'{yr}年', row=2, col=2, bins=50, margin=margin,
+        #                              showlegend=False,
+        #                              barmode='stack', color=colors[years.index(yr)])
 
     # df_pk_1 = df[df['車位類別'] == '坡道平面']
     # df_pk_2 = df[df['車位類別'] == '坡道機械']
