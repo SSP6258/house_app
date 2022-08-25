@@ -1144,7 +1144,14 @@ def fn_gen_analysis_statistic(df):
 
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
-    fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
+    # fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
+
+    years = df['交易年'].uniques()
+    for yr in years:
+        df_yr = df[df['交易年']==yr]
+        fig_bar = fn_gen_plotly_hist(fig_bar, df_yr['交易月'], '交易月', row=1, col=2, bins=50, margin=margin, barmode='stack')
+
+
     fig_bar = fn_gen_plotly_hist(fig_bar, df['每坪單價(萬)'], '單價(萬坪)', row=2, col=1, bins=50, margin=margin)
     fig_bar = fn_gen_plotly_hist(fig_bar, df['總價(萬)'], '總價(萬)', row=2, col=2, bins=50, margin=margin)
 
@@ -1433,11 +1440,6 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                              sel_option=['dist'])
 
         fig_bar_1, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5 = fn_gen_analysis_statistic(df_1)
-        # st.plotly_chart(fig_bar_1, config=config)
-        # st.plotly_chart(fig_bar_2, config=config)
-        # st.plotly_chart(fig_bar_3, config=config)
-        # st.plotly_chart(fig_bar_4, config=config)
-        # st.plotly_chart(fig_bar_5, config=config)
 
         tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(
             ['交易特徵分布', '建物特徵分布1', '建物特徵分布2', '建物特徵分布3', '車位特徵分布'])
