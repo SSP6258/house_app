@@ -655,14 +655,13 @@ def fn_gen_model_explain(X, model):
     print(X.columns)
 
 
-def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, color_by=None, line_color='white',
-                       showlegend=False,
-                       hovertext=None, barmode='group', opacity=0.8):
+def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, line_color='white',
+                       showlegend=False, hovertext=None, barmode='group', opacity=0.8, color=None):
     fig.add_trace(
         go.Histogram(x=data, name=title, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
                      marker=dict(
                          opacity=opacity,
-                         color=color_by,
+                         color=color,
                          line=dict(
                              color=line_color, width=0.4
                          ),
