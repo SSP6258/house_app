@@ -1145,7 +1145,6 @@ def fn_gen_analysis_statistic(df):
     fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
     fig_bar = fn_gen_plotly_hist(fig_bar, df['交易年'], '交易年', row=1, col=1, bins=30, margin=margin)
     # fig_bar = fn_gen_plotly_hist(fig_bar, df['交易月'], '交易月', row=1, col=2, bins=50, margin=margin)
-
     years = list(df['交易年'].unique())
     colors = plotly.colors.qualitative._cols
     for yr in years:
