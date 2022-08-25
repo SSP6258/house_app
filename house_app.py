@@ -1133,23 +1133,28 @@ def fn_gen_analysis_building(df, target, color_by, margin=None, bc_name=None):
     return fig_sct_3
 
 
-def fn_gen_hist_analysis(fig, df_yr, cols, colors, years, yr, margin):
+def fn_gen_hist_analysis(fig, df_list, cols, colors, years, yr, margin):
 
     bins = 30 if cols[0] == '交易年' else 50
 
-    fig = fn_gen_plotly_hist(fig, df_yr[cols[0]], f'{yr}年', row=1, col=1, bins=bins, margin=margin,
+    if len(df_list) == 1:
+        df1, df2, df3, df4 = df_list[0], df_list[0], df_list[0], df_list[0]
+    else:
+        df1, df2, df3, df4 = df_list[0], df_list[1], df_list[2], df_list[3]
+
+    fig = fn_gen_plotly_hist(fig, df1[cols[0]], f'{yr}年', row=1, col=1, bins=bins, margin=margin,
                                  showlegend=False,
                                  barmode='stack', color=colors[years.index(yr)])
 
-    fig = fn_gen_plotly_hist(fig, df_yr[cols[1]], f'{yr}年', row=1, col=2, bins=bins, margin=margin,
+    fig = fn_gen_plotly_hist(fig, df2[cols[1]], f'{yr}年', row=1, col=2, bins=bins, margin=margin,
                                  showlegend=True,
                                  barmode='stack', color=colors[years.index(yr)])
 
-    fig = fn_gen_plotly_hist(fig, df_yr[cols[2]], f'{yr}年', row=2, col=1, bins=bins, margin=margin,
+    fig = fn_gen_plotly_hist(fig, df3[cols[2]], f'{yr}年', row=2, col=1, bins=bins, margin=margin,
                                  showlegend=False,
                                  barmode='stack', color=colors[years.index(yr)])
 
-    fig = fn_gen_plotly_hist(fig, df_yr[cols[3]], f'{yr}年', row=2, col=2, bins=bins, margin=margin,
+    fig = fn_gen_plotly_hist(fig, df4[cols[3]], f'{yr}年', row=2, col=2, bins=bins, margin=margin,
                                  showlegend=False,
                                  barmode='stack', color=colors[years.index(yr)])
 
@@ -1180,24 +1185,9 @@ def fn_gen_analysis_statistic(df):
         df_pk_1_yr = df_pk_1[df_pk_1['交易年'] == yr]
         df_pk_2_yr = df_pk_2[df_pk_2['交易年'] == yr]
 
-        fig_bar = fn_gen_hist_analysis(fig_bar, df_yr, ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr, margin)
-        fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, df_yr, ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr, margin)
+        fig_bar = fn_gen_hist_analysis(fig_bar, [df_yr], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr, margin)
+        fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, [df_yr], ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr, margin)
 
-        # fig_bar_2 = fn_gen_plotly_hist(fig_bar_2, df_yr['建物坪數'], f'{yr}年', row=1, col=1, bins=50, margin=margin,
-        #                              showlegend=False,
-        #                              barmode='stack', color=colors[years.index(yr)])
-        #
-        # fig_bar_2 = fn_gen_plotly_hist(fig_bar_2, df_yr['總樓層數'], f'{yr}年', row=1, col=2, bins=50, margin=margin,
-        #                              showlegend=True,
-        #                              barmode='stack', color=colors[years.index(yr)])
-        #
-        # fig_bar_2 = fn_gen_plotly_hist(fig_bar_2, df_yr['車位類別'], f'{yr}年', row=2, col=1, bins=50, margin=margin,
-        #                              showlegend=False,
-        #                              barmode='stack', color=colors[years.index(yr)])
-        #
-        # fig_bar_2 = fn_gen_plotly_hist(fig_bar_2, df_yr['車位單價(萬)'], f'{yr}年', row=2, col=2, bins=50, margin=margin,
-        #                              showlegend=False,
-        #                              barmode='stack', color=colors[years.index(yr)])
 
         fig_bar_3 = fn_gen_plotly_hist(fig_bar_3, df_pk_1_yr['車位單價(萬)'], f'{yr}年', row=1, col=1, bins=50, margin=margin,
                                      showlegend=False,
