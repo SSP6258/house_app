@@ -1446,7 +1446,11 @@ def fn_gen_analysis(df, latest_records, build_case):
         x_range = [min(df_1['經度']), max(df_1['經度'])]
         y_range = [min(df_1['緯度']), max(df_1['緯度'])]
 
-        fig_c.update_layout(title='每坪單價 的 分布狀況', autosize=False,
+        title = f' {"台北市" if dist=="不限" else dist} 預售屋單價 蛋黃圖'
+        fig_c.update_layout(title={'text': title,
+                                   'x': 0.5,
+                                   'xanchor': 'center'},
+                            autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
                             xaxis_range=x_range, yaxis_range=y_range)
 
