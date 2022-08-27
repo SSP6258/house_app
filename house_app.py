@@ -1422,14 +1422,14 @@ def fn_gen_analysis(df, latest_records, build_case):
             if dist == '不限':
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5, size=3,
+                                              color='green', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
                                               line_color=None)
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5, size=3,
+                                              color='green', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
                                               line_color=None)
