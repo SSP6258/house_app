@@ -728,13 +728,13 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
-                          legend=False, name=None, update_layout=True):
+                          legend=False, name=None, update_layout=True, line_color='White'):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              marker=dict(
                                  size=size,
                                  opacity=opacity,
-                                 line={'color': 'White', 'width': 0.4},
+                                 line={'color': line_color, 'width': 0.4},
                                  color=color,
                                  colorscale='Bluered')  # "Viridis" portland Bluered
                              ), row=row, col=col)
@@ -1424,13 +1424,15 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               row=None, col=None,
                                               color='green', opacity=0.5, size=6,
                                               text=vill,
-                                              update_layout=False)
+                                              update_layout=False,
+                                              line_color=None)
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
                                               color='green', opacity=0.5, size=6,
                                               text=vill,
-                                              update_layout=False)
+                                              update_layout=False,
+                                              line_color=None)
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
