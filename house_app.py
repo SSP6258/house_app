@@ -1188,7 +1188,7 @@ def fn_gen_analysis_statistic(df):
 
     df['交易年'] = df['交易年'].astype(int)
     years = list(df['交易年'].unique())
-    colors = plotly.colors.qualitative._cols
+    colors = plotly.colors.qualitative.Vivid
     for yr in years:
         fig_bar = fn_gen_hist_analysis(fig_bar, [df], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr, margin)
 
@@ -1800,7 +1800,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
 
             margin = {'l': 40}
-            colors = plotly.colors.qualitative.Plotly + plotly.colors.qualitative.Set3 + plotly.colors.qualitative.Light24
+            colors = plotly.colors.qualitative.Vivid + plotly.colors.qualitative.Set3 + plotly.colors.qualitative.Light24
             c = 0
             assert len(colors) > len(dic_values_sort.keys()), f'colors {len(colors)} > c {c} Fail !'
             for k in dic_values_sort.keys():
