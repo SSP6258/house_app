@@ -734,7 +734,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                              marker=dict(
                                  size=size,
                                  opacity=opacity,
-                                 line={'color': line_color, 'width': 0.4},
+                                 line=None if line_color is None else {'color': line_color, 'width': 0.4},
                                  color=color,
                                  colorscale='Bluered')  # "Viridis" portland Bluered
                              ), row=row, col=col)
@@ -1422,14 +1422,14 @@ def fn_gen_analysis(df, latest_records, build_case):
             if dist == '不限':
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5, size=6,
+                                              color='green', opacity=0.5, size=3,
                                               text=vill,
                                               update_layout=False,
                                               line_color=None)
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='green', opacity=0.5, size=6,
+                                              color='green', opacity=0.5, size=3,
                                               text=vill,
                                               update_layout=False,
                                               line_color=None)
