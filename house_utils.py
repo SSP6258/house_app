@@ -62,10 +62,12 @@ def fn_profiler(func):
         elif dur_us >= 1e3:
             excu_time = f'{int(dur_us / 1e3)} (ms)'
         else:
-            excu_time = f'{dur_us} 微秒(us)'
+            excu_time = f'{dur_us} (us)'
 
         if dur_us > 500 * 1000:
-            print(func.__name__, excu_time)
+            now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒'
+
+            print(f'{now} --> {func.__name__} {excu_time}')
 
         return val
 
