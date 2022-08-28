@@ -1423,7 +1423,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             x, y = dic_of_shp['shape'][k].exterior.xy
             if dist == '不限':
                 if dist_shp not in dist_list:
-                    dist_list.append(k)
+                    dist_list.append(dist_shp)
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
                                                   color='white', opacity=0.8, size=4,
