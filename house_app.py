@@ -1430,7 +1430,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='white', opacity=0.8, size=4,
+                                              color='gray', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
                                               line_color=None,
