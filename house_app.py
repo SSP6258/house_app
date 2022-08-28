@@ -728,8 +728,8 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
-                          legend=False, name=None, update_layout=True, line_color='White'):
-    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='markers', showlegend=legend, hovertext=text,
+                          legend=False, name=None, update_layout=True, line_color='White', mode='markers'):
+    fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              marker=dict(
                                  size=size,
@@ -1432,7 +1432,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               color='green', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
-                                              line_color=None)
+                                              line_color=None,
+                                              mode='line')
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
