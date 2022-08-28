@@ -787,10 +787,9 @@ def fn_read_shp(is_dist_only=False):
         path = os.path.join(dic_of_path['database'], 'mapdata202112240331')
         file = r'VILLAGE_MOI_1101214.shp'
 
-    g = os.path.join(path, file)
-    gis_v = gpd.read_file(g, encoding='utf-8')
+    geo = os.path.join(path, file)
+    gis = gpd.read_file(geo, encoding='utf-8')
 
-    gis = gis_v
     shapes = {}
     properties = {}
     for idx in gis.index:
