@@ -1425,7 +1425,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               color='green', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
-                                              line_color=None)
+                                              line_color=None,
+                                              mode='lines')
             elif dist in vill:
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
