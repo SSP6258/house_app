@@ -1417,21 +1417,21 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist_list = []
         for k in dic_of_shp['shape'].keys():
-            vill = dic_of_shp['properties'][k]
-            dist_shp = vill.split(',')[1]
-            fn_dbg(f'{k} {dist} {dist_shp}, {vill}, {dist in vill}')
-            x, y = dic_of_shp['shape'][k].exterior.xy
             if dist == '不限':
-                if dist_shp not in dist_list:
-                    dist_list.append(dist_shp)
-                    fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                                  row=None, col=None,
-                                                  color='white', opacity=0.8, size=4,
-                                                  text=vill,
-                                                  update_layout=False,
-                                                  line_color=None,
-                                                  mode='lines')
+                vill = dic_of_shp_dist['properties'][k]
+                fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
+                x, y = dic_of_shp_dist['shape'][k].exterior.xy
+                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                              row=None, col=None,
+                                              color='white', opacity=0.8, size=4,
+                                              text=vill,
+                                              update_layout=False,
+                                              line_color=None,
+                                              mode='lines')
             elif dist in vill:
+                vill = dic_of_shp['properties'][k]
+                fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
+                x, y = dic_of_shp['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
                                               color='white', opacity=0.8, size=4,
@@ -3256,6 +3256,7 @@ def fn_chrome_96_workaround():
 
 
 dic_of_shp = {}
+dic_of_shp_dist = {}
 
 
 @st.cache
@@ -3285,6 +3286,7 @@ def fn_app(page='data'):
 
     if page == 'eda':
         dic_of_shp['shape'], dic_of_shp['properties'] = fn_read_shp_wrap(is_dist_only=False)
+        dic_of_shp_dist['shape'], dic_of_shp_dist['properties'] = fn_read_shp_wrap(is_dist_only=True)
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
