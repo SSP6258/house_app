@@ -1397,10 +1397,10 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1, build_case_sel, color_by = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr',
                                                              dist_default=None)
 
-        if build_case == '不限':
-            bc_vill = build_case
+        if build_case_sel == '不限':
+            bc_vill = build_case_sel
         else:
-            bc_vill = df_1[df_1['建案名稱'] == build_case]['里'].values[0]
+            bc_vill = df_1[df_1['建案名稱'] == build_case_sel]['里'].values[0]
 
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
