@@ -1488,7 +1488,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         y_range = [min(df_1['緯度']), max(df_1['緯度'])]
 
         yr_min, yr_max = min(df_1['交易年']), max(df_1['交易年'])
-        title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖'
+        title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖' \
+                f' {""if build_case_sel == "不限" else f"({build_case_sel}: ❌)"}'
         fig_c.update_layout(title={'text': title,
                                    'x': 0.5,
                                    'xanchor': 'center'},
