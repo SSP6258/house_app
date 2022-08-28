@@ -1449,7 +1449,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
                 if bc_vill in vill:
-                    fn_dbg(f'--> bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
+                    fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
