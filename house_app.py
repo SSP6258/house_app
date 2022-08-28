@@ -1447,7 +1447,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         y_range = [min(df_1['緯度']), max(df_1['緯度'])]
 
         yr_min, yr_max = min(df_1['交易年']), max(df_1['交易年'])
-        title = f'民國 {yr_min}年~{yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖'
+        title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖'
         fig_c.update_layout(title={'text': title,
                                    'x': 0.5,
                                    'xanchor': 'center'},
@@ -3278,7 +3278,7 @@ def fn_app(page='data'):
         os.makedirs(ml_model)
 
     if page == 'eda':
-        dic_of_shp['shape'], dic_of_shp['properties'] = fn_read_shp_wrap(is_dist_only=True)
+        dic_of_shp['shape'], dic_of_shp['properties'] = fn_read_shp_wrap(is_dist_only=False)
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
