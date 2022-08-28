@@ -1232,7 +1232,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
 
     build_cases = ['不限'] + list(df['建案名稱'].unique())
     build_cases = [b for b in build_cases if str(b) != 'nan']
-    bc_idx = build_cases.index(build_case) if build_case in build_cases else 0
+    bc_idx = build_cases.index(build_case) if build_case in build_cases else len(build_cases)-1
 
     if 'build_case' in sel_option:
         bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
