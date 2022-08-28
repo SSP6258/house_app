@@ -1450,6 +1450,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   mode='lines')
                     break
         else:   # dist in vill:
+
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
                 fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
