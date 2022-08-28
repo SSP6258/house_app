@@ -1443,7 +1443,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp_dist['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=4,
+                                                  color='red', opacity=0.8, size=6,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
@@ -1469,7 +1469,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=4,
+                                                  color='red', opacity=0.8, size=6,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
@@ -1490,7 +1490,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         yr_min, yr_max = min(df_1['交易年']), max(df_1['交易年'])
         title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖' \
-                f' {""if build_case_sel == "不限" else f"(建案: {build_case_sel} ❌)"}'
+                f' {""if build_case_sel == "不限" else f"(❌: {build_case_sel} )"}'
         fig_c.update_layout(title={'text': title,
                                    'x': 0.5,
                                    'xanchor': 'center'},
