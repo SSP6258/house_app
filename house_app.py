@@ -1443,7 +1443,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp_dist['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=6,
+                                                  color='red', opacity=0.8, size=8,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
@@ -1470,7 +1470,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=6,
+                                                  color='red', opacity=0.8, size=8,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
