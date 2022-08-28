@@ -1415,14 +1415,15 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist = '不限' if len(df_1['鄉鎮市區'].unique()) > 1 else df_1['鄉鎮市區'].values[0]
 
-        k_list = []
+        dist_list = []
         for k in dic_of_shp['shape'].keys():
             vill = dic_of_shp['properties'][k]
             fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
+            dist_shp = vill.split(',')[1]
             x, y = dic_of_shp['shape'][k].exterior.xy
             if dist == '不限':
-                if k not in k_list:
-                    k_list.append(k)
+                if dist_shp not in dist_list:
+                    dist_list.append(k)
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
                                                   color='white', opacity=0.8, size=4,
