@@ -1428,7 +1428,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               update_layout=False,
                                               line_color=None,
                                               mode='lines')
-            elif dist in vill:
+            else:  #  dist in vill:
                 vill = dic_of_shp['properties'][k]
                 fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp['shape'][k].exterior.xy
