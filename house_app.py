@@ -1415,8 +1415,8 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist = '不限' if len(df_1['鄉鎮市區'].unique()) > 1 else df_1['鄉鎮市區'].values[0]
 
-        for k in dic_of_shp['shape'].keys():
-            if dist == '不限':
+        if dist == '不限':
+            for k in dic_of_shp_dist['shape'].keys():
                 vill = dic_of_shp_dist['properties'][k]
                 fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp_dist['shape'][k].exterior.xy
@@ -1427,7 +1427,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               update_layout=False,
                                               line_color=None,
                                               mode='lines')
-            else:  #  dist in vill:
+        else:   #  dist in vill:
+            for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
                 fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp['shape'][k].exterior.xy
