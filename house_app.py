@@ -1402,7 +1402,6 @@ def fn_gen_analysis(df, latest_records, build_case):
         else:
             bc_vill = df_1[df_1['建案名稱'] == build_case]['里'].values[0]
 
-
         fig_3d = px.scatter_3d(df_1, x='經度', y='緯度', z='每坪單價(萬)', color='每坪單價(萬)',
                                hover_data=['鄉鎮市區', '建案名稱', '交易年', 'MRT', 'sku_name'],
                                opacity=0.8, color_continuous_scale='portland')
@@ -1447,10 +1446,10 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color=None,
                                               mode='lines')
 
-
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
                 if bc_vill in vill:
+                    fn_dbg(f'--> bc_vill: {bc_vill} vill: {vill}')
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
