@@ -1433,7 +1433,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               text=vill,
                                               update_layout=False,
                                               line_color=None,
-                                              mode='line')
+                                              mode='lines')
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
