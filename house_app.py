@@ -1447,7 +1447,11 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color=None,
                                               mode='lines')
 
+
+            for k in dic_of_shp['shape'].keys():
+                vill = dic_of_shp['properties'][k]
                 if bc_vill in vill:
+                    x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
                                                   color='red', opacity=0.8, size=4,
@@ -1455,6 +1459,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   update_layout=False,
                                                   line_color=None,
                                                   mode='lines')
+                    break
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
