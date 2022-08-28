@@ -1241,6 +1241,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
         colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
         color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
 
+
     return df, bc, color_by
 
 
