@@ -1437,7 +1437,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               # color='white', size=4,
                                               text=vill, opacity=1,
                                               update_layout=False,
-                                              line_color='white', line_width=1,
+                                              line_color='white', line_width=1.5,
                                               mode='lines')
 
             for k in dic_of_shp_dist['shape'].keys():
@@ -1464,7 +1464,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               # color='white', opacity=0.8, size=4,
                                               text=vill, opacity=1,
                                               update_layout=False,
-                                              line_color='white', line_width=1,
+                                              line_color='white', line_width=1.5,
                                               mode='lines', colorscale=None)
 
             for k in dic_of_shp['shape'].keys():
