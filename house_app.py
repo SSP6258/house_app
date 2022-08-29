@@ -1463,7 +1463,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               # color='white', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
-                                              line_color='white', line_width=0.4,
+                                              line_color='white', line_width=1,
                                               mode='lines', colorscale=None)
 
             for k in dic_of_shp['shape'].keys():
@@ -1476,7 +1476,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   # color='red', opacity=0.8, size=8,
                                                   text=vill,
                                                   update_layout=False,
-                                                  line_color='red', line_width=0.8,
+                                                  line_color='red', line_width=2,
                                                   mode='lines', colorscale=None)
                     break
 
