@@ -727,14 +727,14 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
-                          xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
+                          xlabel=None, ylabel=None, title=None, size=None, line_width=0.4, marker_sym=None,
                           legend=False, name=None, update_layout=True, line_color='White', mode='markers'):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              marker=dict(
                                  size=size,
                                  opacity=opacity,
-                                 line=None if line_color is None else {'color': line_color, 'width': 0.4},
+                                 line=None if line_color is None else {'color': line_color, 'width': line_width},
                                  color=color,
                                  colorscale='Bluered')  # "Viridis" portland Bluered
                              ), row=row, col=col)
@@ -1443,7 +1443,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp_dist['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=8,
+                                                  color='red', opacity=0.8, size=4, line_width=0.8,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
@@ -1470,7 +1470,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
-                                                  color='red', opacity=0.8, size=8,
+                                                  color='red', opacity=0.8, size=8, line_width=0.8,
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color=None,
