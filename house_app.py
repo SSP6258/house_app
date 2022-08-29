@@ -1458,11 +1458,11 @@ def fn_gen_analysis(df, latest_records, build_case):
                 x, y = dic_of_shp['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              color='white', opacity=0.8, size=4,
+                                              # color='white', opacity=0.8, size=4,
                                               text=vill,
                                               update_layout=False,
-                                              line_color=None,
-                                              mode='lines')
+                                              line_color='white', line_width=0.4,
+                                              mode='lines', colorscale=None)
 
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
@@ -1474,7 +1474,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   # color='red', opacity=0.8, size=8,
                                                   text=vill,
                                                   update_layout=False,
-                                                  line_color='red', line_width=1.8,
+                                                  line_color='red', line_width=0.8,
                                                   mode='lines', colorscale=None)
                     break
 
