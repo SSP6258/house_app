@@ -736,7 +736,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                              marker=dict(
                                  size=size,
                                  opacity=opacity,
-                                 line={'color': line_color, 'width': line_width},
+                                 line=dict(color=line_color, width=line_width),  # {'color': line_color, 'width': line_width},
                                  color=color,
                                  colorscale=colorscale)  # "Viridis" portland Bluered
                              ), row=row, col=col)
