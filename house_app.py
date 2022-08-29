@@ -1434,8 +1434,8 @@ def fn_gen_analysis(df, latest_records, build_case):
                 x, y = dic_of_shp_dist['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
-                                              # color='white', opacity=0.8, size=4,
-                                              text=vill,
+                                              # color='white', size=4,
+                                              text=vill, opacity=1,
                                               update_layout=False,
                                               line_color='white', line_width=1,
                                               mode='lines')
@@ -1448,7 +1448,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
                                                   # color='red', opacity=0.8, size=4,
-                                                  text=vill,
+                                                  text=vill, opacity=1,
                                                   update_layout=False,
                                                   line_color='red', line_width=3,
                                                   mode='lines', colorscale=None)
@@ -1462,7 +1462,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
                                               # color='white', opacity=0.8, size=4,
-                                              text=vill,
+                                              text=vill, opacity=1,
                                               update_layout=False,
                                               line_color='white', line_width=1,
                                               mode='lines', colorscale=None)
@@ -1475,7 +1475,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
                                                   # color='red', opacity=0.8, size=8,
-                                                  text=vill,
+                                                  text=vill, opacity=1,
                                                   update_layout=False,
                                                   line_color='red', line_width=3,
                                                   mode='lines', colorscale=None)
