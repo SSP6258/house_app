@@ -1475,7 +1475,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   text=vill,
                                                   update_layout=False,
                                                   line_color='red', line_width=1.8,
-                                                  mode='lines' colorscale=None)
+                                                  mode='lines', colorscale=None)
                     break
 
         if build_case_sel != '不限':
