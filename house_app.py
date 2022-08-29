@@ -728,7 +728,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, line_width=0.4, marker_sym=None,
-                          legend=False, name=None, update_layout=True, line_color='White', mode='markers',
+                          legend=False, name=None, update_layout=True, line_color='white', mode='markers',
                           colorscale='Bluered'):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
