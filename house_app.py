@@ -1195,22 +1195,23 @@ def fn_gen_analysis_statistic(df):
     colors = plotly.colors.qualitative.Vivid
     for yr in years:
         fig_bar = fn_gen_hist_analysis(fig_bar, [df], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr,
-                                       margin, lg=None)
+                                       margin, lg='g1')
 
+    for yr in years:
         fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, [df], ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr,
-                                         margin, lg=None)
+                                         margin, lg='g2')
 
         fig_bar_3 = fn_gen_hist_analysis(fig_bar_3, [df_pk_1, df_pk_1, df_pk_2, df_pk_2],
                                          ['車位單價(萬)', '車位坪數', '車位單價(萬)', '車位坪數'], colors, years, yr,
-                                         margin, lg=None)
+                                         margin, lg='g3')
 
         fig_bar_4 = fn_gen_hist_analysis(fig_bar_4, [df_typ, df, df, df],
                                          ['都市土地使用分區', '鄉鎮市區', '地下樓層', '總戶數'], colors, years, yr,
-                                         margin, lg=None)
+                                         margin, lg='g4')
 
         fig_bar_5 = fn_gen_hist_analysis(fig_bar_5, [df_typ, df, df, df],
                                          ['基地面積(坪)', '容積率(%)', '建蔽率(%)', '公設比(%)'], colors, years, yr,
-                                         margin, lg=None)
+                                         margin, lg='g5')
 
     return fig_bar, fig_bar_2, fig_bar_3, fig_bar_4, fig_bar_5
 
