@@ -1484,7 +1484,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
-            x, y = df_1_sel['經度'][0], df_1_sel['緯度'][0]
+            x, y = df_1_sel['經度'].values[0], df_1_sel['緯度'].values[0]
             ave_price = df_1_sel['coor_ave'].values[0]
             text = f'{build_case_sel} {ave_price}萬/坪'
             fig_c = fn_gen_plotly_scatter(fig_c, x, y,
