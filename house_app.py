@@ -726,7 +726,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
     return fig
 
 
-def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, opacity=0.3,
+def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, op=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
                           legend=False, name=None, update_layout=True, line_color=None, line_width=None, mode='markers',
                           colorscale='Bluered'):
@@ -734,7 +734,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              line=dict(color=line_color, width=line_width),
-                             # opacity=opacity,
+                             opacity=op,
                              marker=dict(
                                  size=size,
                                  opacity=opacity,
@@ -1488,7 +1488,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             text = f'{build_case_sel} {ave_price}萬/坪'
             fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
                                           row=None, col=None,
-                                          color='red', text=text, opacity=0.5, marker_sym=4, size=12,
+                                          color='red', text=text, op=0.5, marker_sym=4, size=12,
                                           update_layout=False)
 
         x_range = [min(df_1['經度']), max(df_1['經度'])]
