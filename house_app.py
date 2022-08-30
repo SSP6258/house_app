@@ -1489,7 +1489,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             text = f'{build_case_sel} {ave_price}萬/坪'
             fig_c = fn_gen_plotly_scatter(fig_c, x, y,
                                           row=None, col=None,
-                                          color='red', text=text, opacity=0.8, marker_sym=4, size=13,
+                                          color='red', text=text, opacity=0.6, marker_sym=4, size=13,
                                           update_layout=False)
 
         x_range = [min(df_1['經度']), max(df_1['經度'])]
