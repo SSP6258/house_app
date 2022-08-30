@@ -658,7 +658,7 @@ def fn_gen_model_explain(X, model):
 def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, line_color='white',
                        showlegend=False, lg=None, hovertext=None, barmode='stack', opacity=0.8, color=None):
     fig.add_trace(
-        go.Histogram(x=data, name=title, showlegend=showlegend, legendgroup=lg, nbinsx=bins, hovertext=hovertext,
+        go.Histogram(x=data, name=title, legendgroup=lg, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
                      marker=dict(
                          opacity=opacity,
                          color=color,
