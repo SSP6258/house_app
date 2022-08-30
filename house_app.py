@@ -1431,7 +1431,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         if dist == '不限':
             for k in dic_of_shp_dist['shape'].keys():
                 vill = dic_of_shp_dist['properties'][k]
-                fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
+                # fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp_dist['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
@@ -1444,7 +1444,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             for k in dic_of_shp_dist['shape'].keys():
                 vill = dic_of_shp_dist['properties'][k]
                 if bc_dist in vill:
-                    fn_dbg(f'bc_dist: {bc_dist} vill: {vill} bc: {build_case}')
+                    # fn_dbg(f'bc_dist: {bc_dist} vill: {vill} bc: {build_case}')
                     x, y = dic_of_shp_dist['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
@@ -1458,7 +1458,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
-                fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
+                # fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
@@ -1471,7 +1471,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
                 if bc_vill in vill:
-                    fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
+                    # fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
                     x, y = dic_of_shp['shape'][k].exterior.xy
                     fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                                   row=None, col=None,
@@ -1484,11 +1484,12 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
+            x, y = df_1_sel['經度'][0], df_1_sel['緯度'][0]
             ave_price = df_1_sel['coor_ave'].values[0]
             text = f'{build_case_sel} {ave_price}萬/坪'
-            fig_c = fn_gen_plotly_scatter(fig_c, df_1_sel['經度'], df_1_sel['緯度'],
+            fig_c = fn_gen_plotly_scatter(fig_c, x, y,
                                           row=None, col=None,
-                                          color='red', text=text, op=0.6, marker_sym=4, size=13,
+                                          color='red', text=text, opacity=0.8, marker_sym=4, size=13,
                                           update_layout=False)
 
         x_range = [min(df_1['經度']), max(df_1['經度'])]
