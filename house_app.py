@@ -1195,9 +1195,8 @@ def fn_gen_analysis_statistic(df):
     colors = plotly.colors.qualitative.Vivid
     for yr in years:
         fig_bar = fn_gen_hist_analysis(fig_bar, [df], ['交易年', '交易月', '每坪單價(萬)', '總價(萬)'], colors, years, yr,
-                                       margin, lg='g1')
+                                       margin, lg=None)
 
-    for yr in years:
         fig_bar_2 = fn_gen_hist_analysis(fig_bar_2, [df], ['建物坪數', '總樓層數', '車位類別', '車位單價(萬)'], colors, years, yr,
                                          margin, lg='g2')
 
