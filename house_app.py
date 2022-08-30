@@ -1451,7 +1451,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   # color='red', opacity=0.8, size=4,
                                                   text=vill, opacity=1,
                                                   update_layout=False,
-                                                  line_color='red', line_width=3,
+                                                  line_color='blue', line_width=3,
                                                   mode='lines', colorscale=None)
                     break
         else:   # dist in vill:
@@ -1478,7 +1478,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                                   # color='red', opacity=0.8, size=8,
                                                   text=vill, opacity=1,
                                                   update_layout=False,
-                                                  line_color='red', line_width=3,
+                                                  line_color='blue', line_width=3,
                                                   mode='lines', colorscale=None)
                     break
 
