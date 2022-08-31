@@ -1699,7 +1699,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         st.plotly_chart(fig_bar, config=config)
         fn_dbg('fn_gen_web_eda 3-1-9')
 
-    fn_dbg('fn_gen_web_eda 3-1-10')
+    # fn_dbg('fn_gen_web_eda 3-1-10')
 
 
 @fn_profiler
@@ -1834,7 +1834,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             sorts += list(df_show[col].values)
 
         if r == '樓層價差(%)':
-            vmin = min(sorts)
+            vmin = 0  # min(sorts)
         else:
             sorts = [v for v in sorts if v > 0]
             sorts.sort()
