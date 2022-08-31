@@ -1971,6 +1971,7 @@ def fn_gen_web_eda(df):
 
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
 
+    floor = 0  # 0: default all floors
     # floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
     # df_sel = df_sel[df_sel['移轉層次'] == floor].reset_index(drop=True) if floor != 0 else df_sel
 
@@ -2030,6 +2031,7 @@ def fn_gen_web_eda(df):
         df_bc_s.fillna(round(0, 1), inplace=True)
         df_bc_ps.fillna(round(0, 1), inplace=True)
         df_bc_d.fillna(round(0, 1), inplace=True)
+
         if floor != 0:
             df_bc = df_bc[df_bc.index == str(floor) + 'F']
             df_bc_t = df_bc_t[df_bc_t.index == str(floor) + 'F']
