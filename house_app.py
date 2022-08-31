@@ -34,7 +34,9 @@ except:
     pass
 
 # pip list --format=freeze > requirements.txt
-dic_of_cfg = {'is_dbg': False}
+dic_of_dbg = {'is_dbg': False,
+              'time': 0}
+
 dic_of_cn_2_en = {'經度': 'longitude',
                   '緯度': 'latitude',
                   '移轉層次': 'Floor',
@@ -1891,9 +1893,14 @@ def fn_gen_model_confidence(loaded_model, X):
 
 
 def fn_dbg(msg=''):
-    if dic_of_cfg['is_dbg']:
-        now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond / 1000)}ms'
-        None if msg == '' else st.sidebar.write(f'{now} --> {msg}')
+    if dic_of_dbg['is_dbg']:
+        # now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond / 1000)}ms'
+
+        now = int(round(time.time() * 1000, 0))  # ms
+        dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
+        dic_of_dbg['time'] = now
+
+        None if msg == '' else st.sidebar.write(f'{dur} ms --> {msg}')
 
 
 def fn_util_split(constructor):
@@ -3321,7 +3328,7 @@ def fn_app(page='data'):
     # st.legacy_caching.clear_cache()
 
     this_yr = datetime.datetime.now().year - 1911
-    dic_of_cfg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
+    dic_of_dbg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
