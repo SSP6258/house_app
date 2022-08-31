@@ -35,7 +35,8 @@ except:
 
 # pip list --format=freeze > requirements.txt
 dic_of_dbg = {'is_dbg': False,
-              'time': 0}
+              'time': 0,
+              'sum': 0}
 
 dic_of_cn_2_en = {'經度': 'longitude',
                   '緯度': 'latitude',
@@ -1899,8 +1900,9 @@ def fn_dbg(msg=''):
         now = int(round(time.time() * 1000, 0))  # ms
         dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
         dic_of_dbg['time'] = now
+        dic_of_dbg['sum'] = dic_of_dbg['sum'] + dur
         note = '!!!' if dur > 1000 else ''
-        None if msg == '' else st.sidebar.write(f'{dur} ms --> {msg} {note}')
+        None if msg == '' else st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
 
 
 def fn_util_split(constructor):
@@ -3332,6 +3334,7 @@ def fn_app(page='data'):
     this_yr = datetime.datetime.now().year - 1911
     dic_of_dbg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
     dic_of_dbg['time'] = 0
+    dic_of_dbg['sum'] = 0
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
