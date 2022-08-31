@@ -1899,7 +1899,6 @@ def fn_dbg(msg=''):
         now = int(round(time.time() * 1000, 0))  # ms
         dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
         dic_of_dbg['time'] = now
-
         note = '!!!' if dur > 1000 else ''
         None if msg == '' else st.sidebar.write(f'{dur} ms --> {msg} {note}')
 
