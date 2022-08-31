@@ -1900,7 +1900,8 @@ def fn_dbg(msg=''):
         dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
         dic_of_dbg['time'] = now
 
-        None if msg == '' else st.sidebar.write(f'{dur} ms --> {msg}')
+        note = '!!!' if dur > 1000 else ''
+        None if msg == '' else st.sidebar.write(f'{dur} ms --> {msg} {note}')
 
 
 def fn_util_split(constructor):
