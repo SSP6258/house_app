@@ -1834,7 +1834,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             sorts += list(df_show[col].values)
 
         if r == '樓層價差(%)':
-            vmin = 0  # min(sorts)
+            vmin = min(sorts)
         else:
             sorts = [v for v in sorts if v > 0]
             sorts.sort()
