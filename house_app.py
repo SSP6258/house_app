@@ -1429,6 +1429,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist = '不限' if len(df_1['鄉鎮市區'].unique()) > 1 else df_1['鄉鎮市區'].values[0]
 
+
         if dist == '不限':
             for k in dic_of_shp_dist['shape'].keys():
                 vill = dic_of_shp_dist['properties'][k]
