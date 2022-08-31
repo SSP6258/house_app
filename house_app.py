@@ -1971,8 +1971,8 @@ def fn_gen_web_eda(df):
 
     df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
 
-    floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
-    df_sel = df_sel[df_sel['移轉層次'] == floor].reset_index(drop=True) if floor != 0 else df_sel
+    # floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
+    # df_sel = df_sel[df_sel['移轉層次'] == floor].reset_index(drop=True) if floor != 0 else df_sel
 
     for i in range(5):
         st.sidebar.write('')
