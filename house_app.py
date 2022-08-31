@@ -1405,6 +1405,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         if build_case_sel == '不限':
             bc_vill = build_case_sel
+            bc_dist = build_case_sel
         else:
             bc_vill = df_1[df_1['建案名稱'] == build_case_sel]['里'].values[0]
             bc_dist = df_1[df_1['建案名稱'] == build_case_sel]['鄉鎮市區'].values[0]
