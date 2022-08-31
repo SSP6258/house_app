@@ -1830,10 +1830,14 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
         for col in df_show.columns:
             sorts += list(df_show[col].values)
 
-        sorts = [v for v in sorts if v > 0]
-        sorts.sort()
+        if r == '樓層價差(%)':
+            vmin = min(sorts)
+        else:
+            sorts = [v for v in sorts if v > 0]
+            sorts.sort()
+            vmin = sorts[0] if len(sorts) > 0 else 0
 
-        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=sorts[0])
+        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=vmin)
         df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
 
         st.dataframe(df_show_fig, width=768, height=540)
