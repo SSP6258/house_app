@@ -1393,6 +1393,21 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
     st.plotly_chart(fig, config=config)
 
 
+def fn_plot_shp(fig, dic_of_shp_data, k, text=None, row=None, col=None):
+
+    assert k in dic_of_shp_data['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
+    x, y = dic_of_shp_data['shape'][k].exterior.xy
+    fig = fn_gen_plotly_scatter(fig, list(x), list(y),
+                                  row=row, col=col,
+                                  # color='red', opacity=0.8, size=4,
+                                  text=text, opacity=1,
+                                  update_layout=False,
+                                  line_color='blue', line_width=3,
+                                  mode='lines', colorscale=None)
+
+    return fig
+
+
 # @fn_profiler
 def fn_gen_analysis(df, latest_records, build_case):
     config = {'scrollZoom': True,
@@ -1447,15 +1462,17 @@ def fn_gen_analysis(df, latest_records, build_case):
 
             if bc_dist.endswith('區'):
                 k = f'{"臺北市"}, {bc_dist}, {"NA"}'
-                assert k in dic_of_shp_dist['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
-                x, y = dic_of_shp_dist['shape'][k].exterior.xy
-                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                              row=None, col=None,
-                                              # color='red', opacity=0.8, size=4,
-                                              text=vill, opacity=1,
-                                              update_layout=False,
-                                              line_color='blue', line_width=3,
-                                              mode='lines', colorscale=None)
+                fig_c = fn_plot_shp(fig_c, dic_of_shp_dist, k, text=k)
+
+                # assert k in dic_of_shp_dist['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
+                # x, y = dic_of_shp_dist['shape'][k].exterior.xy
+                # fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                #                               row=None, col=None,
+                #                               # color='red', opacity=0.8, size=4,
+                #                               text=vill, opacity=1,
+                #                               update_layout=False,
+                #                               line_color='blue', line_width=3,
+                #                               mode='lines', colorscale=None)
 
         else:   # dist in vill:
 
@@ -1476,15 +1493,8 @@ def fn_gen_analysis(df, latest_records, build_case):
 
             if bc_vill.endswith('里'):
                 k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
-                assert k in dic_of_shp['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
-                x, y = dic_of_shp['shape'][k].exterior.xy
-                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                              row=None, col=None,
-                                              # color='red', opacity=0.8, size=8,
-                                              text=vill, opacity=1,
-                                              update_layout=False,
-                                              line_color='blue', line_width=3,
-                                              mode='lines', colorscale=None)
+                fig_c = fn_plot_shp(fig_c, dic_of_shp, k, text=k)
+
             fn_dbg("fn_gen_web_eda 3-1-1-3")
 
         if build_case_sel != '不限':
@@ -2138,7 +2148,7 @@ def fn_gen_web_eda(df):
                                     op=0.55,
                                     size='交易量')
 
-    latest_rel = '0821'
+    latest_rel = '0901'
     records = int(df.shape[0] - np.count_nonzero(df['Latest']))
     latest_records = f'版本:{latest_rel} 有 {records}筆'
     city = list(df['city'].unique())
@@ -2220,6 +2230,13 @@ def fn_gen_web_eda(df):
                   '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
     map_style = "open-street-map"
     fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
+
+    # if build_case != '不限':
+    #     bc_dist = df_sel[df_sel['建案名稱'] == build_case]['鄉鎮市區'].values[0]
+    #     bc_vill = df_sel[df_sel['建案名稱'] == build_case]['里'].values[0]
+    #     k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
+    #     fig_map = fn_plot_shp(fig_map, dic_of_shp, k, text=k)
+
     fn_dbg('fn_gen_web_eda 3-2')
     st.plotly_chart(fig_map)
     st.write('')
