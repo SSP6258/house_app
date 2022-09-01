@@ -1457,25 +1457,12 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color='blue', line_width=3,
                                               mode='lines', colorscale=None)
 
-            # for k in dic_of_shp_dist['shape'].keys():
-            #     vill = dic_of_shp_dist['properties'][k]
-            #     if bc_dist in vill:
-            #         # fn_dbg(f'bc_dist: {bc_dist} vill: {vill} bc: {build_case}')
-            #         x, y = dic_of_shp_dist['shape'][k].exterior.xy
-            #         fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-            #                                       row=None, col=None,
-            #                                       # color='red', opacity=0.8, size=4,
-            #                                       text=vill, opacity=1,
-            #                                       update_layout=False,
-            #                                       line_color='blue', line_width=3,
-            #                                       mode='lines', colorscale=None)
-            #         break
-
         else:   # dist in vill:
+
+            fn_dbg("fn_gen_web_eda 3-1-1-1")
 
             for k in dic_of_shp['shape'].keys():
                 vill = dic_of_shp['properties'][k]
-                # fn_dbg(f'{k} {dist}, {vill}, {dist in vill}')
                 x, y = dic_of_shp['shape'][k].exterior.xy
                 fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
                                               row=None, col=None,
@@ -1485,6 +1472,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color='white', line_width=1.5,
                                               mode='lines', colorscale=None)
 
+            fn_dbg("fn_gen_web_eda 3-1-1-2")  # 1463 ms
 
             if bc_vill.endswith('里'):
                 k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
@@ -1497,20 +1485,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               update_layout=False,
                                               line_color='blue', line_width=3,
                                               mode='lines', colorscale=None)
-
-            # for k in dic_of_shp['shape'].keys():
-            #     vill = dic_of_shp['properties'][k]
-            #     if bc_vill in vill:
-            #         # fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
-            #         x, y = dic_of_shp['shape'][k].exterior.xy
-            #         fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-            #                                       row=None, col=None,
-            #                                       # color='red', opacity=0.8, size=8,
-            #                                       text=vill, opacity=1,
-            #                                       update_layout=False,
-            #                                       line_color='blue', line_width=3,
-            #                                       mode='lines', colorscale=None)
-            #         break
+            fn_dbg("fn_gen_web_eda 3-1-1-3")
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
@@ -2186,30 +2161,35 @@ def fn_gen_web_eda(df):
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
+        fn_dbg('fn_gen_web_eda 2-1')
 
     with tab_price:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
+        fn_dbg('fn_gen_web_eda 2-2')
 
     with tab_deals:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='交易筆數',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm)
+        fn_dbg('fn_gen_web_eda 2-3')
 
     with tab_area_min:
         fig_tm_n = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最小坪數',
                                          color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                          mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm_n)
+        fn_dbg('fn_gen_web_eda 2-4')
 
     with tab_area_max:
         fig_tm_m = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='最大坪數',
                                          color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                          mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
         st.plotly_chart(fig_tm_m)
+        fn_dbg('fn_gen_web_eda 2-5')
 
     fn_dbg('fn_gen_web_eda 3')
 
