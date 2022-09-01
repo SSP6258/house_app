@@ -802,10 +802,11 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2, c3 = st.columns(3)
     # print(str(bc_name))
+    dist_dft = '北投區'
 
     # IndexError: index 0 is out of bounds for axis 0 with size 0
     # print(bc_name)
-    dist_of_bc = '不限' if bc_name is None or '不限' in bc_name else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
+    dist_of_bc = dist_dft if bc_name is None or '不限' in bc_name else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
 
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
@@ -1225,7 +1226,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
 
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
-    dist_dft = 0
+    dist_dft = dists.index('北投區')
 
     if build_case is not None and build_case != '不限':
         df_bc = df[df['建案名稱'] == build_case]
