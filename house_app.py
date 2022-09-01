@@ -1991,7 +1991,7 @@ def fn_gen_web_eda(df):
 
     deal_num = 0
     for b in df_sel['建案名稱'].unique():
-        df_sel_b = df_sel[['建案名稱']==b]
+        df_sel_b = df_sel[df_sel['建案名稱']==b]
         deal_num = deal_num + len(df_sel_b["戶別"].unique())
 
     From_To = f'{From} ~ {To}, 有 {deal_num} 筆交易'
