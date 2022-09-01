@@ -1973,7 +1973,9 @@ def fn_gen_web_eda(df):
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
     # idx = options.index('R線_明德站') if 'R線_明德站' in options else 0
     idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
+
     mrt = st.sidebar.selectbox('捷運站', options=options, index=idx)
+
     df_sel = df_sel.reset_index(drop=True) if mrt == '不限' else df_sel[df_sel['MRT'] == mrt].reset_index(drop=True)
 
     build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
@@ -2354,8 +2356,9 @@ def fn_gen_web_eda(df):
             st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
 
     df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
+
     AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
-    st.write('資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)')
+    st.write(f'資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
 
     fn_dbg(f'fn_gen_web_eda 6 {build_case}')
 
@@ -3391,7 +3394,9 @@ def fn_app(page='data'):
         df = fn_gen_web_init(path)
         df = df[df['交易年'].apply(lambda x: year_sel[0] <= x <= year_sel[1])]
         df = df[df['每坪單價(萬)'].apply(lambda x: price_sel[0] <= x <= price_sel[1])]
+
         build_typ = c2.selectbox('建物型態', ['大樓', '華廈', '不限'], index=0)
+
         df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
 
         c1, c2 = st.sidebar.columns(2)
