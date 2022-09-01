@@ -1432,7 +1432,6 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist = '不限' if len(df_1['鄉鎮市區'].unique()) > 1 else df_1['鄉鎮市區'].values[0]
 
-
         if dist == '不限':
             for k in dic_of_shp_dist['shape'].keys():
                 vill = dic_of_shp_dist['properties'][k]
@@ -1473,19 +1472,31 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color='white', line_width=1.5,
                                               mode='lines', colorscale=None)
 
-            for k in dic_of_shp['shape'].keys():
-                vill = dic_of_shp['properties'][k]
-                if bc_vill in vill:
-                    # fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
-                    x, y = dic_of_shp['shape'][k].exterior.xy
-                    fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                                  row=None, col=None,
-                                                  # color='red', opacity=0.8, size=8,
-                                                  text=vill, opacity=1,
-                                                  update_layout=False,
-                                                  line_color='blue', line_width=3,
-                                                  mode='lines', colorscale=None)
-                    break
+            # 臺北市, 北投區, 湖田里
+            k = f'{"臺北市"}, {dist}, {bc_vill}'
+            assert k in dic_of_shp['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
+            x, y = dic_of_shp['shape'][k].exterior.xy
+            fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                          row=None, col=None,
+                                          # color='red', opacity=0.8, size=8,
+                                          text=vill, opacity=1,
+                                          update_layout=False,
+                                          line_color='blue', line_width=3,
+                                          mode='lines', colorscale=None)
+
+            # for k in dic_of_shp['shape'].keys():
+            #     vill = dic_of_shp['properties'][k]
+            #     if bc_vill in vill:
+            #         # fn_dbg(f'bc_vill: {bc_vill} vill: {vill} bc: {build_case}')
+            #         x, y = dic_of_shp['shape'][k].exterior.xy
+            #         fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+            #                                       row=None, col=None,
+            #                                       # color='red', opacity=0.8, size=8,
+            #                                       text=vill, opacity=1,
+            #                                       update_layout=False,
+            #                                       line_color='blue', line_width=3,
+            #                                       mode='lines', colorscale=None)
+            #         break
 
         if build_case_sel != '不限':
             df_1_sel = df_1[df_1['建案名稱'] == build_case_sel]
@@ -3326,10 +3337,18 @@ dic_of_shp = {}
 dic_of_shp_dist = {}
 
 
-@st.cache
+# @st.cache
 def fn_read_shp_wrap(is_dist_only=False):
     shapes, properties = fn_read_shp(is_dist_only=is_dist_only)
-    return shapes, properties
+
+    shapes_new = {}
+    properties_new = {}
+    for k, v in properties.items():
+        print(f'{k}: {v}')
+        shapes_new[v] = shapes[k]
+        properties_new[v] = v
+
+    return shapes_new, properties_new
 
 
 def fn_app(page='data'):
