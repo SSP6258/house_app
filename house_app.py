@@ -1445,19 +1445,32 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color='white', line_width=1.5,
                                               mode='lines')
 
-            for k in dic_of_shp_dist['shape'].keys():
-                vill = dic_of_shp_dist['properties'][k]
-                if bc_dist in vill:
-                    # fn_dbg(f'bc_dist: {bc_dist} vill: {vill} bc: {build_case}')
-                    x, y = dic_of_shp_dist['shape'][k].exterior.xy
-                    fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                                  row=None, col=None,
-                                                  # color='red', opacity=0.8, size=4,
-                                                  text=vill, opacity=1,
-                                                  update_layout=False,
-                                                  line_color='blue', line_width=3,
-                                                  mode='lines', colorscale=None)
-                    break
+            if bc_dist.endswith('區'):
+                k = f'{"臺北市"}, {bc_dist}, {"NA"}'
+                assert k in dic_of_shp_dist['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
+                x, y = dic_of_shp_dist['shape'][k].exterior.xy
+                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                              row=None, col=None,
+                                              # color='red', opacity=0.8, size=4,
+                                              text=vill, opacity=1,
+                                              update_layout=False,
+                                              line_color='blue', line_width=3,
+                                              mode='lines', colorscale=None)
+
+            # for k in dic_of_shp_dist['shape'].keys():
+            #     vill = dic_of_shp_dist['properties'][k]
+            #     if bc_dist in vill:
+            #         # fn_dbg(f'bc_dist: {bc_dist} vill: {vill} bc: {build_case}')
+            #         x, y = dic_of_shp_dist['shape'][k].exterior.xy
+            #         fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+            #                                       row=None, col=None,
+            #                                       # color='red', opacity=0.8, size=4,
+            #                                       text=vill, opacity=1,
+            #                                       update_layout=False,
+            #                                       line_color='blue', line_width=3,
+            #                                       mode='lines', colorscale=None)
+            #         break
+
         else:   # dist in vill:
 
             for k in dic_of_shp['shape'].keys():
@@ -1472,17 +1485,18 @@ def fn_gen_analysis(df, latest_records, build_case):
                                               line_color='white', line_width=1.5,
                                               mode='lines', colorscale=None)
 
-            # 臺北市, 北投區, 湖田里
-            k = f'{"臺北市"}, {dist}, {bc_vill}'
-            assert k in dic_of_shp['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
-            x, y = dic_of_shp['shape'][k].exterior.xy
-            fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
-                                          row=None, col=None,
-                                          # color='red', opacity=0.8, size=8,
-                                          text=vill, opacity=1,
-                                          update_layout=False,
-                                          line_color='blue', line_width=3,
-                                          mode='lines', colorscale=None)
+
+            if bc_vill.endswith('里'):
+                k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
+                assert k in dic_of_shp['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
+                x, y = dic_of_shp['shape'][k].exterior.xy
+                fig_c = fn_gen_plotly_scatter(fig_c, list(x), list(y),
+                                              row=None, col=None,
+                                              # color='red', opacity=0.8, size=8,
+                                              text=vill, opacity=1,
+                                              update_layout=False,
+                                              line_color='blue', line_width=3,
+                                              mode='lines', colorscale=None)
 
             # for k in dic_of_shp['shape'].keys():
             #     vill = dic_of_shp['properties'][k]
@@ -3337,7 +3351,7 @@ dic_of_shp = {}
 dic_of_shp_dist = {}
 
 
-# @st.cache
+@st.cache
 def fn_read_shp_wrap(is_dist_only=False):
     shapes, properties = fn_read_shp(is_dist_only=is_dist_only)
 
