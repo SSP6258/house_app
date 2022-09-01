@@ -1402,6 +1402,7 @@ def fn_gen_analysis(df, latest_records, build_case):
     tab_dist_price, tab_dist_char, tab_ana_corr, tab_ana_dist, tab_ana_mrt, tab_ana_ele, tab_ana_bd, tab_ana_sell = tabs
     fn_dbg('fn_gen_web_eda 3-1-1')
 
+
     with tab_dist_price:
         pass
 
