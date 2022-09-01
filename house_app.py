@@ -3358,7 +3358,7 @@ def fn_read_shp_wrap(is_dist_only=False):
     shapes_new = {}
     properties_new = {}
     for k, v in properties.items():
-        print(f'{k}: {v}')
+        # print(f'{k}: {v}')
         shapes_new[v] = shapes[k]
         properties_new[v] = v
 
