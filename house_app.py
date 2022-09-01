@@ -2005,6 +2005,7 @@ def fn_gen_web_eda(df):
         df_sel_b = df_sel[df_sel['建案名稱'] == b]
         deal_num = deal_num + len(df_sel_b["戶別"].unique())
 
+    deal_num = df_sel.shape[0] if build_case == '不限' else deal_num
     From_To = f'{From} ~ {To}, 有 {deal_num} 筆交易'
     ave = round(df_sel['每坪單價(萬)'].mean(), 0)
 
