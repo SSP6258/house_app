@@ -2139,9 +2139,10 @@ def fn_gen_web_eda(df):
         cities = cities + c + ' '
 
     # rendering web view
+    st.write('')
     st.subheader(f'🏙️ {cities} {house_typ} 實價登錄 (更新至: {Latest_date})')
 
-    tabs = st.tabs([f'{cities} {house_typ}', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
+    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
 
     with tab_price_map:
@@ -2195,195 +2196,206 @@ def fn_gen_web_eda(df):
              int(To.split('年')[-1].split('月')[0]) - int(From.split('年')[-1].split('月')[0]) + 1
 
     st.write('')
-    if build_case == '不限':
-        st.subheader('🗺️ 建案位置')
-    else:
-        st.subheader(f'🗺️ 建案位置 👉 {build_case}')
-        st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
-        st.write(
-            f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])}人)')
-        st.write(f'- 捷運距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺 ({df_sel["捷運站"].values[0]})')
-        st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分 (MRT)')
 
-    df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
+    st.subheader(f'🏡 建案分析 👉 {build_case}')
 
-    title = ''
-    hover_name = '建案名稱'
-    hover_data = ['交易年', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
-                  '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
-    map_style = "open-street-map"
-    fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
+    tab_bc_location, tab_bc_info, tab_bc_sell_1, tab_bc_sell_2 = st.tabs(['建案位置', '建案資料', '建案銷售1', '建案銷售2'])
 
-    # if build_case != '不限':
-    #     bc_dist = df_sel[df_sel['建案名稱'] == build_case]['鄉鎮市區'].values[0]
-    #     bc_vill = df_sel[df_sel['建案名稱'] == build_case]['里'].values[0]
-    #     k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
-    #     fig_map = fn_plot_shp(fig_map, dic_of_shp, k, text=k)
+    with tab_bc_location:
+        if build_case == '不限':
+            st.subheader('🗺️ 建案位置')
+        else:
+            st.subheader(f'🗺️ 建案位置')
+            st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
+            st.write(
+                f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])}人)')
+            st.write(f'- 捷運距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺 ({df_sel["捷運站"].values[0]})')
+            st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分 (MRT)')
 
-    fn_dbg('fn_gen_web_eda 3-2')
-    st.plotly_chart(fig_map)
-    st.write('')
+        df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
 
-    fn_dbg('fn_gen_web_eda 4')
+        title = ''
+        hover_name = '建案名稱'
+        hover_data = ['交易年', '總價(萬)', '每坪單價(萬)', '車位單價(萬)',
+                      '車位類別', '移轉層次', '捷運站', '捷運站距離(m)', ]
+        map_style = "open-street-map"
+        fig_map = fn_gen_plotly_map(df_sel, title, hover_name, hover_data, map_style, zoom=14)
 
-    if build_case == '不限':
-        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
-    else:
-        st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
+        # if build_case != '不限':
+        #     bc_dist = df_sel[df_sel['建案名稱'] == build_case]['鄉鎮市區'].values[0]
+        #     bc_vill = df_sel[df_sel['建案名稱'] == build_case]['里'].values[0]
+        #     k = f'{"臺北市"}, {bc_dist}, {bc_vill}'
+        #     fig_map = fn_plot_shp(fig_map, dic_of_shp, k, text=k)
 
+        fn_dbg('fn_gen_web_eda 3-2')
+        st.plotly_chart(fig_map)
         st.write('')
-        builder = 'NA'
-        builders = [builder]
-        constructor = 'NA'
-        constructors = [constructor]
 
-        df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False,
-                            encoding='utf-8-sig')
+        fn_dbg('fn_gen_web_eda 4')
 
-        with st.form(key='Form_bc_info'):
-            c1, c2 = st.columns(2)
-            bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數', '企劃銷售']
-            bc_info_c2 = ['基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)', '公設比(%)', '平面車位', '機械車位', '座向規劃', '土地分區']
+    with tab_bc_info:
+        st.subheader('📜 建案資料')
+        if build_case == '不限':
+            pass
+            # st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
+        else:
+            # st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
+            # st.write('')
 
-            for i in bc_info_c1:
-                v = str(df_sel[i].values[0])
-                v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
-                v = v + '%' if '%' in i else v
-                v = v + '年' if i == '完工年度' else v
-                c1.write(f'{i}: {v}')
-                builder = v if i == '投資建設' else builder
-                builders = fn_util_split(builder) if i == '投資建設' else builders
-                constructor = v if i == '營造公司' else constructor
-                constructors = fn_util_split(constructor) if i == '營造公司' else constructors
+            builder = 'NA'
+            builders = [builder]
+            constructor = 'NA'
+            constructors = [constructor]
 
-                for builder in builders:
-                    if i == '投資建設' and builder in df_lg['建商營造'].values:
-                        df_lg_b = df_lg[df_lg['建商營造'] == builder]
-                        lg_latest = df_lg_b['裁判日期'].values[0]
-                        lg_reason = df_lg_b['裁判案由'].values[0]
-                        b = ''  # if len(builders) <= 1 else f' ({builder})'
-                        c1.write(
-                            f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
+            df_lg = pd.read_csv(os.path.join(dic_of_path['database'], 'builder_litigation.csv'), na_filter=False,
+                                encoding='utf-8-sig')
 
-                for constructor in constructors:
-                    if i == '營造公司' and constructor in df_lg['建商營造'].values:
-                        df_lg_b = df_lg[df_lg['建商營造'] == constructor]
-                        lg_latest = df_lg_b['裁判日期'].values[0]
-                        lg_reason = df_lg_b['裁判案由'].values[0]
-                        c = ''  # if len(constructors) <= 1 else f' ({constructor})'
-                        c1.write(
-                            f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
+            with st.form(key='Form_bc_info'):
+                c1, c2 = st.columns(2)
+                bc_info_c1 = ['建案名稱', '投資建設', '營造公司', '建造執照', '完工年度', '地上樓層', '地下樓層', '總戶數', '企劃銷售']
+                bc_info_c2 = ['基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)', '公設比(%)', '平面車位', '機械車位', '座向規劃', '土地分區']
 
-            for i in bc_info_c2:
-                v = str(df_sel[i].values[0])
-                v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
-                v = v + '%' if '%' in i else v
-                v = v + '年' if i == '完工年度' else v
-                # v = '[參考公式](https://www.hbhousing.com.tw/News/Detail.aspx?Num=5044&utm_source=gsm&utm_medium=cpc&utm_content=word&utm_campaign=201901hbcue&ctype=B&cid=words&oid=gsm&gclid=Cj0KCQjw_7KXBhCoARIsAPdPTfhs4zRHqUrHu26rpRRl1RaWymm0iNi04nTTKiA9pNtWRqWQnmKutLwaAr_OEALw_wcB)' if i=='容積率(%)' else v
-                v = v + ' [法規](https://www.udd.gov.taipei/laws/rdpqpr5-5426)' if i == '容積率(%)' else v
-                c2.write(f'{i}: {v}')
+                for i in bc_info_c1:
+                    v = str(df_sel[i].values[0])
+                    v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
+                    v = v + '%' if '%' in i else v
+                    v = v + '年' if i == '完工年度' else v
+                    c1.write(f'{i}: {v}')
+                    builder = v if i == '投資建設' else builder
+                    builders = fn_util_split(builder) if i == '投資建設' else builders
+                    constructor = v if i == '營造公司' else constructor
+                    constructors = fn_util_split(constructor) if i == '營造公司' else constructors
 
-            submitted = st.form_submit_button("")
+                    for builder in builders:
+                        if i == '投資建設' and builder in df_lg['建商營造'].values:
+                            df_lg_b = df_lg[df_lg['建商營造'] == builder]
+                            lg_latest = df_lg_b['裁判日期'].values[0]
+                            lg_reason = df_lg_b['裁判案由'].values[0]
+                            b = ''  # if len(builders) <= 1 else f' ({builder})'
+                            c1.write(
+                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
 
-        if builder in df_lg['建商營造'].values:
-            df_lg_b = df_lg[df_lg['建商營造'] == builder]
-            df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
-            lg_latest = df_lg_b['裁判日期'].values[0]
-            lg_total = df_lg_b['歷年案件'].values[0]
+                    for constructor in constructors:
+                        if i == '營造公司' and constructor in df_lg['建商營造'].values:
+                            df_lg_b = df_lg[df_lg['建商營造'] == constructor]
+                            lg_latest = df_lg_b['裁判日期'].values[0]
+                            lg_reason = df_lg_b['裁判案由'].values[0]
+                            c = ''  # if len(constructors) <= 1 else f' ({constructor})'
+                            c1.write(
+                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
 
-            with st.expander(f' 👉 建商:{builder} {"    "}  ⚖️歷史裁判案件數: {lg_total}件 ❗'):
-                st.write('')
-                st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
-                st.write('')
-                AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
+                for i in bc_info_c2:
+                    v = str(df_sel[i].values[0])
+                    v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
+                    v = v + '%' if '%' in i else v
+                    v = v + '年' if i == '完工年度' else v
+                    # v = '[參考公式](https://www.hbhousing.com.tw/News/Detail.aspx?Num=5044&utm_source=gsm&utm_medium=cpc&utm_content=word&utm_campaign=201901hbcue&ctype=B&cid=words&oid=gsm&gclid=Cj0KCQjw_7KXBhCoARIsAPdPTfhs4zRHqUrHu26rpRRl1RaWymm0iNi04nTTKiA9pNtWRqWQnmKutLwaAr_OEALw_wcB)' if i=='容積率(%)' else v
+                    v = v + ' [法規](https://www.udd.gov.taipei/laws/rdpqpr5-5426)' if i == '容積率(%)' else v
+                    c2.write(f'{i}: {v}')
 
-        for c in constructors:
-            fn_dbg(c)
-            if c in df_lg['建商營造'].values:
-                df_lg_c = df_lg[df_lg['建商營造'] == c]
-                df_lg_c = df_lg_c[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
-                lg_latest = df_lg_c['裁判日期'].values[0]
-                lg_total = df_lg_c['歷年案件'].values[0]
+                submitted = st.form_submit_button("")
 
-                with st.expander(f'👉 營造商:{c} {"    "}  ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
+            if builder in df_lg['建商營造'].values:
+                df_lg_b = df_lg[df_lg['建商營造'] == builder]
+                df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
+                lg_latest = df_lg_b['裁判日期'].values[0]
+                lg_total = df_lg_b['歷年案件'].values[0]
+
+                with st.expander(f' 👉 建商:{builder} {"    "}  ⚖️歷史裁判案件數: {lg_total}件 ❗'):
                     st.write('')
                     st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
                     st.write('')
-                    AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
+                    AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
-    fn_dbg('fn_gen_web_eda 5')
+            for c in constructors:
+                fn_dbg(c)
+                if c in df_lg['建商營造'].values:
+                    df_lg_c = df_lg[df_lg['建商營造'] == c]
+                    df_lg_c = df_lg_c[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
+                    lg_latest = df_lg_c['裁判日期'].values[0]
+                    lg_total = df_lg_c['歷年案件'].values[0]
 
-    st.write('')
-    st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
-    st.subheader(f'均價 {int(ave)} 萬/坪')
+                    with st.expander(f'👉 營造商:{c} {"    "}  ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
+                        st.write('')
+                        st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
+                        st.write('')
+                        AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
 
-    dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
-               '車位類別', '車位單價(萬)', '交易年月日']
+        fn_dbg('fn_gen_web_eda 5')
 
-    if len(st.session_state['feature_sel']) == 0:
-        st.session_state['feature_sel'] = dft_sel
-
-    df_cols = df_sel[st.session_state['feature_sel']]
-    with st.form(key='欄位選擇'):
-        cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
-
-        submitted = st.form_submit_button('選 擇')
-
-        if submitted:
-            df_cols = df_sel[cols]
-            st.session_state['feature_sel'] = cols
-            st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
-
-    df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
-
-    AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
-    st.write(f'資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
-
-    fn_dbg(f'fn_gen_web_eda 6 {build_case}')
-
-    if build_case == '不限':
-        pass
-    else:
-        # fn_gen_bc_deals(build_case, dic_df_show)
-        fn_dbg('fn_gen_web_eda 7')
-        deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
+    with tab_bc_sell_1:
         st.write('')
-        st.subheader(f'🏡 建案: {build_case}'
-                     f' 📝 登錄: {deals} 筆'
-                     f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+        st.subheader(f'{From_To}, 銷售速率 {round(len(df_sel["戶別"].unique()) / period, 2)} 筆/月')
+        st.subheader(f'均價 {int(ave)} 萬/坪')
 
-        tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
+        dft_sel = ['移轉層次', '建物坪數', '每坪單價(萬)', '總價(萬)',
+                   '車位類別', '車位單價(萬)', '交易年月日']
 
-        tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
+        if len(st.session_state['feature_sel']) == 0:
+            st.session_state['feature_sel'] = dft_sel
 
-        with tab_price:
-            fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
+        df_cols = df_sel[st.session_state['feature_sel']]
+        with st.form(key='欄位選擇'):
+            cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
 
-        with tab_diff:
-            fn_gen_bc_deals(build_case, dic_df_show, '樓層價差(%)')
+            submitted = st.form_submit_button('選 擇')
 
-        with tab_wo_pk:
-            fn_gen_bc_deals(build_case, dic_df_show, '總價-車位(萬)')
+            if submitted:
+                df_cols = df_sel[cols]
+                st.session_state['feature_sel'] = cols
+                st.write(f'選擇了 {len(st.session_state["feature_sel"])}個欄位')
 
-        with tab_total:
-            fn_gen_bc_deals(build_case, dic_df_show, '總價(萬)')
+        df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
 
-        with tab_pk:
-            fn_gen_bc_deals(build_case, dic_df_show, '車位總價(萬)')
+        AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
+        st.write(f'資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
 
-        with tab_area:
-            fn_gen_bc_deals(build_case, dic_df_show, '建物坪數')
+        fn_dbg(f'fn_gen_web_eda 6 {build_case}')
 
-        with tab_pk_area:
-            fn_gen_bc_deals(build_case, dic_df_show, '車位坪數')
-
-        with tab_date:
-            fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
-
-        with st.expander('📈 樓層均價 與 成交戶數'):
-            # st.subheader('📈 樓層均價 與 成交戶數')
+    with tab_bc_sell_2:
+        if build_case == '不限':
+            pass
+        else:
+            # fn_gen_bc_deals(build_case, dic_df_show)
+            fn_dbg('fn_gen_web_eda 7')
+            deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             st.write('')
-            st.plotly_chart(fig_bar2)
+            # st.subheader(f'🏡 建案: {build_case}'
+            st.subheader(f' 📝 登錄: {deals} 筆'
+                         f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+
+            tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
+
+            tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
+
+            with tab_price:
+                fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
+
+            with tab_diff:
+                fn_gen_bc_deals(build_case, dic_df_show, '樓層價差(%)')
+
+            with tab_wo_pk:
+                fn_gen_bc_deals(build_case, dic_df_show, '總價-車位(萬)')
+
+            with tab_total:
+                fn_gen_bc_deals(build_case, dic_df_show, '總價(萬)')
+
+            with tab_pk:
+                fn_gen_bc_deals(build_case, dic_df_show, '車位總價(萬)')
+
+            with tab_area:
+                fn_gen_bc_deals(build_case, dic_df_show, '建物坪數')
+
+            with tab_pk_area:
+                fn_gen_bc_deals(build_case, dic_df_show, '車位坪數')
+
+            with tab_date:
+                fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
+
+            with st.expander('📈 樓層均價 與 成交戶數'):
+                # st.subheader('📈 樓層均價 與 成交戶數')
+                st.write('')
+                st.plotly_chart(fig_bar2)
 
 
 @fn_profiler
