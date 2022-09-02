@@ -2295,6 +2295,8 @@ def fn_gen_web_eda(df):
 
                 submitted = st.form_submit_button("")
 
+            st.write()
+            st.subheader('  ⚖️訴訟裁判')
             if builder in df_lg['建商營造'].values:
                 df_lg_b = df_lg[df_lg['建商營造'] == builder]
                 df_lg_b = df_lg_b[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
