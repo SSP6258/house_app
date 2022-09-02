@@ -2197,7 +2197,7 @@ def fn_gen_web_eda(df):
 
     st.write('')
 
-    st.subheader(f'🏡 建案分析 👉 {build_case}')
+    st.subheader(f'🏘️ 建案分析 👉 {build_case}')
 
     tab_bc_location, tab_bc_info, tab_bc_sell_1, tab_bc_sell_2 = st.tabs(['建案位置', '建案資料', '建案銷售1', '建案銷售2'])
 
@@ -2360,8 +2360,8 @@ def fn_gen_web_eda(df):
             fn_dbg('fn_gen_web_eda 7')
             deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             st.write('')
-            # st.subheader(f'🏡 建案: {build_case}'
-            st.subheader(f' 📝 登錄: {deals} 筆'
+            st.subheader(f'🏡 建案: {build_case}'
+                         f' 📝 登錄: {deals} 筆'
                          f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
             tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
