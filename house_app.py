@@ -1910,10 +1910,10 @@ def fn_dbg(msg=''):
 
         now = int(round(time.time() * 1000, 0))  # ms
         dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
-        dic_of_dbg['time'] = now
-        dic_of_dbg['sum'] = dic_of_dbg['sum'] + dur
-        note = '!!!' if dur > 1000 else ''
         if dur > 100:
+            dic_of_dbg['time'] = now
+            dic_of_dbg['sum'] = dic_of_dbg['sum'] + dur
+            note = '!!!' if dur > 1000 else ''
             None if msg == '' else st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
 
 
