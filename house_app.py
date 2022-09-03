@@ -67,6 +67,9 @@ dic_of_cn_2_en = {'經度': 'longitude',
                   '使用分區_住': 'land_typ',
                   '稅_中位數': 'tax_median',
                   '稅_平均數': 'tax_mean',
+                  '地下樓層': 'underground floor',
+                  '總戶數': 'total households',
+                  '基地面積(坪)': 'base area',
                   }
 
 
@@ -404,6 +407,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     st.write("驗證資料:[内政部不動產成交案件 資料供應系統(每月1、11、21日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)")
 
     df_tax = pd.read_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), index_col='行政區')
+    df_bc = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext.csv'), index_col='建案名稱')
 
     file = st.file_uploader("資料上傳", type=['csv'])
     print(file)
@@ -456,8 +460,21 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
         else:
             assert False, f'No 里 in df.columns'
 
-        if df.shape[0] and n_data:
+        if '建案名稱' in df.columns:
+            for idx in df.index:
+                bc = df.loc[idx, '建案名稱']
+                if bc in df_bc.index:
+                    for c in ['地下樓層', '總戶數', '基地面積(坪)']:
+                        df.at[idx, c] = df_bc.loc[bc, c]
+        else:
+            assert False, f'No 建案名稱 in df.columns'
 
+        for c in ['地下樓層', '總戶數', '基地面積(坪)']:
+            df = df[df[c].apply(lambda x: str(x).split('.')[0].isnumeric())]
+            assert df.shape[0] > 0, f'{c} df.shape = {df.shape}'
+            df[c] = df[c].apply(lambda x: int(round(float(x), 0)))
+
+        if df.shape[0] and n_data:
             df = fn_cln_house_data(df.copy())
 
             df = df[df['建物型態'] == build_typ] if build_typ != '不限' else df
@@ -572,6 +589,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
 def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     le = LabelEncoder()
     # df cat= df[['鄉鎮市區,主要建材',車位類別, 'MRT']]
+
     df.reset_index(drop=True, inplace=True)
     df_cat = df[['主要建材', '車位類別']]
     f_cat = []
@@ -611,6 +629,8 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
     f_num += ['MRT_ave', 'SKU_ave', 'DIST_ave']
     f_num += ['稅_中位數', '稅_平均數', '稅_第一分位數', '稅_第三分位數']
 
+    f_num += ['地下樓層', '總戶數', '基地面積(坪)']
+
     if is_inference:
         Features = df_F['Features'].to_list()
     else:
@@ -637,6 +657,7 @@ def fn_gen_training_data(df, path, is_inference=False, df_F=pd.DataFrame()):
                 print(c, i, v, df_cat.iloc[i, :].values)
             assert False, c + str(f' is {X[c].values} {len(X[c].tolist())}')
 
+    # print(X.shape, df_cat.shape)
     return X, df_cat
 
 
@@ -2530,6 +2551,11 @@ def fn_gen_web_ml_train(df, path):
                 print(idx, grp.loc[idx])
                 df = df[df['MRT'] != idx]
 
+        for c in ['地下樓層', '總戶數', '基地面積(坪)']:
+            df = df[df[c].apply(lambda x: str(x).split('.')[0].isnumeric())]
+            assert df.shape[0] > 0, f'{c} df.shape = {df.shape}'
+            df[c] = df[c].apply(lambda x: int(round(float(x), 0)))
+
         df.reset_index(drop=True, inplace=True)
 
         X, df_cat = fn_gen_training_data(df, path)
@@ -2545,6 +2571,8 @@ def fn_gen_web_ml_train(df, path):
                                                    'DIST_ave' not in c and
                                                    'SKU_ave' not in c and
                                                    '稅_第' not in c and
+                                                   '幾房' not in c and
+                                                   '幾衛' not in c and
                                                    c != 'MRT'])
             st.write('')
             form2_submitted = st.form_submit_button('選擇')
@@ -2838,8 +2866,8 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
                                 color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
                                 x_title='重要度 (影響力)', y_title='')
-    c1, c2, c3 = st.columns(3)
-    c2.markdown(f'{"#" * 5} 各項指標 對 房價 的影響')
+    c1, c2, c3 = st.columns([1.5, 2, 1])
+    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響(MSE={round(df_result.loc["MSE", "測試集"],2)})')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
@@ -2993,16 +3021,18 @@ def fn_gen_web_ml_inference(path, build_typ):
             c1, c2, c3, c4 = st.columns(4)
             dic_of_input['建物坪數'] = c1.text_input(label='建物坪數(不含車位):', value=24)
             dic_of_input['車位坪數'] = c2.text_input(label='車位坪數:', value=2.21)
-            dic_of_input['土地坪數'] = c3.text_input(label='土地坪數', value='未使用')
-            # dic_of_input['地下幾層'] = c4.text_input(label='地下幾層', value='未使用')
+            # dic_of_input['土地坪數'] = c3.text_input(label='土地坪數', value='未使用')
+            dic_of_input['基地面積(坪)'] = c3.text_input(label='基地面積(坪)', value=332)
+            dic_of_input['總戶數'] = c4.text_input(label='總戶數', value=60)
 
             c1, c2, c3, c4 = st.columns(4)
             this_yr = datetime.date.today().year - 1911
             dic_of_input['交易年'] = c1.slider('交易年(民國)', min_value=100, max_value=120, step=1, value=this_yr)
             dic_of_input['交易月'] = datetime.date.today().month
             dic_of_input['移轉層次'] = c2.slider('交易樓層', min_value=2, max_value=40, step=1, value=14)
-            dic_of_input['總樓層數'] = c3.slider('建物總樓層', min_value=2, max_value=40, step=1, value=15)
-            dic_of_input['屋齡'] = c4.slider('屋齢', min_value=0, max_value=20, step=1, value=0)
+            dic_of_input['總樓層數'] = c3.slider('地上樓層', min_value=2, max_value=40, step=1, value=15)
+            # dic_of_input['屋齡'] = c4.slider('屋齢', min_value=0, max_value=20, step=1, value=0)
+            dic_of_input['地下樓層'] = c4.slider('地下樓層', min_value=0, max_value=7, step=1, value=2)
 
             c1, c2, c3, c4, c5 = st.columns(5)
             dic_of_input['幾房'] = c1.radio('幾房?', (1, 2, 3, 4, 5, 6), index=2)
