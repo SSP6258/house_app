@@ -1540,19 +1540,32 @@ def fn_gen_analysis(df, latest_records, build_case):
         tb_trade, tb_build_1, tb_build_2, tb_build_3, tb_pk = st.tabs(
             ['交易特徵分布', '建物特徵分布1', '建物特徵分布2', '建物特徵分布3', '車位特徵分布'])
 
+        dist_sel = df_1['鄉鎮市區'].unique()
+        dist_sel = '台北市' if len(dist_sel) > 1 else dist_sel[0]
+
         with tb_trade:
+            c1, c2, c3 = st.columns(3)
+            c2.write(f'{dist_sel} 交易特徵分布')
             st.plotly_chart(fig_bar_1, config=config)
 
         with tb_build_1:
+            c1, c2, c3 = st.columns(3)
+            c2.write(f'{dist_sel} 建物特徵分布1')
             st.plotly_chart(fig_bar_2, config=config)
 
         with tb_build_2:
+            c1, c2, c3 = st.columns(3)
+            c2.write(f'{dist_sel} 建物特徵分布2')
             st.plotly_chart(fig_bar_5, config=config)
 
         with tb_build_3:
+            c1, c2, c3 = st.columns(3)
+            c2.write(f'{dist_sel} 建物特徵分布3')
             st.plotly_chart(fig_bar_4, config=config)
 
         with tb_pk:
+            c1, c2, c3 = st.columns(3)
+            c2.write(f'{dist_sel} 車位特徵分布')
             st.plotly_chart(fig_bar_3, config=config)
 
         fn_dbg('fn_gen_web_eda 3-1-3')
