@@ -3023,7 +3023,6 @@ def fn_gen_web_ml_inference(path, build_typ):
             dic_of_input['建物坪數'] = c2.text_input(label='建物坪數(不含車位):', value=24)
             dic_of_input['車位坪數'] = c3.text_input(label='車位坪數:', value=2.21)
             dic_of_input['總戶數'] = c4.text_input(label='總戶數', value=60)
-            # dic_of_input['土地坪數'] = c3.text_input(label='土地坪數', value='未使用')
 
             c1, c2, c3, c4 = st.columns(4)
             this_yr = datetime.date.today().year - 1911
