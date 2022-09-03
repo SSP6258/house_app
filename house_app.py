@@ -2310,7 +2310,7 @@ def fn_gen_web_eda(df):
                     AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
             for c in constructors:
-                fn_dbg(c)
+                # fn_dbg(c)
                 if c in df_lg['建商營造'].values:
                     df_lg_c = df_lg[df_lg['建商營造'] == c]
                     df_lg_c = df_lg_c[['建商營造', '歷年案件', '裁判日期', '裁判案由', '裁判字號']]
