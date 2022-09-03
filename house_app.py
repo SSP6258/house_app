@@ -1913,7 +1913,8 @@ def fn_dbg(msg=''):
         dic_of_dbg['time'] = now
         dic_of_dbg['sum'] = dic_of_dbg['sum'] + dur
         note = '!!!' if dur > 1000 else ''
-        None if msg == '' else st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
+        if dur > 100:
+            None if msg == '' else st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
 
 
 def fn_util_split(constructor):
