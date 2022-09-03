@@ -2103,10 +2103,10 @@ def fn_gen_web_eda(df):
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
     city = df['土地位置建物門牌'].apply(lambda x: str(x).split('市')[0]+'市')
-    city = city.unique()
+    city = city.unique()[0]
 
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
-    title = f'{period}: {df.shape[0]} 筆 {city}  {house_typ} 實價登錄資料'
+    title = f'{period}: {df.shape[0]} 筆 {city} {house_typ} 實價登錄資料'
 
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
