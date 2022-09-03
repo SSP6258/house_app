@@ -6,7 +6,7 @@ import datetime
 import time
 import pandas as pd
 import pprint
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, fn_read_shp, fn_search_vill
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, fn_read_shp, fn_search_vill, fn_profiler
 
 dic_of_filter = {
     '交易標的': '房地(土地+建物)+車位',
@@ -31,7 +31,6 @@ dic_of_typ = {
     '鋼骨混凝土造': 'SRC',
     '見其他登記事項': 'RC',
 }
-
 
 dic_of_name_2_addr = {
     # New TPE
@@ -86,6 +85,8 @@ dic_of_name_2_addr = {
     '義泰吾境': '台北市內湖區南京東路六段389號',
     '華固大安學府': '台北市大安區復興南路二段37號',
     '基泰碧湖': '台北市內湖區內湖路一段741號',
+    '華固文臨': '台北市北投區文林北路175號',
+    '華固翡儷': '台北市北投區西安街二段197號',
 
 }
 
@@ -129,6 +130,7 @@ def fn_house_age_sel(x):
     return result
 
 
+@fn_profiler
 def fn_house_filter(df):
     df = df.drop(index=0, columns=['編號', '非都市土地使用分區', '非都市土地使用編定'])
     df = df[df['都市土地使用分區'].apply(lambda x: str(x) == '住' or '住宅區' in str(x) or str(x) == '商')]
@@ -198,6 +200,7 @@ def fn_house_filter(df):
     return df
 
 
+@fn_profiler
 def fn_data_cleaning(df):
     df = fn_house_filter(df)
     for k in dic_of_transfer.keys():
@@ -290,26 +293,13 @@ def fn_addr_handle(addr):
 
     a = '台北市北投區大度路三段301巷67號' if a == '台北市北投區關渡里大度路三段301巷' else a  # 康寶日出印象
     a = '台北市北投區大度路三段301巷67號' if a == '台北市北投區大度路三段301巷' else a  # 康寶日出印象
-
-    # a = '台北市中正區重慶南路二段80號' if a == '台北市中正區重慶南路二段' else a  # 四方荷韻
-    # a = '台北市大安區大安路二段80號' if a == '台北市大安區大安路二段' else a  # 吉美大安花園
-    # a = '台北市文山區秀明路二段75號' if a == '台北市文山區秀明路二段' else a  # 松露院
-    # a = '台北市中山區民生東路二段115巷' if a == '台北市中山區民生東路二段' else a  # 大喆
-    # a = '台北市松山區八德路四段480號' if a == '台北市松山區八德路四段' else a  # 吉美艾麗
-    # a = '台北市萬華區環河南路二段47號' if a == '台北市萬華區環河南路二段' else a  # 首傅晴海
-    # a = '台北市大安區羅斯福路三段159號' if a == '台北市大安區羅斯福路三段' else a  # 大安MONEY
-    # a = '台北市文山區木柵路三段85巷' if a == '台北市文山區木柵路三段' else a  # 久康青沺
-    # a = '台北市中山區建國北路二段58號' if a == '台北市中山區建國北路二段' else a  # 帝璽
-    # a = '台北市士林區重慶北路四段110號' if a == '台北市士林區重慶北路四段' else a  # 日健闊
-    # a = '台北市南港區市民大道七段8號' if a == '台北市南港區市民大道七段' else a  # 璞松綻
-    # a = '台北市中正區金山南路一段96號' if a == '台北市中正區金山南路一段' else a  # 達欣東門馥寓
-    # a = '台北市北投區致遠一路一段40號' if a == '台北市北投區致遠一路一段' else a  # 璞玥
-    # a = '台北市北投區中央北路一段88號' if a == '台北市北投區中央北路一段' else a  # 達永豐盛學
-    # a = '台北市北投區東華街一段550號' if a == '台北市北投區振華里東華街一段' else a  # 天母常玉
+    a = '台北市北投區文林北路175號' if a == '台北市北投區文林北路175巷及75巷口' else a  # 華固文臨
+    a = '台北市北投區西安街二段197號' if a == '台北市北投區西安街二段吉利街口' else a  # 華固翡儷
 
     return a
 
 
+@fn_profiler
 def fn_house_coor_read():
     House_coor_file = os.path.join(dic_of_path['database'], 'House_coor.csv')
     if os.path.exists(House_coor_file):
@@ -323,6 +313,7 @@ def fn_house_coor_read():
     return df_coor_read
 
 
+@fn_profiler
 def fn_house_coor_save(df_coor_save):
     House_coor_file = os.path.join(dic_of_path['database'], 'House_coor.csv')
     df_coor_save = df_coor_save.reset_index().drop_duplicates(subset='index', keep='first')
@@ -497,7 +488,8 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame(), is_trc=True
         # if addr not in df_coor_read.index:
         dic_of_coor[addr] = [dic_of_geo_info[addr]['coor']['lat'], dic_of_geo_info[addr]['coor']['log']]
         if is_trc:
-            print(f'{is_coor_save}, {list_of_addr_unique.index(addr)}/{len(list_of_addr_unique)}', addr, dic_of_coor[addr])
+            print(f'{is_coor_save}, {list_of_addr_unique.index(addr)}/{len(list_of_addr_unique)}', addr,
+                  dic_of_coor[addr])
 
     if len(dic_of_coor.keys()):
         df_coor = pd.DataFrame(dic_of_coor, index=['lat', 'lon'])
@@ -544,6 +536,7 @@ def fn_gen_house_data(file, post, slp=5, df_validate=pd.DataFrame(), is_trc=True
     return df
 
 
+@fn_profiler
 def fn_gen_raw_data(path, slp=5, is_force=True):
     path_source = os.path.join(path, 'source')
     path_output = os.path.join(path, 'output/house_all.csv')
@@ -640,13 +633,81 @@ def fn_gen_vill(file):
         print(f'Vill updated !')
 
 
+dic_bc_rename = {
+    '中星仁愛旭': '仁愛旭',
+    '宏國大道城A棟': '宏國大道城-A區',
+    '宏國大道城B棟': '宏國大道城-B區',
+    '宏國大道城C棟': '宏國大道城-C區',
+    '宏國大道城D棟': '宏國大道城-D區',
+    '政大爵鼎NO2': '政大爵鼎NO.2',
+    '政大爵鼎NO1': '政大爵鼎NO.1',
+    '吉美君悅': '吉美君悦',
+    '忠泰衍見築': '衍見築',
+    '台大學': '台太學',
+    '寶舖ＣＡＲＥ': '寶舖CARE',
+    '三磐舍紫II': '三磐舍紫2',
+    '德杰羽森-璽': '德杰羽森',
+    '德杰羽森-琚': '德杰羽森',
+    '德杰羽森-玥': '德杰羽森',
+    '吉吉美': '喆美',
+}
+
+
+def fn_gen_bc_info():
+    file_df_all = os.path.join(dic_of_path['root'], 'pre_sold_house', 'output', 'house_all.csv')
+    df = pd.read_csv(file_df_all, encoding='utf-8-sig')
+
+    file_df_bc = os.path.join(dic_of_path['database'], 'build_case_info_ext.csv')
+    df_bc_info = pd.read_csv(file_df_bc, encoding='utf-8-sig')
+
+    '''
+    行政區	
+    建照年度	
+    完工年度	
+    公開銷售	
+    建案名稱	
+    基地面積(坪)	
+    建蔽面積(坪)	
+    建蔽率(%)	
+    容積率(%)	
+    公設比(%)	
+    棟數	地上樓層	
+    地下樓層	總戶數	平面車位	機械車位	總車位數	預估工期	建造執照	預估工期	投資建設	建築設計	營造公司	企劃銷售	結構工程	座向規劃	車位規劃	車位配比	用途規劃	土地分區	管理費用	景觀設計	公設設計	燈光設計	棟戶規劃	樓層規劃	基地地址	建材說明	url	爬蟲耗時(秒)	更新日期		
+    '''
+
+    bc_infos = ['投資建設', '營造公司', '建造執照', '企劃銷售', '公開銷售', '預估工期', '座向規劃', '土地分區',
+                '完工年度', '建蔽率(%)', '基地面積(坪)', '建蔽面積(坪)', '容積率(%)', '公設比(%)',
+                '地上樓層', '地下樓層', '總戶數', '平面車位', '機械車位']
+
+    cols = bc_infos + list(df.columns)
+    bc_lack = []
+    if '建案名稱' in df.columns:
+        for idx in df.index:
+            bc = df.loc[idx, '建案名稱']
+            bc = dic_bc_rename[bc] if bc in dic_bc_rename.keys() else bc
+            if str(bc) != 'nan':
+                if bc in df_bc_info['建案名稱'].values:
+                    df_sel_bc = df_bc_info[df_bc_info['建案名稱'] == bc]
+                    for info in bc_infos:
+                        assert info in df_sel_bc.columns, f'{info} not in df_sel_bc.columns'
+                        df.at[idx, info] = df_sel_bc[info].values[0]
+                else:
+                    if bc not in bc_lack:
+                        print(f'build_case_info_ext.csv has no {bc}')
+                        bc_lack.append(bc)
+    else:
+        assert False, f'建案名稱 NOT in df.columns'
+
+    df.to_csv(file_df_all, encoding='utf-8-sig', index=False)
+
+
 def fn_gen_tax_info(file):
     tax = os.path.join(dic_of_path['database'], '108_165-A.csv')  # 107_165-A.csv, 108_165-A.csv
     df_tax = pd.read_csv(tax)
     df_all = pd.read_csv(file)
 
     if '里' in df_all.columns:
-        df_all['區_里'] = df_all['鄉鎮市區']+'_'+df_all['里']
+        df_all['區_里'] = df_all['鄉鎮市區'] + '_' + df_all['里']
         if '鄉鎮市區' in df_tax.columns:
             df_tax['區_里'] = df_tax['鄉鎮市區'] + '_' + df_tax['村里']
         else:
@@ -656,12 +717,12 @@ def fn_gen_tax_info(file):
             d_v = df_all.loc[idx, '區_里']
             if d_v in df_tax['區_里'].values:
                 df_tax_sel = df_tax[df_tax['區_里'] == d_v]
-                assert df_tax_sel.shape[0] == 1, f'df_tax_sel.shape = { df_tax_sel.shape} {d_v} {idx}'
+                assert df_tax_sel.shape[0] == 1, f'df_tax_sel.shape = {df_tax_sel.shape} {d_v} {idx}'
                 for c in df_tax_sel.columns:
                     if c in ['里', '行政區', '鄉鎮市區', '村里', '區_里', '納稅單位']:
                         pass
                     else:
-                        df_all.at[idx, '稅_'+str(c)] = df_tax_sel[c].values[0]
+                        df_all.at[idx, '稅_' + str(c)] = df_tax_sel[c].values[0]
             else:
                 if str(d_v) != 'nan':
                     print(f'{d_v} not in df_tax {tax}')
@@ -673,16 +734,21 @@ def fn_gen_tax_info(file):
 
 
 def fn_main():
-    # path = os.path.join(dic_of_path['root'], 'pre_owned_house')
+    # XX path = os.path.join(dic_of_path['root'], 'pre_owned_house')
+
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
     fn_gen_raw_data(path, slp=5, is_force=False)
 
-    # fn_save_building_name(path)
+    # XX fn_save_building_name(path)
 
     file = os.path.join(path, 'output', 'house_all.csv')
-    # file = os.path.join(dic_of_path['database'], 'House_coor.csv')
     fn_gen_vill(file)
     fn_gen_tax_info(file)
+
+    file = os.path.join(dic_of_path['database'], 'House_coor.csv')
+    fn_gen_vill(file)
+
+    fn_gen_bc_info()
 
 
 if __name__ == '__main__':
