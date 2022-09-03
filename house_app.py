@@ -2140,7 +2140,7 @@ def fn_gen_web_eda(df):
 
     # rendering web view
     st.write('')
-    st.subheader(f'🏙️ {cities} {house_typ} 實價登錄 (更新至: {Latest_date})')
+    st.header(f'🏙️ {cities} {house_typ} 實價登錄 (最新: {Latest_date})')
 
     tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
@@ -2188,7 +2188,7 @@ def fn_gen_web_eda(df):
     fn_dbg('fn_gen_web_eda 3')
 
     st.write('')
-    st.subheader(f'📊 數據分析')
+    st.header(f'📊 數據分析')
     fn_gen_analysis(df.copy(), latest_records, build_case)
 
     st.write('')
@@ -2197,9 +2197,9 @@ def fn_gen_web_eda(df):
 
     st.write('')
 
-    st.subheader(f'🏘️ 建案分析 👉 {build_case}')
+    st.header(f'🏘️ 建案分析 👉 {build_case}')
 
-    tab_bc_location, tab_bc_info, tab_bc_sell_1, tab_bc_sell_2 = st.tabs(['建案位置', '建案資料', '建案銷售1', '建案銷售2'])
+    tab_bc_sell_2, tab_bc_sell_1, tab_bc_location, tab_bc_info = st.tabs(['銷售整理', '銷售明細', '建案位置', '建案資料'])
 
     with tab_bc_location:
         if build_case == '不限':
