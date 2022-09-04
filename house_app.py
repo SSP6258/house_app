@@ -754,7 +754,6 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
                           legend=False, name=None, update_layout=True, line_color=None, line_width=None, mode='markers',
                           colorscale='Bluered'):
-
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              line=dict(color=line_color, width=line_width),
@@ -1262,7 +1261,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
 
     build_cases = ['不限'] + list(df['建案名稱'].unique())
     build_cases = [b for b in build_cases if str(b) != 'nan']
-    bc_idx = build_cases.index(build_case) if build_case in build_cases else len(build_cases)-1
+    bc_idx = build_cases.index(build_case) if build_case in build_cases else len(build_cases) - 1
 
     if 'build_case' in sel_option:
         bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
@@ -1270,7 +1269,6 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
     if 'color_by' in sel_option:
         colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
         color_by = c3.selectbox('著色條件', options=colors, index=0, key=f'{key}+color')
-
 
     return df, bc, color_by
 
@@ -1416,16 +1414,15 @@ def fn_corr_util(dic_of_show, df_1, cmp, target, config):
 
 
 def fn_plot_shp(fig, dic_of_shp_data, k, text=None, row=None, col=None):
-
     assert k in dic_of_shp_data['shape'].keys(), f'{k} not in dic_of_shp[shape].keys('
     x, y = dic_of_shp_data['shape'][k].exterior.xy
     fig = fn_gen_plotly_scatter(fig, list(x), list(y),
-                                  row=row, col=col,
-                                  # color='red', opacity=0.8, size=4,
-                                  text=text, opacity=1,
-                                  update_layout=False,
-                                  line_color='blue', line_width=3,
-                                  mode='lines', colorscale=None)
+                                row=row, col=col,
+                                # color='red', opacity=0.8, size=4,
+                                text=text, opacity=1,
+                                update_layout=False,
+                                line_color='blue', line_width=3,
+                                mode='lines', colorscale=None)
 
     return fig
 
@@ -1496,7 +1493,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                 #                               line_color='blue', line_width=3,
                 #                               mode='lines', colorscale=None)
 
-        else:   # dist in vill:
+        else:  # dist in vill:
 
             fn_dbg("fn_gen_web_eda 3-1-1-1")
 
@@ -1533,8 +1530,8 @@ def fn_gen_analysis(df, latest_records, build_case):
         y_range = [min(df_1['緯度']), max(df_1['緯度'])]
 
         yr_min, yr_max = min(df_1['交易年']), max(df_1['交易年'])
-        title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist=="不限" else dist} 預售屋 成交單價 蛋黃圖' \
-                f' {""if build_case_sel == "不限" else f"(❌: {build_case_sel} )"}'
+        title = f'民國 {yr_min}年 ~ {yr_max}年 {"台北市" if dist == "不限" else dist} 預售屋 成交單價 蛋黃圖' \
+                f' {"" if build_case_sel == "不限" else f"(❌: {build_case_sel} )"}'
         fig_c.update_layout(title={'text': title,
                                    'x': 0.5,
                                    'xanchor': 'center'},
@@ -1563,29 +1560,30 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         dist_sel = df_1['鄉鎮市區'].unique()
         dist_sel = '台北市' if len(dist_sel) > 1 else dist_sel[0]
+        dist_sel = dist_sel + ' 預售屋'
 
         with tb_trade:
-            c1, c2, c3 = st.columns(3)
-            c2.write(f'{dist_sel} 預售屋 交易特徵分布')
+            c1, c2, c3 = st.columns([1.2, 2, 1])
+            c2.write(f'{dist_sel} 交易特徵分布')
             st.plotly_chart(fig_bar_1, config=config)
 
         with tb_build_1:
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3 = st.columns([1.2, 2, 1])
             c2.write(f'{dist_sel} 建物特徵分布1')
             st.plotly_chart(fig_bar_2, config=config)
 
         with tb_build_2:
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3 = st.columns([1.2, 2, 1])
             c2.write(f'{dist_sel} 建物特徵分布2')
             st.plotly_chart(fig_bar_5, config=config)
 
         with tb_build_3:
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3 = st.columns([1.2, 2, 1])
             c2.write(f'{dist_sel} 建物特徵分布3')
             st.plotly_chart(fig_bar_4, config=config)
 
         with tb_pk:
-            c1, c2, c3 = st.columns(3)
+            c1, c2, c3 = st.columns([1.2, 2, 1])
             c2.write(f'{dist_sel} 車位特徵分布')
             st.plotly_chart(fig_bar_3, config=config)
 
@@ -1917,8 +1915,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             for k in dic_values_sort.keys():
                 fig = fn_gen_plotly_hist(fig, dic_values_sort[k], f'{str(k)}坪{r}', bins=50, margin=margin,
                                          line_color='black', color=colors[c], showlegend=True)
-                c = c+1
-
+                c = c + 1
 
             # with st.expander('銷售分析'):
             st.plotly_chart(fig)
@@ -2136,7 +2133,7 @@ def fn_gen_web_eda(df):
     df_sel.rename(columns={'MRT': '捷運站', 'MRT_DIST': '捷運站距離(m)'}, inplace=True)
 
     house_typ = '預售屋' if len(df['建築完成年月'].unique()) == 1 else '中古屋'
-    city = df['土地位置建物門牌'].apply(lambda x: str(x).split('市')[0]+'市')
+    city = df['土地位置建物門牌'].apply(lambda x: str(x).split('市')[0] + '市')
     city = city.unique()[0]
 
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
@@ -2243,7 +2240,8 @@ def fn_gen_web_eda(df):
             st.write(f'- 建案地址: {df_sel["地址"].values[0]}')
             st.write(
                 f'- 鄰近小學: {df_sel["sku_name"].values[0]} (距離: {int(df_sel["sku_dist"].values[0])}公尺, 學生人數: {int(df_sel["sku_109_total"].values[0])}人)')
-            st.write(f'- 鄰近捷運: {df_sel["捷運站"].values[0]} (距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺, 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分鐘)')
+            st.write(
+                f'- 鄰近捷運: {df_sel["捷運站"].values[0]} (距離: {int(df_sel["捷運站距離(m)"].values[0])}公尺, 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分鐘)')
             # st.write(f'- 通勤時間: {int(df_sel["MRT_Commute_Time_UL"].values[0])}分鐘 (捷運)')
 
         df_sel['每坪單價'] = df_sel['每坪單價(萬)'].apply(lambda x: str(x) + '萬/坪')
@@ -2372,7 +2370,8 @@ def fn_gen_web_eda(df):
 
         df_cols = df_sel[st.session_state['feature_sel']]
         with st.form(key='欄位選擇'):
-            cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns, default=st.session_state['feature_sel'])
+            cols = st.multiselect(f'欄位選擇(共{len(df_sel.columns)}個)', df_sel.columns,
+                                  default=st.session_state['feature_sel'])
 
             submitted = st.form_submit_button('選 擇')
 
@@ -2384,7 +2383,8 @@ def fn_gen_web_eda(df):
         df_cols = df_cols.sort_values(by='移轉層次', ascending=False) if '移轉層次' in df_cols.columns else df_cols
 
         AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=False, enable_enterprise_modules=True)
-        st.write(f'資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
+        st.write(
+            f'資料來源: [内政部不動產交易實價查詢服務網(每月1、11、21 日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
 
         fn_dbg(f'fn_gen_web_eda 6 {build_case}')
 
@@ -2396,9 +2396,13 @@ def fn_gen_web_eda(df):
             fn_dbg('fn_gen_web_eda 7')
             deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             st.write('')
-            st.subheader(f'🏡 建案: {build_case}'
-                         f' 📝 登錄: {deals} 筆'
-                         f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+            # st.subheader(f'🏡 建案: {build_case}'
+            #              f' 📝 登錄: {deals} 筆'
+            #              f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
+            st.markdown(f'{"#" * 4} '
+                        f'🏡 建案: {build_case}'
+                        f' 📝 登錄: {deals} 筆'
+                        f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
             tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
 
@@ -2867,7 +2871,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
                                 color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
                                 x_title='重要度 (影響力)', y_title='')
     c1, c2, c3 = st.columns([1.5, 2, 1])
-    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響(MSE={round(df_result.loc["MSE", "測試集"],2)})')
+    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響(MSE={round(df_result.loc["MSE", "測試集"], 2)})')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
