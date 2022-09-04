@@ -2484,8 +2484,12 @@ def fn_gen_web_ml_train(df, path):
             dft_trees = st.session_state['para']['n_estimators']
             dft_depth = st.session_state['para']['max_depth']
         else:
-            dft_trees = 800
-            dft_depth = 150
+            if ml_model == 'RandomForestRegressor':
+                dft_trees = 800
+                dft_depth = 150
+            else:
+                dft_trees = 450
+                dft_depth = 30
 
         trees = col3.slider('要使用幾棵樹訓練(n_estimators)', min_value=1, max_value=1000, step=10, value=dft_trees)
         max_depth = col3.slider('每顆樹的最大深度(max_depth)', min_value=1, max_value=500, step=10, value=dft_depth)
@@ -2870,8 +2874,9 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
                                 color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
                                 x_title='重要度 (影響力)', y_title='')
-    c1, c2, c3 = st.columns([1.5, 2, 1])
-    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響(MSE={round(df_result.loc["MSE", "測試集"], 2)})')
+    c1, c2, c3 = st.columns([1.5, 3, 1])
+    model = ml_model.replace('Regressor', '') if 'Regressor' in ml_model else ml_model
+    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響 ({model} MSE={round(df_result.loc["MSE", "測試集"], 2)})')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
