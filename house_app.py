@@ -2488,7 +2488,7 @@ def fn_gen_web_ml_train(df, path):
                 dft_trees = 800
                 dft_depth = 150
             else:
-                dft_trees = 400
+                dft_trees = 380
                 dft_depth = 30
 
         trees = col3.slider('要使用幾棵樹訓練(n_estimators)', min_value=1, max_value=1000, step=10, value=dft_trees)
