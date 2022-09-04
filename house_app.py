@@ -1566,7 +1566,7 @@ def fn_gen_analysis(df, latest_records, build_case):
 
         with tb_trade:
             c1, c2, c3 = st.columns(3)
-            c2.write(f'{dist_sel} 交易特徵分布')
+            c2.write(f'{dist_sel} 預售屋 交易特徵分布')
             st.plotly_chart(fig_bar_1, config=config)
 
         with tb_build_1:
@@ -3017,7 +3017,6 @@ def fn_gen_web_ml_inference(path, build_typ):
 
             dic_of_input['緯度'] = dic_of_input.pop('lat')
             dic_of_input['經度'] = dic_of_input.pop('log')
-
 
             c1, c2, c3, c4 = st.columns(4)
             dic_of_input['總戶數'] = c1.text_input(label='總戶數', value=60)
