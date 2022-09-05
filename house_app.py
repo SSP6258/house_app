@@ -2144,7 +2144,7 @@ def fn_gen_web_eda(df):
     city = city.unique()[0]
 
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
-    title = f'{period} {city} {house_typ} {df["建案名稱"].nunique()} 個建案 {df.shape[0]} 筆 實價登錄資料'
+    title = f'{period} {city} {df["建案名稱"].nunique()} 個 {house_typ} 建案 {df.shape[0]} 筆 實價登錄資料'
 
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
