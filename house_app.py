@@ -1838,7 +1838,10 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
 
         dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
 
-        df_show = dic_df_show[r] if r in dic_df_show.keys() else None
+        if r == '單價分布':
+            df_show = dic_df_show['每坪單價(萬)']
+        else:
+            df_show = dic_df_show[r] if r in dic_df_show.keys() else None
 
         df_show = df_show[df_show.index != '1F']
 
@@ -1872,21 +1875,24 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
         df_show = df_show.astype(int) if r == '交易日期' else df_show
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
 
-        sorts = []
-        for col in df_show.columns:
-            sorts += list(df_show[col].values)
-
-        if r == '樓層價差(%)':
-            vmin = min(sorts)
+        if r == '單價分布':
+            pass
         else:
-            sorts = [v for v in sorts if v > 0]
-            sorts.sort()
-            vmin = sorts[0] if len(sorts) > 0 else 0
+            sorts = []
+            for col in df_show.columns:
+                sorts += list(df_show[col].values)
 
-        df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=vmin)
-        df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
+            if r == '樓層價差(%)':
+                vmin = min(sorts)
+            else:
+                sorts = [v for v in sorts if v > 0]
+                sorts.sort()
+                vmin = sorts[0] if len(sorts) > 0 else 0
 
-        st.dataframe(df_show_fig, width=768, height=540)
+            df_show_fig = df_show_fig.background_gradient(cmap='rainbow', low=0.8, high=0, axis=None, vmin=vmin)
+            df_show_fig = df_show_fig.highlight_between(left=0, right=0.0005, axis=1, color='gray')
+
+            st.dataframe(df_show_fig, width=768, height=540)
 
         dic_values = defaultdict(list)
         for col in df_show.columns:
@@ -1900,7 +1906,8 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
                         v = datetime.date(year=year, month=month, day=1)
                     dic_values[a].append(v)
 
-        if r == '每坪單價(萬)':
+        # if r == '每坪單價(萬)':
+        if r == '單價分布':
             deals = np.count_nonzero(dic_df_show['每坪單價(萬)'])
             fig = make_subplots(rows=1, cols=1,
                                 subplot_titles=(
@@ -1908,7 +1915,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
 
             dic_values_sort = {k: dic_values[k] for k in sorted(dic_values)}
 
-            margin = {'l': 40}
+            margin = {'l': 40, 't': 30}
             colors = plotly.colors.qualitative.Vivid + plotly.colors.qualitative.Set3 + plotly.colors.qualitative.Light24
             c = 0
             assert len(colors) > len(dic_values_sort.keys()), f'colors {len(colors)} > c {c} Fail !'
@@ -2404,12 +2411,15 @@ def fn_gen_web_eda(df):
                         f' 📝 登錄: {deals} 筆'
                         f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-            tabs = st.tabs(['每坪單價(萬)', '樓層價差(%)', '總價-車位(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易日期'])
+            tabs = st.tabs(['每坪單價', '單價分布', '樓層價差', '總價-車位', '總價', '車位總價', '建物坪數', '車位坪數', '交易日期'])
 
-            tab_price, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
+            tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
             with tab_price:
                 fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
+
+            with tab_price_dist:
+                fn_gen_bc_deals(build_case, dic_df_show, '單價分布')
 
             with tab_diff:
                 fn_gen_bc_deals(build_case, dic_df_show, '樓層價差(%)')
