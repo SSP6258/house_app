@@ -2237,6 +2237,7 @@ def fn_gen_web_eda(df):
 
     st.header(f'🏘️ 建案分析 👉 {build_case}')
 
+
     tab_bc_sell_2, tab_bc_sell_1, tab_bc_location, tab_bc_info = st.tabs(['銷售整理', '銷售明細', '建案位置', '建案資料'])
 
     with tab_bc_location:
@@ -2275,8 +2276,7 @@ def fn_gen_web_eda(df):
     with tab_bc_info:
         st.subheader('📜 建案資料')
         if build_case == '不限':
-            pass
-            # st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊')
+            st.markdown(f'{"#" * 4} 🙊 請選擇 👉 建案名稱')
         else:
             # st.subheader(f'🚇 捷運 {mrt.split("_")[-1]} 周邊 👉 {build_case}')
             # st.write('')
@@ -2397,7 +2397,7 @@ def fn_gen_web_eda(df):
 
     with tab_bc_sell_2:
         if build_case == '不限':
-            pass
+            st.markdown(f'{"#" * 4} 🙊 請選擇 👉 建案名稱')
         else:
             # fn_gen_bc_deals(build_case, dic_df_show)
             fn_dbg('fn_gen_web_eda 7')
@@ -2416,7 +2416,7 @@ def fn_gen_web_eda(df):
             tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
             with tab_price:
-                fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
+                    fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
             with tab_price_dist:
                 fn_gen_bc_deals(build_case, dic_df_show, '單價分布')
