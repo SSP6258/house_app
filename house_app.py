@@ -2451,6 +2451,7 @@ def fn_gen_web_eda(df):
 @fn_profiler
 def fn_gen_web_ml_train(df, path):
     # ts = time.time()
+    fn_dbg('fn_gen_web_ml_train 1')
 
     ml_model = os.path.join(path, 'output/model')
 
@@ -2576,7 +2577,9 @@ def fn_gen_web_ml_train(df, path):
 
         df.reset_index(drop=True, inplace=True)
 
+        fn_dbg('fn_gen_web_ml_train 2')
         X, df_cat = fn_gen_training_data(df, path)
+        fn_dbg('fn_gen_web_ml_train 3')
         y = df[['每坪單價(萬)']]
 
         with st.form(key='Form2'):
@@ -2591,6 +2594,12 @@ def fn_gen_web_ml_train(df, path):
                                                    '稅_第' not in c and
                                                    '幾房' not in c and
                                                    '幾衛' not in c and
+                                                   # '幾廳' not in c and
+                                                   # '交易年' not in c and
+                                                   # '使用分區' not in c and
+                                                   # '利率' not in c and
+                                                   # '中位數' not in c and
+                                                   # '頂樓-1' not in c and
                                                    c != 'MRT'])
             st.write('')
             form2_submitted = st.form_submit_button('選擇')
@@ -2713,6 +2722,8 @@ def fn_gen_web_ml_train(df, path):
 
             assert False, f'{X_train.shape, y_train.shape}'
 
+        fn_dbg('fn_gen_web_ml_train 4')
+
         if tune == 'GridSearch':
             print(regr.best_params_)
             # st.write('')
@@ -2725,6 +2736,7 @@ def fn_gen_web_ml_train(df, path):
 
         fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_test, df, mse_th)
 
+        fn_dbg('fn_gen_web_ml_train 5')
         # st.session_state['Train'] = 'done'
 
     # te = time.time()
@@ -2856,13 +2868,14 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
 
     df_imp = df_imp.sort_values(by='Importance')
 
+    imp_thd = 0.005
     # df_top = df_imp.iloc[df_imp.shape[0] - 10:df_imp.shape[0] + 1, :]
     # df_bot = df_imp.iloc[:10, :]
-
+    df_imp['Features'] = df_imp['Features'].apply(lambda x: str(x) + '  ')
     df_imp['Importance'] = df_imp['Importance'].apply(lambda x: round(x, 5))
     df_top = df_imp[df_imp['Features'].apply(lambda x: '均價' in x)]
     df_bot = df_imp[df_imp['Features'].apply(lambda x: '均價' not in x)]
-    df_bot = df_bot[df_bot['Importance'] > 0.001]
+    df_bot = df_bot[df_bot['Importance'] > imp_thd]
 
     x_data_col = 'Importance'
     y_data_col = 'Features'
@@ -2884,9 +2897,9 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
                                 color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
                                 x_title='重要度 (影響力)', y_title='')
-    c1, c2, c3 = st.columns([1.5, 3, 1])
+    c1, c2, c3 = st.columns([1.5, 5, 0.5])
     model = ml_model.replace('Regressor', '') if 'Regressor' in ml_model else ml_model
-    c2.markdown(f'{"#" * 6} 各項指標 對 房價 的影響 ({model} MSE={round(df_result.loc["MSE", "測試集"], 2)})')
+    c2.markdown(f'{"#" * 6} 各項指標(Top {df_bot.shape[0]}) 對 房價 的影響力 ({model} MSE={round(df_result.loc["MSE", "測試集"], 2)})')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
