@@ -2416,7 +2416,11 @@ def fn_gen_web_eda(df):
             tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
             with tab_price:
-                    fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
+                df = dic_df_show['每坪單價(萬)']
+                v_max, v_min = df.max(), df.min()
+                st.write(f'單價最高 👉 {v_max}')
+                st.write(f'單價最低 👉 {v_min}')
+                fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
             with tab_price_dist:
                 fn_gen_bc_deals(build_case, dic_df_show, '單價分布')
