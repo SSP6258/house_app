@@ -2428,11 +2428,11 @@ def fn_gen_web_eda(df):
                 str_max, str_min = ' ', ' '
                 for k, v in dic_max.items():
                     v_str = ', '.join(v)
-                    str_max = str_max + f'{k} - {v_str}'
+                    str_max = str_max + f'{k} - {v_str} '
 
                 for k, v in dic_min.items():
                     v_str = ', '.join(v)
-                    str_min = str_min + f'{k} - {v_str}'
+                    str_min = str_min + f'{k} - {v_str} '
 
                 st.write(f'最高單價 👉 {v_max} (萬/坪): {str_max}')
                 st.write(f'最低單價 👉 {v_min} (萬/坪): {str_min}')
