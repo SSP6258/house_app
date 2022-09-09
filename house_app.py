@@ -2237,7 +2237,6 @@ def fn_gen_web_eda(df):
 
     st.header(f'🏘️ 建案分析 👉 {build_case}')
 
-
     tab_bc_sell_2, tab_bc_sell_1, tab_bc_location, tab_bc_info = st.tabs(['銷售整理', '銷售明細', '建案位置', '建案資料'])
 
     with tab_bc_location:
@@ -2417,9 +2416,26 @@ def fn_gen_web_eda(df):
 
             with tab_price:
                 df = dic_df_show['每坪單價(萬)']
-                v_max, v_min = df.max().max(), df[df > .01].min().min()
-                st.write(f'最高單價 👉 {v_max} (萬/坪) {df[df==v_max].dropna(thresh=2).index.values[0]}')
-                st.write(f'最低單價 👉 {v_min} (萬/坪) ')
+                v_max, v_min = df.max().max(), df[df > 0].min().min()
+                dic_max, dic_min = {}, {}
+                for c in df.columns:
+                    if v_max in df[c].values:
+                        dic_max[c] = df[df[c] == v_max].index.values.tolist()
+
+                    if v_min in df[c].values:
+                        dic_min[c] = df[df[c] == v_min].index.values.tolist()
+
+                str_max, str_min = ' ', ' '
+                for k, v in dic_max.items():
+                    v_str = ', '.join(v)
+                    str_max = str_max + f'{k} - {v_str}'
+
+                for k, v in dic_min.items():
+                    v_str = ', '.join(v)
+                    str_min = str_min + f'{k} - {v_str}'
+
+                st.write(f'最高單價 👉 {v_max} (萬/坪): {str_max}')
+                st.write(f'最低單價 👉 {v_min} (萬/坪): {str_min}')
                 fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
             with tab_price_dist:
@@ -2903,7 +2919,8 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
                                 x_title='重要度 (影響力)', y_title='')
     c1, c2, c3 = st.columns([1.5, 5, 0.5])
     model = ml_model.replace('Regressor', '') if 'Regressor' in ml_model else ml_model
-    c2.markdown(f'{"#" * 6} 各項指標(Top {df_bot.shape[0]}) 對 房價 的影響力 ({model} MSE={round(df_result.loc["MSE", "測試集"], 2)})')
+    c2.markdown(
+        f'{"#" * 6} 各項指標(Top {df_bot.shape[0]}) 對 房價 的影響力 ({model} MSE={round(df_result.loc["MSE", "測試集"], 2)})')
     st.plotly_chart(fig_bot)
 
     st.write('測試資料集 的 模型預估結果(萬/坪):')
