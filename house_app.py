@@ -2418,8 +2418,8 @@ def fn_gen_web_eda(df):
             with tab_price:
                 df = dic_df_show['每坪單價(萬)']
                 v_max, v_min = df.max().max(), df[df > .01].min().min()
-                st.write(f'單價最高 👉 {v_max} (萬/坪) {df[df==v_max].dropna(thresh=2).index.values[:]}')
-                st.write(f'單價最低 👉 {v_min} (萬/坪) {df[df==v_min].dropna(thresh=2).index.values[:]}')
+                # st.write(f'最高單價 👉 {v_max} (萬/坪) {df[df==v_max].dropna(thresh=2).index.values[0]}')
+                st.write(f'最低單價 👉 {v_min} (萬/坪) {df[df==v_min].dropna(thresh=2).index.values[0]}')
                 fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
             with tab_price_dist:
