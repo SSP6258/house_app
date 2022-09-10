@@ -61,7 +61,6 @@ class MultiApp:
             'house_dora_88.jpg': '~ ❤️女兒小一時送的父親節禮物 一棟別墅 ~',
             'house_sunset.jpg': '~ 🌅 八里夕陽 ~',
             'house_peace_island.jpg': '~ 🏝️ 和平島 ~',
-
         }
 
         img = 'house_peace_island.jpg'
