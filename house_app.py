@@ -1834,6 +1834,7 @@ def fn_gen_bc_deals_old(build_case, dic_df_show):
 
 @fn_profiler
 def fn_gen_bc_deals(build_case, dic_df_show, r):
+    fn_gen_bc_summary(dic_df_show, r)
     if len(dic_df_show.keys()):
 
         dic_df_show['樓層價差(%)'] = dic_df_show['每坪單價(萬)']
@@ -1970,6 +1971,35 @@ def fn_util_split(constructor):
         constructors = [constructor]
 
     return constructors
+
+
+def fn_gen_bc_summary(dic_df_show, key):
+
+    if key == '每坪單價(萬)':
+        df = dic_df_show[key]
+        v_max, v_min = df.max().max(), df[df > 0].min().min()
+        dic_max, dic_min = {}, {}
+        for c in df.columns:
+            if v_max in df[c].values:
+                dic_max[c] = df[df[c] == v_max].index.values.tolist()
+
+            if v_min in df[c].values:
+                dic_min[c] = df[df[c] == v_min].index.values.tolist()
+
+        str_max, str_min = ' ', ' '
+        for k, v in dic_max.items():
+            str_max = str_max + f'{k}-{", ".join(v)} '
+
+        for k, v in dic_min.items():
+            str_min = str_min + f'{k}-{", ".join(v)} '
+
+        st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
+        st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
+    else:
+        st.write('')
+        st.write('')
+        st.write('')
+        st.write('')
 
 
 @fn_profiler
@@ -2144,7 +2174,7 @@ def fn_gen_web_eda(df):
     city = city.unique()[0]
 
     period = f"民國 {df['交易年'].min()}年 ~ {df['交易年'].max()}年"
-    title = f'{period} {city} {df["建案名稱"].nunique()} 個 {house_typ} 建案 {df.shape[0]} 筆 實價登錄資料'
+    title = f'{period} {city} {df["建案名稱"].nunique()} 個 {df["建物型態"].values[0]}型{house_typ}建案 {df.shape[0]} 筆 實價登錄資料'
 
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
@@ -2415,27 +2445,27 @@ def fn_gen_web_eda(df):
             tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
 
             with tab_price:
-                df = dic_df_show['每坪單價(萬)']
-                v_max, v_min = df.max().max(), df[df > 0].min().min()
-                dic_max, dic_min = {}, {}
-                for c in df.columns:
-                    if v_max in df[c].values:
-                        dic_max[c] = df[df[c] == v_max].index.values.tolist()
+                # fn_gen_bc_summary(dic_df_show, '每坪單價(萬)')
 
-                    if v_min in df[c].values:
-                        dic_min[c] = df[df[c] == v_min].index.values.tolist()
-
-                str_max, str_min = ' ', ' '
-                for k, v in dic_max.items():
-                    # v_str = ', '.join(v)
-                    str_max = str_max + f'{k}-{", ".join(v)} '
-
-                for k, v in dic_min.items():
-                    # v_str = ', '.join(v)
-                    str_min = str_min + f'{k}-{", ".join(v)} '
-
-                st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
-                st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
+                # df = dic_df_show['每坪單價(萬)']
+                # v_max, v_min = df.max().max(), df[df > 0].min().min()
+                # dic_max, dic_min = {}, {}
+                # for c in df.columns:
+                #     if v_max in df[c].values:
+                #         dic_max[c] = df[df[c] == v_max].index.values.tolist()
+                #
+                #     if v_min in df[c].values:
+                #         dic_min[c] = df[df[c] == v_min].index.values.tolist()
+                #
+                # str_max, str_min = ' ', ' '
+                # for k, v in dic_max.items():
+                #     str_max = str_max + f'{k}-{", ".join(v)} '
+                #
+                # for k, v in dic_min.items():
+                #     str_min = str_min + f'{k}-{", ".join(v)} '
+                #
+                # st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
+                # st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
 
                 fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
