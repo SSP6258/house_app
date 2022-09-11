@@ -60,10 +60,10 @@ class MultiApp:
             'house_dora_2.jpg': '',
             'house_dora_88.jpg': '~ ❤️女兒小一時送的父親節禮物 一棟別墅 ~',
             'house_sunset.jpg': '~ 🌅 八里夕陽 ~',
-            'house_peace_island.jpg': '~ 🏝️ 和平島 ~',
+            'house_peace_island_s.jpg': '~ 🏝️ 和平島 ~',
         }
 
-        img = 'house_peace_island.jpg'
+        img = 'house_peace_island_s.jpg'
 
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
