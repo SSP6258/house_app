@@ -2494,7 +2494,7 @@ def fn_gen_web_eda(df):
             with tab_date:
                 fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
 
-            with tab_floor_ave('📈 樓層均價 與 成交戶數'):
+            with tab_floor_ave:
                 # st.subheader('📈 樓層均價 與 成交戶數')
                 st.write('')
                 st.plotly_chart(fig_bar2)
