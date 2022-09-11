@@ -65,7 +65,7 @@ class MultiApp:
 
         img = 'house_peace_island.jpg'
 
-        fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=300, caption=dic_imgs[img])
+        fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
         # try:
         #     with st.sidebar:
