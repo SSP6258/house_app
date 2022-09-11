@@ -63,6 +63,7 @@ class MultiApp:
             'house_peace_island.jpg': '~ 🏝️ 和平島 ~',
         }
 
+
         img = 'house_peace_island.jpg'
 
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
