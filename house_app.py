@@ -2441,9 +2441,9 @@ def fn_gen_web_eda(df):
                         f' 📝 登錄: {deals} 筆'
                         f' 💰 總金額: {round((dic_df_show["總價(萬)"].values.sum()) / 10000, 2)} 億')
 
-            tabs = st.tabs(['每坪單價', '單價分布', '樓層價差', '總價-車位', '總價', '車位總價', '建物坪數', '車位坪數', '交易日期'])
+            tabs = st.tabs(['每坪單價', '單價分布', '樓層價差', '總價-車位', '總價', '車位總價', '建物坪數', '車位坪數', '交易日期', '樓層均價'])
 
-            tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date = tabs
+            tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date, tab_floor_ave = tabs
 
             with tab_price:
                 # fn_gen_bc_summary(dic_df_show, '每坪單價(萬)')
@@ -2494,10 +2494,10 @@ def fn_gen_web_eda(df):
             with tab_date:
                 fn_gen_bc_deals(build_case, dic_df_show, '交易日期')
 
-            # with st.expander('📈 樓層均價 與 成交戶數'):
-            #     # st.subheader('📈 樓層均價 與 成交戶數')
-            #     st.write('')
-            #     st.plotly_chart(fig_bar2)
+            with tab_floor_ave('📈 樓層均價 與 成交戶數'):
+                # st.subheader('📈 樓層均價 與 成交戶數')
+                st.write('')
+                st.plotly_chart(fig_bar2)
 
 
 @fn_profiler
