@@ -2002,6 +2002,7 @@ def fn_gen_bc_summary(dic_df_show, key):
         for k, v in dic_min.items():
             str_min = str_min + f'{k}-{", ".join(v)} '
 
+        v_min = int(v_min) if '總' in key else v_min
         st.write(f'{dic_summary[key][0]} 👉 {v_max} {dic_summary[key][2]} : {str_max}')
         st.write(f'{dic_summary[key][1]} 👉 {v_min} {dic_summary[key][2]} : {str_min}')
     else:
