@@ -1977,7 +1977,16 @@ def fn_gen_bc_summary(dic_df_show, key):
 
     summary = ['每坪單價(萬)', '總價(萬)']
 
-    if key in summary:
+    dic_summary = {
+        '每坪單價(萬)': ['最高單價', '最低單價', '(萬/坪)'],
+        '總價(萬)': ['最高總價', '最低總價', '(萬)'],
+        '總價-車位(萬)': ['最高總價', '最低總價', '(萬)'],
+        '車位總價(萬)': ['最高總價', '最低總價', '(萬)'],
+        '建物坪數': ['最大坪數', '最小坪數', '(坪)'],
+        '車位坪數': ['最大坪數', '最小坪數', '(坪)'],
+    }
+
+    if key in dic_summary.keys():
         df = dic_df_show[key]
         v_max, v_min = df.max().max(), df[df > 0].min().min()
         dic_max, dic_min = {}, {}
@@ -1995,12 +2004,8 @@ def fn_gen_bc_summary(dic_df_show, key):
         for k, v in dic_min.items():
             str_min = str_min + f'{k}-{", ".join(v)} '
 
-        if key == '每坪單價(萬)':
-            st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
-            st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
-        elif key == '總價(萬)':
-            st.write(f'最高總價 👉 {v_max} (萬) : {str_max}')
-            st.write(f'最低總價 👉 {v_min} (萬) : {str_min}')
+        st.write(f'{dic_summary[key][0]} 👉 {v_max} {dic_summary[key][2]} : {str_max}')
+        st.write(f'{dic_summary[key][1]} 👉 {v_min} {dic_summary[key][2]} : {str_min}')
     else:
         st.write('')
         st.write('')
