@@ -2008,7 +2008,7 @@ def fn_gen_bc_summary(dic_df_show, key):
         st.write('')
         st.write('')
         st.write('')
-        # st.write('')
+        st.write('')
 
 
 @fn_profiler
