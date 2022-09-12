@@ -1975,8 +1975,6 @@ def fn_util_split(constructor):
 
 def fn_gen_bc_summary(dic_df_show, key):
 
-    summary = ['每坪單價(萬)', '總價(萬)']
-
     dic_summary = {
         '每坪單價(萬)': ['最高單價', '最低單價', '(萬/坪)'],
         '總價(萬)': ['最高總價', '最低總價', '(萬)'],
@@ -2010,7 +2008,7 @@ def fn_gen_bc_summary(dic_df_show, key):
         st.write('')
         st.write('')
         st.write('')
-        st.write('')
+        # st.write('')
 
 
 @fn_profiler
