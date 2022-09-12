@@ -1975,7 +1975,9 @@ def fn_util_split(constructor):
 
 def fn_gen_bc_summary(dic_df_show, key):
 
-    if key == '每坪單價(萬)':
+    summary = ['每坪單價(萬)', '總價(萬)']
+
+    if key in summary:
         df = dic_df_show[key]
         v_max, v_min = df.max().max(), df[df > 0].min().min()
         dic_max, dic_min = {}, {}
@@ -1993,8 +1995,12 @@ def fn_gen_bc_summary(dic_df_show, key):
         for k, v in dic_min.items():
             str_min = str_min + f'{k}-{", ".join(v)} '
 
-        st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
-        st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
+        if key == '每坪單價(萬)':
+            st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
+            st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
+        elif key == '總價(萬)':
+            st.write(f'最高總價 👉 {v_max} (萬) : {str_max}')
+            st.write(f'最低總價 👉 {v_min} (萬) : {str_min}')
     else:
         st.write('')
         st.write('')
@@ -2446,28 +2452,6 @@ def fn_gen_web_eda(df):
             tab_price, tab_price_dist, tab_diff, tab_wo_pk, tab_total, tab_pk, tab_area, tab_pk_area, tab_date, tab_floor_ave = tabs
 
             with tab_price:
-                # fn_gen_bc_summary(dic_df_show, '每坪單價(萬)')
-
-                # df = dic_df_show['每坪單價(萬)']
-                # v_max, v_min = df.max().max(), df[df > 0].min().min()
-                # dic_max, dic_min = {}, {}
-                # for c in df.columns:
-                #     if v_max in df[c].values:
-                #         dic_max[c] = df[df[c] == v_max].index.values.tolist()
-                #
-                #     if v_min in df[c].values:
-                #         dic_min[c] = df[df[c] == v_min].index.values.tolist()
-                #
-                # str_max, str_min = ' ', ' '
-                # for k, v in dic_max.items():
-                #     str_max = str_max + f'{k}-{", ".join(v)} '
-                #
-                # for k, v in dic_min.items():
-                #     str_min = str_min + f'{k}-{", ".join(v)} '
-                #
-                # st.write(f'最高單價 👉 {v_max} (萬/坪) : {str_max}')
-                # st.write(f'最低單價 👉 {v_min} (萬/坪) : {str_min}')
-
                 fn_gen_bc_deals(build_case, dic_df_show, '每坪單價(萬)')
 
             with tab_price_dist:
