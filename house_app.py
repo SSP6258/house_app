@@ -1997,7 +1997,7 @@ def fn_gen_bc_summary(dic_df_show, key):
 
         str_max, str_min = ' ', ' '
         for k, v in dic_max.items():
-            str_max = str_max + f'{k}-{", ".join(v)} '
+            str_max = str_max + f'{k}-{f", {k}-".join(v)} '
 
         for k, v in dic_min.items():
             str_min = str_min + f'{k}-{", ".join(v)} '
