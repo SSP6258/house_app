@@ -1599,11 +1599,11 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1 = df_1[df_1['容積率(%)'].apply(lambda x: str(x).isnumeric())]
         df_1['容積率(%)'] = df_1['容積率(%)'].astype(int)
 
-        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案']
+        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案1', '建案2']
         # cmp = st.radio('比較指標:', options=options, index=6)
         # fn_set_radio_2_hor()
 
-        tb_mrt, tb_sku, tb_build, tb_ave, tb_income1, tb_income2, tb_build_case = st.tabs(options)
+        tb_mrt, tb_sku, tb_build, tb_ave, tb_income1, tb_income2, tb_build_case1, tb_build_case2 = st.tabs(options)
 
         # title = f'每坪單價 與 "{cmp}" 指標 的關係'
         target = [dict(label='每坪單價', values=df_1['每坪單價(萬)'])]
@@ -1643,9 +1643,11 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='基地面積(坪)', values=df_1['基地面積(坪)']),
             dict(label='地下樓層', values=df_1['地下樓層']),
             dict(label='完工年度', values=df_1['完工年度']),
-            # dict(label='建蔽率(%)', values=df_1['建蔽率(%)']),
-            # dict(label='容積率(%)', values=df_1['容積率(%)']),
-            # dict(label='公設比(%)', values=df_1['公設比(%)']),
+
+            dict(label='建蔽率(%)', values=df_1['建蔽率(%)']),
+            dict(label='容積率(%)', values=df_1['容積率(%)']),
+            dict(label='公設比(%)', values=df_1['公設比(%)']),
+            dict(label='公設比(%)', values=df_1['公設比(%)']),
         ]
 
         figs = 4
@@ -1656,8 +1658,9 @@ def fn_gen_analysis(df, latest_records, build_case):
         d5 = dimensions[4 * figs: 5 * figs]
         d6 = dimensions[5 * figs: 6 * figs]
         d7 = dimensions[6 * figs: 7 * figs]
+        d8 = dimensions[7 * figs: 8 * figs]
 
-        plots = [d1, d2, d3, d4, d5, d6, d7]
+        plots = [d1, d2, d3, d4, d5, d6, d7, d8]
         dic_of_show = {k: plots[options.index(k)] for k in options}
 
         with tb_mrt:
@@ -1684,8 +1687,12 @@ def fn_gen_analysis(df, latest_records, build_case):
             cmp = options[5]
             fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
-        with tb_build_case:
+        with tb_build_case1:
             cmp = options[6]
+            fn_corr_util(dic_of_show, df_1, cmp, target, config)
+
+        with tb_build_case2:
+            cmp = options[7]
             fn_corr_util(dic_of_show, df_1, cmp, target, config)
 
         fn_dbg('fn_gen_web_eda 3-1-4')
