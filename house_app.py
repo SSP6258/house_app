@@ -744,7 +744,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             zoom=zoom, height=height, color=color,
                             text=text, opacity=op, size=size)
 
-    fig.update_layout(mapbox_style=map_style, margin=margin, width=500, height=450)  # 'mapbox_style=map_style'
+    fig.update_layout(mapbox_style=map_style, margin=margin, width=800, height=450)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
 
     return fig
