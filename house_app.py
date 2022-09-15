@@ -744,7 +744,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             zoom=zoom, height=height, color=color,
                             text=text, opacity=op, size=size)
 
-    fig.update_layout(mapbox_style=map_style, margin=margin)  # 'mapbox_style=map_style'
+    fig.update_layout(mapbox_style=map_style, margin=margin, width=800, height=450)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
 
     return fig
@@ -753,7 +753,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, op=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
                           legend=False, name=None, update_layout=True, line_color=None, line_width=None, mode='markers',
-                          colorscale='Bluered'):
+                          colorscale='Bluered', width=None):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              line=dict(color=line_color, width=line_width),
@@ -767,7 +767,7 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                              ), row=row, col=col)
 
     if margin is not None:
-        fig.update_layout(margin=margin)
+        fig.update_layout(margin=margin, width=width)
 
     if update_layout:
         fig.update_layout(
@@ -792,7 +792,7 @@ def fn_gen_plotly_treemap(df, path=None, values=None, color=None, hover=None, mi
                      color_continuous_scale='balance',  # balance RdBu
                      color_continuous_midpoint=mid)
 
-    fig.update_layout(margin=dict(t=20, l=0, r=0, b=20))
+    fig.update_layout(margin=dict(t=20, l=0, r=0, b=20), width=850, height=500)
 
     return fig
 
@@ -1537,7 +1537,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                    'xanchor': 'center'},
                             autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
-                            xaxis_range=x_range, yaxis_range=y_range)
+                            xaxis_range=x_range, yaxis_range=y_range, width=800)
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
@@ -1647,7 +1647,7 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='建蔽率(%)', values=df_1['建蔽率(%)']),
             dict(label='容積率(%)', values=df_1['容積率(%)']),
             dict(label='公設比(%)', values=df_1['公設比(%)']),
-            dict(label='公設比(%)', values=df_1['公設比(%)']),
+            # dict(label='公設比(%)', values=df_1['公設比(%)']),
         ]
 
         figs = 4
@@ -1658,7 +1658,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         d5 = dimensions[4 * figs: 5 * figs]
         d6 = dimensions[5 * figs: 6 * figs]
         d7 = dimensions[6 * figs: 7 * figs]
-        d8 = dimensions[7 * figs: 8 * figs]
+        d8 = dimensions[7 * figs: 8 * figs-1]
 
         plots = [d1, d2, d3, d4, d5, d6, d7, d8]
         dic_of_show = {k: plots[options.index(k)] for k in options}
@@ -2213,7 +2213,7 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", '最新登錄']
     color = '每坪均價(萬)'
 
-    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.25,
+    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.5,
                                     op=0.55,
                                     size='交易量')
 
