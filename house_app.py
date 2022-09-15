@@ -716,6 +716,7 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
     return fig
 
 
+
 def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                       color=None, zoom=10, height=400, text=None, margin=None, op=None, size=None):
     margin = {"r": 0, "t": 40, "l": 0, "b": 0} if margin is None else margin
