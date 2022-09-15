@@ -716,7 +716,6 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
     return fig
 
 
-
 def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                       color=None, zoom=10, height=400, text=None, margin=None, op=None, size=None):
     margin = {"r": 0, "t": 40, "l": 0, "b": 0} if margin is None else margin
@@ -745,7 +744,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
                             zoom=zoom, height=height, color=color,
                             text=text, opacity=op, size=size)
 
-    fig.update_layout(mapbox_style=map_style, margin=margin, width=800, height=450)  # 'mapbox_style=map_style'
+    fig.update_layout(mapbox_style=map_style, margin=margin, width=500, height=450)  # 'mapbox_style=map_style'
     # map style - "open-street-map", "white-bg", "carto-positron", "stamen-terrain"
 
     return fig
