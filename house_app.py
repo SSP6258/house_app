@@ -403,7 +403,6 @@ def fn_get_hover_text(df):
     if '每坪單價(萬)' in cols:
         txt += '每坪單價 ' + df['每坪單價(萬)'].astype(str) + ' 萬元<br>'
 
-
     return txt
 
 
