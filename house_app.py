@@ -394,6 +394,12 @@ def fn_get_hover_text(df):
     if 'sku_dist' in cols:
         txt += df['sku_dist'].astype(int).astype(str) + '公尺<br>'
 
+    if '投資建設' in cols:
+        txt += df['投資建設'].astype(str) + '<br>'
+
+    if '營造公司' in cols:
+        txt += df['營造公司'].astype(str) + '<br>'
+
     if '每坪單價(萬)' in cols:
         txt += '每坪單價 ' + df['每坪單價(萬)'].astype(str) + ' 萬元<br>'
 
@@ -1599,11 +1605,15 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1 = df_1[df_1['容積率(%)'].apply(lambda x: str(x).isnumeric())]
         df_1['容積率(%)'] = df_1['容積率(%)'].astype(int)
 
-        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案1', '建案2']
+        options = ['捷運', '小學', '建物', '均價', '所得1', '所得2', '建案1', '建案2', '歷年訴訟']
         # cmp = st.radio('比較指標:', options=options, index=6)
         # fn_set_radio_2_hor()
 
-        tb_mrt, tb_sku, tb_build, tb_ave, tb_income1, tb_income2, tb_build_case1, tb_build_case2 = st.tabs(options)
+        tb_mrt, tb_sku, tb_build, tb_ave, tb_income1, tb_income2, tb_build_case1, tb_build_case2, tb_lg = st.tabs(
+            options)
+
+        df_lg = df_1[df_1['建商訴訟'] > 0]
+        df_lg = df_lg[df_lg['營造訴訟'] > 0]
 
         # title = f'每坪單價 與 "{cmp}" 指標 的關係'
         target = [dict(label='每坪單價', values=df_1['每坪單價(萬)'])]
@@ -1648,6 +1658,11 @@ def fn_gen_analysis(df, latest_records, build_case):
             dict(label='容積率(%)', values=df_1['容積率(%)']),
             dict(label='公設比(%)', values=df_1['公設比(%)']),
             # dict(label='公設比(%)', values=df_1['公設比(%)']),
+
+            dict(label='建商 歷年訴訟(件)', values=df_lg['建商訴訟']),
+            dict(label='營造 歷年訴訟(件)', values=df_lg['營造訴訟']),
+            dict(label='建商+營造 歷年訴訟(件)', values=df_lg['所有訴訟']),
+            # dict(label='公設比(%)', values=df_1['公設比(%)']),
         ]
 
         figs = 4
@@ -1658,9 +1673,10 @@ def fn_gen_analysis(df, latest_records, build_case):
         d5 = dimensions[4 * figs: 5 * figs]
         d6 = dimensions[5 * figs: 6 * figs]
         d7 = dimensions[6 * figs: 7 * figs]
-        d8 = dimensions[7 * figs: 8 * figs-1]
+        d8 = dimensions[7 * figs: 8 * figs - 1]
+        d9 = dimensions[8 * figs - 1: 9 * figs - 1]
 
-        plots = [d1, d2, d3, d4, d5, d6, d7, d8]
+        plots = [d1, d2, d3, d4, d5, d6, d7, d8, d9]
         dic_of_show = {k: plots[options.index(k)] for k in options}
 
         with tb_mrt:
@@ -1694,6 +1710,10 @@ def fn_gen_analysis(df, latest_records, build_case):
         with tb_build_case2:
             cmp = options[7]
             fn_corr_util(dic_of_show, df_1, cmp, target, config)
+
+        with tb_lg:
+            cmp = options[8]
+            fn_corr_util(dic_of_show, df_lg, cmp, target, config)
 
         fn_dbg('fn_gen_web_eda 3-1-4')
 
@@ -1982,7 +2002,6 @@ def fn_util_split(constructor):
 
 
 def fn_gen_bc_summary(dic_df_show, key):
-
     dic_summary = {
         '每坪單價(萬)': ['最高單價', '最低單價', '(萬/坪)'],
         '總價(萬)': ['最高總價', '最低總價', '(萬)'],
