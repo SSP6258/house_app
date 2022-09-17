@@ -686,7 +686,8 @@ def fn_gen_model_explain(X, model):
 
 
 def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, line_color='white',
-                       showlegend=False, lg=None, hovertext=None, barmode='stack', opacity=0.8, color=None):
+                       showlegend=False, lg=None, hovertext=None, barmode='stack', opacity=0.8, color=None,
+                       width=None, height=None, font_size=None):
     fig.add_trace(
         go.Histogram(x=data, name=title, legendgroup=lg, showlegend=showlegend, nbinsx=bins, hovertext=hovertext,
                      marker=dict(
@@ -701,13 +702,21 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
     )
 
     fig.update_layout(margin=margin,
-                      barmode=barmode)
+                      barmode=barmode,
+                      width=width,
+                      height=height,
+                      font=dict(
+                          family="Courier New, monospace",
+                          size=font_size,
+                          color=None,)
+                      )
 
     return fig
 
 
 def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
-                      color_col=None, text_fmt=None, title=None, x_title=None, y_title=None, ccs='agsunset', op=None):
+                      color_col=None, text_fmt=None, title=None, x_title=None, y_title=None, ccs='agsunset', op=None,
+                      height=None, width=None, font_size=None):
     fig = px.bar(df_top, x=x_data_col, y=y_data_col,
                  orientation=v_or_h, title=title,
                  text=text_col, color=color_col,
@@ -717,7 +726,13 @@ def fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
     fig.update_traces(texttemplate=text_fmt)
     fig.update_layout(margin=margin,
                       yaxis_title=y_title,
-                      xaxis_title=x_title)
+                      xaxis_title=x_title,
+                      height=height,
+                      font=dict(
+                          family=None,
+                          size=font_size,
+                          color=None, )
+                      )
 
     return fig
 
@@ -2904,11 +2919,12 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     title = f'測試誤差分佈, 誤差<{err_th}萬的預測達{int(100 * df_sel.shape[0] / df_metrics.shape[0])}%'
     fig = make_subplots(rows=1, cols=1, subplot_titles=(title,))
 
-    margin = dict(t=30, b=250, l=0, r=400)
-    fig = fn_gen_plotly_hist(fig, df_metrics['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, opacity=0.7)
+    margin = dict(t=30, b=0, l=0, r=400)
+    fig = fn_gen_plotly_hist(fig, df_metrics['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, opacity=0.7, height=220)
     fig = fn_gen_plotly_hist(fig, df_sel['誤差(萬/坪)'], '測試誤差分佈(萬)', margin=margin, bins=10, barmode='overlay',
-                             opacity=0.7)
+                             opacity=0.7, height=220)
 
+    st.write('')
     c2.plotly_chart(fig)
 
     X_train.rename(columns={'sku_dist': '小學距離',
@@ -2949,21 +2965,21 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     color_col = 'Importance'
     text_col = 'Importance'
     v_or_h = 'h'
-    margin = dict(t=0, b=0, l=10, r=15)
+    margin = dict(t=0, b=0, l=10, r=0)
     text_fmt = '%{value:.5f}'
 
     if df_top.shape[0] > 0:
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
                                     color_col=color_col, text_fmt=text_fmt, op=0.8,
-                                    x_title='重要度 (影響力)', y_title='')
+                                    x_title='重要度 (影響力)', y_title='', height=300, font_size=13)
 
         c1, c2, c3 = st.columns(3)
-        c2.markdown(f'{"#" * 5} 區域均價 對 房價 的影響')
+        c2.markdown(f'{"#" * 6} 區域均價 對 房價 的影響')
         st.plotly_chart(fig_top)
 
     fig_bot = fn_gen_plotly_bar(df_bot, x_data_col, y_data_col, text_col, v_or_h, margin,
                                 color_col=color_col, text_fmt=text_fmt, ccs='haline', op=0.8,
-                                x_title='重要度 (影響力)', y_title='')
+                                x_title='重要度 (影響力)', y_title='', height=550, font_size=13)
     c1, c2, c3 = st.columns([1.5, 5, 0.5])
     model = ml_model.replace('Regressor', '') if 'Regressor' in ml_model else ml_model
     c2.markdown(
