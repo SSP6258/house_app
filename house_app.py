@@ -706,7 +706,7 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
                       width=width,
                       height=height,
                       font=dict(
-                          family="Courier New, monospace",
+                          family=None,  # "Courier New, monospace",
                           size=font_size,
                           color=None,)
                       )
