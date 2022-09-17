@@ -894,7 +894,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_gb.index, df_gb['每坪單價(萬)'].values,
                                     margin=margin, color='tomato', text=hover_text,
                                     opacity=0.8, row=1, size=15, marker_sym=24,
-                                    legend=True, name='每坪均價(區)')
+                                    legend=True, name='每坪均價(區)', width=700)
 
     hover_text = fn_get_hover_text(df_sort)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['鄉鎮市區'], df_sort['每坪單價(萬)'],
@@ -902,7 +902,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
     df_dist_hl = df_sort if dist == '不限' else df_sort[df_sort['鄉鎮市區'] == dist]
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_dist_hl['鄉鎮市區'], df_dist_hl['每坪單價(萬)'],
-                                    margin=margin, color='lightseagreen', text=hover_text, opacity=0.8, row=1, size=8)
+                                    margin=margin, color='lightseagreen', text=hover_text, opacity=0.8, row=1, size=8, width=700)
 
     if bc_name != '不限':
         hover_txt1 = fn_get_hover_text(df_hl)
@@ -927,12 +927,12 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
                                     margin=margin, color='violet', text=hover_text,
                                     opacity=0.8, row=2, size=15, marker_sym=24,
-                                    legend=True, name='每坪均價(里)')
+                                    legend=True, name='每坪均價(里)', width=700)
 
     hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
                                     margin=margin, color='lightseagreen', text=hover_text, opacity=min(1., op * 3),
-                                    row=2)
+                                    row=2, width=700)
 
     # hover_text = fn_get_hover_text(df_sort)
     # fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
@@ -947,7 +947,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax_ave['稅_平均數(萬)'],
                                         margin=margin, color='tomato', text=hover_text,
                                         opacity=0.7, row=2, size=11, marker_sym=3,
-                                        legend=True, name='所得平均', height=600)
+                                        legend=True, name='所得平均', height=600, width=700)
 
     if tax == '所得中位數' or tax == '全選':
         df_tax_med = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_中位數'].values[0] / 10))
@@ -956,7 +956,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax_med['稅_中位數(萬)'],
                                         margin=margin, color='orange', text=hover_text,
                                         opacity=0.7, row=2, size=11, marker_sym=17,
-                                        legend=True, name='所得中位數', height=600)
+                                        legend=True, name='所得中位數', height=600, width=700)
 
     if tax in ['全選', '所得中位數', '所得平均數']:
         fig_sct_2 = make_subplots(rows=2, cols=1,
@@ -972,13 +972,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['中位數_均價'],
                                               margin=margin, color='red', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=4,  # marker_sym=18,
-                                              legend=True, name='入不敷出', height=600)
+                                              legend=True, name='入不敷出', height=600, width=700)
 
             df_1_ok = df_1[df_1['中位數_均價'] >= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['中位數_均價'],
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=1, size=15, marker_sym=0,  # marker_sym=18,
-                                              legend=True, name='入可敷出', height=600)
+                                              legend=True, name='入可敷出', height=600, width=700)
 
         if tax in ['全選', '所得平均數']:
             df_1['平均數_均價'] = df_tax_ave['稅_平均數(萬)'] - df_sort['每坪單價(萬)']
