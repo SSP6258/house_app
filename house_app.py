@@ -2719,12 +2719,12 @@ def fn_gen_web_ml_train(df, path):
 
         with st.expander(f'👓 檢視 資料分佈'):
             watch = "每坪單價(萬)"
-            st.markdown(f'{"#" * 5} 目標 *“{watch}"* 在 訓練 與 測試 樣本的分佈狀況:')
+            st.markdown(f'{"#" * 5} 預測目標 *“{watch}"* 在 訓練 與 測試 樣本的分佈狀況:')
             fig = make_subplots(rows=2, cols=1)
 
             margin = dict(t=10, b=0, l=0, r=0)
-            fn_gen_plotly_hist(fig, y_train[watch], '訓練', row=1, margin=margin)
-            fn_gen_plotly_hist(fig, y_test[watch], '測試', row=2, margin=margin)
+            fn_gen_plotly_hist(fig, y_train[watch], '訓練', row=1, margin=margin,width=500)
+            fn_gen_plotly_hist(fig, y_test[watch], '測試', row=2, margin=margin, width=500)
             st.plotly_chart(fig)
 
             if 'MRT' in X_train.columns:  # X.columns:
@@ -2733,9 +2733,9 @@ def fn_gen_web_ml_train(df, path):
                     fig = make_subplots(rows=2, cols=1)
                     margin = dict(t=10, b=0, l=0, r=0)
                     fn_gen_plotly_hist(fig, X_train[col_2_check].sort_values(), f'訓練:{X_train.shape[0]} 筆', row=1,
-                                       margin=margin)
+                                       margin=margin, width=500)
                     fn_gen_plotly_hist(fig, X_test[col_2_check].sort_values(), f'測試: {X_test.shape[0]} 筆', row=2,
-                                       margin=margin)
+                                       margin=margin, width=500)
                     st.plotly_chart(fig)
 
         if 'MRT' in X_train.columns:  # X.columns:
@@ -2967,7 +2967,6 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     v_or_h = 'h'
     margin = dict(t=0, b=0, l=10, r=0)
     text_fmt = '%{value:.5f}'
-
 
     if df_top.shape[0] > 0:
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
