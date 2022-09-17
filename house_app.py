@@ -935,7 +935,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax_ave['稅_平均數(萬)'],
                                         margin=margin, color='tomato', text=hover_text,
                                         opacity=0.7, row=2, size=11, marker_sym=3,
-                                        legend=True, name='所得平均')
+                                        legend=True, name='所得平均', height=600)
 
     if tax == '所得中位數' or tax == '全選':
         df_tax_med = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_中位數'].values[0] / 10))
@@ -944,7 +944,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_tax_med['稅_中位數(萬)'],
                                         margin=margin, color='orange', text=hover_text,
                                         opacity=0.7, row=2, size=11, marker_sym=17,
-                                        legend=True, name='所得中位數')
+                                        legend=True, name='所得中位數', height=600)
 
     if tax in ['全選', '所得中位數', '所得平均數']:
         fig_sct_2 = make_subplots(rows=2, cols=1,
