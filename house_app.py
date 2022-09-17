@@ -962,7 +962,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                               opacity=1, row=1, size=12, marker_sym=18,
                                               legend=True, name='入不敷出', height=600)
 
-
             df_1_ok = df_1[df_1['均價_中位數'] <= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_中位數'],
                                               margin=margin, color='lightseagreen', text=hover_text,
