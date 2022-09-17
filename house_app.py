@@ -883,7 +883,7 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_gb = pd.DataFrame(df_sort.groupby('鄉鎮市區', as_index=True)['每坪單價(萬)'].mean())
     df_gb = df_gb[['每坪單價(萬)']].apply(lambda x: round(x, 2))
 
-    df_sort = df.sort_values(by='每坪單價(萬)', ascending=False)
+    df_gb = df_gb.sort_values(by='每坪單價(萬)', ascending=False)
 
     if bc_name != '不限':
         df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
