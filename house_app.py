@@ -968,7 +968,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                               opacity=1, row=1, size=12, marker_sym=18,
                                               legend=True, name='入可敷出', height=600)
 
-
         if tax in ['全選', '所得平均數']:
             df_1['均價_平均數'] = df_tax_ave['稅_平均數(萬)'] - df_sort['每坪單價(萬)']
             df_1 = df_1.sort_values(by='均價_平均數', ascending=False)
