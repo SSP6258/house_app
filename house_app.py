@@ -774,7 +774,7 @@ def fn_gen_plotly_map(df, title, hover_name, hover_data, map_style,
 def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=None, text=None, op=None, opacity=0.3,
                           xlabel=None, ylabel=None, title=None, size=None, marker_sym=None,
                           legend=False, name=None, update_layout=True, line_color=None, line_width=None, mode='markers',
-                          colorscale='Bluered', width=None):
+                          colorscale='Bluered', width=None, height=None):
     fig.add_trace(go.Scatter(x=x_data, y=y_data, mode=mode, showlegend=legend, hovertext=text,
                              marker_symbol=marker_sym, name=name,
                              line=dict(color=line_color, width=line_width),
@@ -787,8 +787,8 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
                                  colorscale=colorscale)  # "Viridis" portland Bluered
                              ), row=row, col=col)
 
-    if margin is not None:
-        fig.update_layout(margin=margin, width=width)
+    # if margin is not None:
+    # fig.update_layout(margin=margin, width=width)
 
     if update_layout:
         fig.update_layout(
@@ -801,7 +801,10 @@ def fn_gen_plotly_scatter(fig, x_data, y_data, row=1, col=1, margin=None, color=
             },
             xaxis_title=xlabel,
             yaxis_title=ylabel,
-            font=dict(size=13)
+            font=dict(size=13),
+            width=width,
+            height=height,
+            margin=margin,
         )
 
     return fig
@@ -957,13 +960,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_中位數'],
                                               margin=margin, color='red', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=18,
-                                              legend=True, name='入不敷出')
+                                              legend=True, name='入不敷出', height=600)
 
             df_1_ok = df_1[df_1['均價_中位數'] <= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_中位數'],
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=18,
-                                              legend=True, name='入可敷出')
+                                              legend=True, name='入可敷出', height=600)
 
         if tax in ['全選', '所得平均數']:
             df_1['均價_平均數'] = df_sort['每坪單價(萬)'] - df_tax_ave['稅_平均數(萬)']
@@ -971,13 +974,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['均價_平均數'],
                                               margin=margin, color='red', text=hover_text,
                                               opacity=1, row=2, size=12, marker_sym=18,
-                                              legend=True, name='入不敷出')
+                                              legend=True, name='入不敷出', height=600)
 
             df_1_ok = df_1[df_1['均價_平均數'] <= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['均價_平均數'],
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=2, size=12, marker_sym=18,
-                                              legend=True, name='入可敷出')
+                                              legend=True, name='入可敷出', height=600)
 
         return [fig_sct, fig_sct_2]
     else:
