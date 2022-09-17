@@ -971,13 +971,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
 
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['中位數_均價'],
                                               margin=margin, color='red', text=hover_text,
-                                              opacity=1, row=1, size=12, marker_sym=18,
+                                              opacity=1, row=1, size=12, marker_sym=4,  # marker_sym=18,
                                               legend=True, name='入不敷出', height=600)
 
             df_1_ok = df_1[df_1['中位數_均價'] >= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['中位數_均價'],
                                               margin=margin, color='lightseagreen', text=hover_text,
-                                              opacity=1, row=1, size=12, marker_sym=18,
+                                              opacity=1, row=1, size=15, marker_sym=0,  # marker_sym=18,
                                               legend=True, name='入可敷出', height=600)
 
         if tax in ['全選', '所得平均數']:
@@ -985,13 +985,13 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
             df_1 = df_1.sort_values(by='平均數_均價', ascending=False)
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1['里'], df_1['平均數_均價'],
                                               margin=margin, color='red', text=hover_text,
-                                              opacity=1, row=2, size=12, marker_sym=18,
+                                              opacity=1, row=2, size=12, marker_sym=4,
                                               legend=True, name='入不敷出', height=600)
 
             df_1_ok = df_1[df_1['平均數_均價'] >= 0]
             fig_sct_2 = fn_gen_plotly_scatter(fig_sct_2, df_1_ok['里'], df_1_ok['平均數_均價'],
                                               margin=margin, color='lightseagreen', text=hover_text,
-                                              opacity=1, row=2, size=12, marker_sym=18,
+                                              opacity=1, row=2, size=15, marker_sym=0,
                                               legend=True, name='入可敷出', height=600)
 
         return [fig_sct, fig_sct_2]
