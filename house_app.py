@@ -2968,6 +2968,7 @@ def fn_gen_web_ml_eval(ml_model, model_file, regr, X_train, X_test, y_train, y_t
     margin = dict(t=0, b=0, l=10, r=0)
     text_fmt = '%{value:.5f}'
 
+
     if df_top.shape[0] > 0:
         fig_top = fn_gen_plotly_bar(df_top, x_data_col, y_data_col, text_col, v_or_h, margin,
                                     color_col=color_col, text_fmt=text_fmt, op=0.8,
