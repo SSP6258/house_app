@@ -882,18 +882,21 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_sort = df.sort_values(by='DIST_ave', ascending=False)
     df_gb = pd.DataFrame(df_sort.groupby('鄉鎮市區', as_index=True)['每坪單價(萬)'].mean())
     df_gb = df_gb[['每坪單價(萬)']].apply(lambda x: round(x, 2))
-
-    # st.write(df_gb)
     df_gb = df_gb.sort_values(by='每坪單價(萬)', ascending=False)
-    # st.write(df_gb)
 
     if bc_name != '不限':
         df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
-    hover_text = fn_get_hover_text(df_sort)
-
     # color_set, opacity = fn_set_color_by(color_by, df_sort)
 
+    # Jack Force Order
+    hover_text = fn_get_hover_text(df_gb)
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_gb.index, df_gb['每坪單價(萬)'].values,
+                                    margin=margin, color='tomato', text=hover_text,
+                                    opacity=0.8, row=1, size=15, marker_sym=24,
+                                    legend=True, name='每坪均價(區)')
+
+    hover_text = fn_get_hover_text(df_sort)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['鄉鎮市區'], df_sort['每坪單價(萬)'],
                                     margin=margin, color='royalblue', text=hover_text, opacity=op, row=1)
 
@@ -907,11 +910,11 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         fig_sct = fn_gen_plotly_scatter(fig_sct, df_hl['鄉鎮市區'], df_hl['每坪單價(萬)'],
                                         margin=margin, color='red', text=hover_txt1, opacity=1, row=1, size=8)
 
-    hover_text = fn_get_hover_text(df_gb)
-    fig_sct = fn_gen_plotly_scatter(fig_sct, df_gb.index, df_gb['每坪單價(萬)'],
-                                    margin=margin, color='tomato', text=hover_text,
-                                    opacity=0.6, row=1, size=12, marker_sym=24,
-                                    legend=True, name='每坪均價(區)')
+    # hover_text = fn_get_hover_text(df_gb)
+    # fig_sct = fn_gen_plotly_scatter(fig_sct, df_gb.index, df_gb['每坪單價(萬)'].values,
+    #                                 margin=margin, color='tomato', text=hover_text,
+    #                                 opacity=0.6, row=1, size=12, marker_sym=24,
+    #                                 legend=True, name='每坪均價(區)')
 
     df_sort = df_dist.sort_values(by='每坪單價(萬)', ascending=False)
 
@@ -920,17 +923,22 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     for vill in df_sort['里'].values:
         df_vill = pd.concat([df_vill, df[df['dist_vill'] == vill]], axis=0)
 
-    # del df
+    hover_text = fn_get_hover_text(df_sort)
+    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
+                                    margin=margin, color='violet', text=hover_text,
+                                    opacity=0.8, row=2, size=15, marker_sym=24,
+                                    legend=True, name='每坪均價(里)')
+
     hover_text = fn_get_hover_text(df_vill)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_vill['dist_vill'], df_vill['每坪單價(萬)'],
                                     margin=margin, color='lightseagreen', text=hover_text, opacity=min(1., op * 3),
                                     row=2)
 
-    hover_text = fn_get_hover_text(df_sort)
-    fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
-                                    margin=margin, color='violet', text=hover_text,
-                                    opacity=0.6, row=2, size=12, marker_sym=24,
-                                    legend=True, name='每坪均價(里)')
+    # hover_text = fn_get_hover_text(df_sort)
+    # fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['里'], df_sort['每坪單價(萬)'],
+    #                                 margin=margin, color='violet', text=hover_text,
+    #                                 opacity=0.6, row=2, size=12, marker_sym=24,
+    #                                 legend=True, name='每坪均價(里)')
 
     if tax == '所得平均數' or tax == '全選':
         df_tax_ave = pd.DataFrame(df_sort['里'].apply(lambda x: df[df['區_里'] == x]['稅_平均數'].values[0] / 10))
