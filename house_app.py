@@ -883,6 +883,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_gb = pd.DataFrame(df_sort.groupby('鄉鎮市區', as_index=True)['每坪單價(萬)'].mean())
     df_gb = df_gb[['每坪單價(萬)']].apply(lambda x: round(x, 2))
 
+    df_gb = df_gb.sort_values(by='DIST_ave', ascending=False)
+
     if bc_name != '不限':
         df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
@@ -967,7 +969,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
                                               margin=margin, color='lightseagreen', text=hover_text,
                                               opacity=1, row=1, size=12, marker_sym=18,
                                               legend=True, name='入可敷出', height=600)
-
 
         if tax in ['全選', '所得平均數']:
             df_1['平均數_均價'] = df_tax_ave['稅_平均數(萬)'] - df_sort['每坪單價(萬)']
