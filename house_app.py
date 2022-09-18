@@ -855,7 +855,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
     tax = c2.selectbox('各里所得分析(108年度)', options=['無', '所得中位數', '所得平均數', '全選'], index=1)
-    op = c3.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
+    op = 0.2  # c3.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
+    st.write('')
 
     # if bc_name is None:
     #     bc_name = ['康寶日出印象']
@@ -874,10 +875,10 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     admin_vills = len(df_dist['里'].unique())
     dist_sel = dist.replace("不限", "台北市")
 
-    fig_sct = make_subplots(rows=2, cols=1,
-                            # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
-                            subplot_titles=(f'台北市 {admin_dists}個 行政區 v.s. 每坪單價(萬)',
-                                            f'{dist_sel} {admin_vills}個 里 v.s. 每坪單價(萬)'))
+    # fig_sct = make_subplots(rows=2, cols=1,
+    #                         # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
+    #                         subplot_titles=(f'台北市 {admin_dists}個 行政區 v.s. 每坪單價(萬)',
+    #                                         f'{dist_sel} {admin_vills}個 里 v.s. 每坪單價(萬)'))
 
     df_sort = df.sort_values(by='DIST_ave', ascending=False)
     df_gb = pd.DataFrame(df_sort.groupby('鄉鎮市區', as_index=True)['每坪單價(萬)'].mean())
@@ -888,6 +889,11 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
         df_hl = df_sort[df_sort['建案名稱'].apply(lambda x: x in bc_name)]
 
     # color_set, opacity = fn_set_color_by(color_by, df_sort)
+
+    fig_sct = make_subplots(rows=2, cols=1,
+                            # specs=[[{"rowspan": 2, "colspan": 1}, None], [{}, {}], [{}, {}]],
+                            subplot_titles=(f'台北市 {admin_dists}個 行政區 v.s. 每坪單價(萬)',
+                                            f'{dist_sel} {admin_vills}個 里 v.s. 每坪單價(萬)'))
 
     # Jack Force Order
     hover_text = fn_get_hover_text(df_gb)
