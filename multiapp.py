@@ -64,7 +64,6 @@ class MultiApp:
             'house_0919.jpg': '~ 🙏 天佑台灣 ~'
         }
 
-
         img = 'house_0919.jpg'
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
