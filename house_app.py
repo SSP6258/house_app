@@ -1579,7 +1579,7 @@ def fn_gen_analysis(df, latest_records, build_case):
                                    'xanchor': 'center'},
                             autosize=False,
                             margin={'l': 50, 'r': 20, 't': 30, 'b': 20},
-                            xaxis_range=x_range, yaxis_range=y_range, width=800)
+                            xaxis_range=x_range, yaxis_range=y_range, width=800, height=600)
 
         tab_egg, tab_3D = st.tabs(['蛋黃圖', '立體圖'])
 
