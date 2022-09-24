@@ -61,10 +61,11 @@ class MultiApp:
             'house_dora_88.jpg': '~ ❤️女兒小一時送的父親節禮物 一棟別墅 ~',
             'house_sunset.jpg': '~ 🌅 八里夕陽 ~',
             'house_peace_island_s.jpg': '~ 🏝️ 和平島 ~',
-            'house_0919.jpg': '~ 🙏 天佑台灣 ~'
+            'house_0919.jpg': '~ 🙏 天佑台灣 ~',
+            'house_ocean_1.jpg': '~ 🌊 海闊天空 ~'
         }
 
-        img = 'house_0919.jpg'
+        img = 'house_ocean_1.jpg'
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
         # try:
