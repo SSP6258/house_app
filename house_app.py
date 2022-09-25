@@ -2016,8 +2016,16 @@ def fn_dbg(msg='', is_force=False):
         dic_of_dbg['time'] = now
         dic_of_dbg['sum'] = dic_of_dbg['sum'] + dur
         note = '!!!' if dur > 1000 else ''
-        None if msg == '' else st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
-        st.sidebar.write('') if is_force else None
+        if msg == '':
+            pass
+        else:
+            if is_force:
+                st.sidebar.success(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
+                st.sidebar.write('')
+            else:
+                st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
+
+        # st.sidebar.write('') if is_force else None
 
 
 def fn_util_split(constructor):
