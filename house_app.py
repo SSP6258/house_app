@@ -2007,8 +2007,8 @@ def fn_gen_model_confidence(loaded_model, X):
     return trees, conf
 
 
-def fn_dbg(msg=''):
-    if dic_of_dbg['is_dbg']:
+def fn_dbg(msg='', is_force=False):
+    if dic_of_dbg['is_dbg'] or is_force:
         # now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond / 1000)}ms'
 
         now = int(round(time.time() * 1000, 0))  # ms
@@ -3548,6 +3548,7 @@ def fn_app(page='data'):
     dic_of_dbg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
     dic_of_dbg['time'] = 0
     dic_of_dbg['sum'] = 0
+    fn_dbg(f'', is_force=True)
     st.sidebar.header(f'🔍 資訊篩選:\n')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
@@ -3624,3 +3625,4 @@ def fn_app(page='data'):
         st.write(f' page: {page} unhandle yet !!!')
 
     print(f'fn_app() done, page = {page}')
+    fn_dbg(f'fn_app end', is_force=True)

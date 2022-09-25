@@ -5,7 +5,7 @@ app = MultiApp()
 
 # Add all your application here
 app.add_app("👨‍🏫 網站介紹", app_intro.app)
-app.add_app("🕵‍♂ 資料探勘", app_eda.app)
+app.add_app("🔭 資料探勘", app_eda.app)
 app.add_app("🏋‍♂ 模型訓練", app_train.app)
 app.add_app("🧙 模型推論", app_inference.app)
 app.add_app("📚 參考資料", app_reference.app)
