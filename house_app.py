@@ -2009,8 +2009,6 @@ def fn_gen_model_confidence(loaded_model, X):
 
 def fn_dbg(msg='', is_force=False):
     if dic_of_dbg['is_dbg'] or is_force:
-        # now = f'{datetime.datetime.now().minute}分{datetime.datetime.now().second}秒{int(datetime.datetime.now().microsecond / 1000)}ms'
-
         now = int(round(time.time() * 1000, 0))  # ms
         dur = 0 if dic_of_dbg['time'] == 0 else now - dic_of_dbg['time']
         dic_of_dbg['time'] = now
@@ -2025,7 +2023,6 @@ def fn_dbg(msg='', is_force=False):
             else:
                 st.sidebar.write(f'{dur} / {dic_of_dbg["sum"]} ms --> {msg} {note}')
 
-        # st.sidebar.write('') if is_force else None
 
 
 def fn_util_split(constructor):
