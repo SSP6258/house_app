@@ -3521,7 +3521,7 @@ def fn_gen_web_intro():
     with tab_contact:  # st.expander('📌 與我聯絡'):
         st.write('')
         st.write("🔗 [Jack Pan](https://www.linkedin.com/in/%E9%95%B7%E6%B0%B8-%E6%BD%98-235912aa/)")
-        st.write("📘 [FB](https://www.facebook.com/jack.pan.96/)")
+        st.write("📘 [Facebook](https://www.facebook.com/jack.pan.96/)")
         st.write('✉️ ssp6258@yahoo.com.tw')
         st.write('💾 [網站程式碼](https://github.com/SSP6258/house_app)')
         st.write('🚧 [故障報修、意見反饋](https://github.com/SSP6258/house_app/issues/new)')
