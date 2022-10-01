@@ -845,14 +845,13 @@ def fn_add_date_line(fig, df, date, mode='lines', width=10, color='lightgreen', 
 def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     color_by = '無'
     c1, c2, c3 = st.columns(3)
-    # print(str(bc_name))
-    dist_dft = '北投區'
-
-    # IndexError: index 0 is out of bounds for axis 0 with size 0
-    # print(bc_name)
-    dist_of_bc = dist_dft if bc_name is None or '不限' in bc_name else df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
-
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
+
+    if bc_name is None or '不限' in bc_name:
+        dist_of_bc = '北投區' if '北投區' in dists else dists[-1]
+    else:
+        dist_of_bc = df[df['建案名稱'] == bc_name[0]]['鄉鎮市區'].values[0]
+
     dist = c1.selectbox('行政區', options=dists, index=dists.index(dist_of_bc))
     tax = c2.selectbox('各里所得分析(108年度)', options=['無', '所得中位數', '所得平均數', '全選'], index=1)
     op = 0.2  # c3.slider('透明度', min_value=0.01, max_value=0.4, value=0.2)
