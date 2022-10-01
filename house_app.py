@@ -2257,13 +2257,17 @@ def fn_gen_web_eda(df):
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
 
-    df_bc_1 = pd.DataFrame(df.groupby('地址', as_index=True)['地址'].count()).rename(columns={'地址': '交易量'})
-    df_bc_2 = pd.DataFrame(df.groupby('地址', as_index=True)['MRT'].nth(1))
-    df_bc_3 = pd.DataFrame(df.groupby('地址', as_index=True)['建案名稱'].nth(1))
-    df_bc_4 = pd.DataFrame(df.groupby('地址', as_index=True)['交易年月日'].nth(-1)).rename(columns={'交易年月日': '最新登錄'})
-    df_bc_5 = pd.DataFrame(df.groupby('地址', as_index=True)['經度'].nth(1))
-    df_bc_6 = pd.DataFrame(df.groupby('地址', as_index=True)['緯度'].nth(1))
-    df_bc_7 = pd.DataFrame(df.groupby('地址', as_index=True)['每坪單價(萬)'].mean()).rename(columns={'每坪單價(萬)': '每坪均價(萬)'})
+    df['地址_建案'] = df['地址'] + df['建案名稱']
+
+    col_grp = '地址_建案'
+
+    df_bc_1 = pd.DataFrame(df.groupby(col_grp, as_index=True)['地址'].count()).rename(columns={'地址': '交易量'})
+    df_bc_2 = pd.DataFrame(df.groupby(col_grp, as_index=True)['MRT'].nth(1))
+    df_bc_3 = pd.DataFrame(df.groupby(col_grp, as_index=True)['建案名稱'].nth(1))
+    df_bc_4 = pd.DataFrame(df.groupby(col_grp, as_index=True)['交易年月日'].nth(-1)).rename(columns={'交易年月日': '最新登錄'})
+    df_bc_5 = pd.DataFrame(df.groupby(col_grp, as_index=True)['經度'].nth(1))
+    df_bc_6 = pd.DataFrame(df.groupby(col_grp, as_index=True)['緯度'].nth(1))
+    df_bc_7 = pd.DataFrame(df.groupby(col_grp, as_index=True)['每坪單價(萬)'].mean()).rename(columns={'每坪單價(萬)': '每坪均價(萬)'})
 
     df_bc_cnt = pd.concat([df_bc_1, df_bc_2, df_bc_3, df_bc_4, df_bc_5, df_bc_6, df_bc_7], axis=1)
     df_bc_cnt['每坪均價(萬)'] = df_bc_cnt['每坪均價(萬)'].apply(lambda x: round(x, 2))
