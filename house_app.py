@@ -1288,7 +1288,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
 
     c1, c2, c3 = st.columns(3)
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
-    dist_dft = dists.index('北投區')
+    dist_dft = dists.index('北投區') if '北投區' in dists else dists[0]
 
     if build_case is not None and build_case != '不限':
         df_bc = df[df['建案名稱'] == build_case]
