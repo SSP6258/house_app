@@ -2292,12 +2292,7 @@ def fn_gen_web_eda(df):
 
     # rendering web view
     st.write('')
-    if dist == '':
-        st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
-    else:
-        st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
-        c1, c2, c3 = st.columns([1, 3, 1])
-        c2.subheader(f'~ 最新交易: {Latest_date} ~')
+    st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
 
     tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
