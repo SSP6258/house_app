@@ -64,7 +64,7 @@ class MultiApp:
             'house_0919.jpg': '~ 🙏 天佑台灣 ~',
             'house_ocean_1.jpg': '~ 🌊 海闊天空 ~',
             'house_view.jpg': '~ 家的視野 ~',
-            'house_green.png': '~ 綠光 ~',
+            'house_green.JPG': '~ 綠光 ~',
         }
 
         img = 'house_green.JPG'
