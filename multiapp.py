@@ -65,7 +65,7 @@ class MultiApp:
             'house_ocean_1.jpg': '~ 🌊 海闊天空 ~',
             'house_view.JPG': '~ 🎑 家的視野 ~',
             'house_green.JPG': '~ 綠光 ~',
-            'house_cloud.JPG': '~ 彩雲 ~'
+            'house_cloud.JPG': '~ 5 AM Club ~'
         }
 
         img = 'house_cloud.JPG'
