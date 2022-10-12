@@ -68,6 +68,7 @@ class MultiApp:
             'house_cloud.JPG': '~ 5 AM Club ~'
         }
 
+
         img = 'house_cloud.JPG'
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
