@@ -905,7 +905,6 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_sort['鄉鎮市區'], df_sort['每坪單價(萬)'],
                                     margin=margin, color='royalblue', text=hover_text, opacity=op, row=1)
 
-
     df_dist_hl = df_sort if dist == '不限' else df_sort[df_sort['鄉鎮市區'] == dist]
     hover_text = fn_get_hover_text(df_dist_hl)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_dist_hl['鄉鎮市區'], df_dist_hl['每坪單價(萬)'],
