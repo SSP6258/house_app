@@ -2300,7 +2300,7 @@ def fn_gen_web_eda(df):
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend = tabs
 
     with tab_trend:
-        ###
+
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
         df_plost.reset_index(drop=True, inplace=True)
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
