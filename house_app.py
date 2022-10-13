@@ -2296,7 +2296,7 @@ def fn_gen_web_eda(df):
     st.write('')
     st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
 
-    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '趨勢'])
+    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價量趨勢'])
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend = tabs
 
     with tab_trend:
@@ -2306,31 +2306,34 @@ def fn_gen_web_eda(df):
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
         df_plost['date'] = pd.to_datetime(df_plost['交易年月日'])
 
-        st.markdown('#### 交易均價')
-        plost.time_hist(
-            data=df_plost,
-            date='date',
-            x_unit='year',
-            y_unit='month',
-            color='每坪單價(萬)',
-            aggregate='average',
-            legend='right',
-            height=345,
-            width=850,
-            use_container_width=False)
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown('##### 交易均價分布')
+            plost.time_hist(
+                data=df_plost,
+                date='date',
+                x_unit='year',
+                y_unit='month',
+                color='每坪單價(萬)',
+                aggregate='average',
+                legend=None,
+                height=345,
+                width=850,
+                use_container_width=True)
 
-        st.markdown('#### 交易數量')
-        plost.time_hist(
-            data=df_plost,
-            date='date',
-            x_unit='year',
-            y_unit='month',
-            color='每坪單價(萬)',
-            aggregate='count',
-            legend='right',
-            height=345,
-            width=820,
-            use_container_width=False)
+        with c2:
+            st.markdown('##### 交易數量分布')
+            plost.time_hist(
+                data=df_plost,
+                date='date',
+                x_unit='year',
+                y_unit='month',
+                color='每坪單價(萬)',
+                aggregate='count',
+                legend=None,
+                height=345,
+                width=820,
+                use_container_width=True)
         ###
 
     with tab_price_map:
