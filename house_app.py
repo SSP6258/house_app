@@ -2306,8 +2306,6 @@ def fn_gen_web_eda(df):
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
         df_plost['date'] = pd.to_datetime(df_plost['交易年月日'])
 
-        # c1, c2, c3 = st.columns(3)
-
         st.markdown('#### 交易均價')
         plost.time_hist(
             data=df_plost,
@@ -2321,8 +2319,6 @@ def fn_gen_web_eda(df):
             width=850,
             use_container_width=False)
 
-        # st.write('')
-        # c1, c2, c3 = st.columns(3)
         st.markdown('#### 交易數量')
         plost.time_hist(
             data=df_plost,
