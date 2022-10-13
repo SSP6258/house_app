@@ -27,6 +27,7 @@ from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesi
     fn_read_shp
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
+import plost
 
 try:
     from streamlit_player import st_player
@@ -2295,8 +2296,46 @@ def fn_gen_web_eda(df):
     st.write('')
     st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
 
-    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數'])
-    tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max = tabs
+    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '趨勢'])
+    tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend = tabs
+
+    with tab_trend:
+        ###
+        df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
+        df_plost.reset_index(drop=True, inplace=True)
+        df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
+        df_plost['date'] = pd.to_datetime(df_plost['交易年月日'])
+
+        # c1, c2, c3 = st.columns(3)
+
+        st.markdown('#### 交易均價')
+        plost.time_hist(
+            data=df_plost,
+            date='date',
+            x_unit='year',
+            y_unit='month',
+            color='每坪單價(萬)',
+            aggregate='average',
+            legend='right',
+            height=345,
+            width=850,
+            use_container_width=False)
+
+        # st.write('')
+        # c1, c2, c3 = st.columns(3)
+        st.markdown('#### 交易數量')
+        plost.time_hist(
+            data=df_plost,
+            date='date',
+            x_unit='year',
+            y_unit='month',
+            color='每坪單價(萬)',
+            aggregate='count',
+            legend='right',
+            height=345,
+            width=820,
+            use_container_width=False)
+        ###
 
     with tab_price_map:
         st.plotly_chart(fig_map_all)
