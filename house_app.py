@@ -2305,6 +2305,8 @@ def fn_gen_web_eda(df):
         df_plost.reset_index(drop=True, inplace=True)
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
         df_plost['date'] = pd.to_datetime(df_plost['交易年月日'])
+        df_plost['每坪單價(萬)'] = df_plost['每坪單價(萬)'].apply(lambda x: round(x,2))
+        df_plost.rename(columns={'每坪單價(萬)': '單價(萬)'}, inplace=True)
 
         c1, c2 = st.columns(2)
         with c1:
