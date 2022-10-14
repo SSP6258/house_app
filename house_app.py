@@ -2321,6 +2321,7 @@ def fn_gen_web_eda(df):
                 width=850,
                 use_container_width=True)
 
+
         with c2:
             st.markdown('#### 量')
             plost.time_hist(
