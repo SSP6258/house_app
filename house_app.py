@@ -2306,6 +2306,7 @@ def fn_gen_web_eda(df):
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
         df_plost['date'] = pd.to_datetime(df_plost['交易年月日'])
 
+
         c1, c2 = st.columns(2)
         with c1:
             cc1, cc2, cc3 = c1.columns(3)
