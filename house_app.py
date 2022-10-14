@@ -2308,7 +2308,7 @@ def fn_gen_web_eda(df):
 
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('#### 價')
+            st.markdown('## 價')
             plost.time_hist(
                 data=df_plost,
                 date='date',
@@ -2322,7 +2322,7 @@ def fn_gen_web_eda(df):
                 use_container_width=True)
 
         with c2:
-            st.markdown('#### 量')
+            st.markdown('## 量')
             plost.time_hist(
                 data=df_plost,
                 date='date',
@@ -2334,7 +2334,6 @@ def fn_gen_web_eda(df):
                 height=345,
                 width=820,
                 use_container_width=True)
-
 
     with tab_price_map:
         st.plotly_chart(fig_map_all)
