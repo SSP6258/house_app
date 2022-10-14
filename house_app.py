@@ -2310,7 +2310,7 @@ def fn_gen_web_eda(df):
 
         c1, c2 = st.columns(2)
         with c1:
-            st.markdown('## 均價')
+            st.markdown('### 均價')
             plost.time_hist(
                 data=df_plost,
                 date='date',
@@ -2324,7 +2324,7 @@ def fn_gen_web_eda(df):
                 use_container_width=True)
 
         with c2:
-            st.markdown('## 交易量')
+            st.markdown('### 交易量')
             plost.time_hist(
                 data=df_plost,
                 date='date',
