@@ -2308,8 +2308,8 @@ def fn_gen_web_eda(df):
 
         c1, c2 = st.columns(2)
         with c1:
-            c1, c2, c3 = st.columns(3)
-            c2.markdown('## 價')
+            cc1, cc2, cc3 = st.columns(3)
+            cc2.markdown('## 價')
             plost.time_hist(
                 data=df_plost,
                 date='date',
