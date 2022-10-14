@@ -2334,7 +2334,7 @@ def fn_gen_web_eda(df):
                 height=345,
                 width=820,
                 use_container_width=True)
-        ###
+
 
     with tab_price_map:
         st.plotly_chart(fig_map_all)
