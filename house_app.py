@@ -2296,11 +2296,10 @@ def fn_gen_web_eda(df):
     st.write('')
     st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
 
-    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價量趨勢'])
-    tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend = tabs
+    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價格走勢', '交易量走勢'])
+    tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend_price, tab_trend_amount = tabs
 
-    with tab_trend:
-
+    with tab_trend_price:
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
         df_plost.reset_index(drop=True, inplace=True)
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
@@ -2308,10 +2307,46 @@ def fn_gen_web_eda(df):
         df_plost['每坪單價(萬)'] = df_plost['每坪單價(萬)'].apply(lambda x: round(x, 2))
         df_plost.rename(columns={'每坪單價(萬)': '單價(萬)'}, inplace=True)
 
+        df_plost['year'] = pd.DatetimeIndex(df_plost['date']).year
+        df_plost['month'] = pd.DatetimeIndex(df_plost['date']).month
+        df_yp = pd.DataFrame()
+        for y in df_plost['year'].unique():
+            df_y = df_plost[df_plost['year'] == y]
+            df_y[f'單價(萬)_{y}'] = df_y[f'單價(萬)']
+            df_ym = df_y.groupby('month', as_index=True)[f'單價(萬)_{y}'].mean()
+            df_yp = pd.concat([df_yp, df_ym], axis=1)
+        df_yp.reset_index(inplace=True)
+        df_yp = df_yp.sort_values(by='index', ignore_index=True)
+        df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
+
+        this_y = datetime.datetime.today().year
+        v='NA'
+        m='NA'
+        d='NA'
+        col_y = f'單價(萬)_{this_y}'
+        col_yp = f'單價(萬)_{this_y-1}'
+        if col_y in df_yp.columns:
+            for idx in df_yp.index:
+                if str(df_yp.loc[idx, col_y]) == 'nan':
+                    try:
+                        v = int(round(df_yp.loc[idx-1, col_y], 0))
+                        m = idx
+                        vp = df_yp.loc[idx-1, col_yp]
+                        if str(vp) != 'nan':
+                            d = int(round(v - df_yp.loc[idx-1, col_yp], 0))
+                    except:
+                        pass
+                        # st.write(idx)
+                        # st.write(df_yp)
+                    break
+
+        st.write('')
+        place = city[-1] if dist == '' else dist
+        st.metric(f'{place} {this_y}年{m}月 均價', f'{v} 萬/坪', f'{d} 萬/坪(比較去年同期)', delta_color='inverse')
         c1, c2 = st.columns([1, 2])
 
         with c1:
-            st.markdown('### 均價')
+            # st.markdown('### 均價')
             plost.time_hist(
                 data=df_plost,
                 date='date',
@@ -2325,24 +2360,44 @@ def fn_gen_web_eda(df):
                 use_container_width=True)
 
         with c2:
-            st.markdown('### 走勢')
-            df_plost['year'] = pd.DatetimeIndex(df_plost['date']).year
-            df_plost['month'] = pd.DatetimeIndex(df_plost['date']).month
-            df_yp = pd.DataFrame()
-            for y in df_plost['year'].unique():
-                df_y = df_plost[df_plost['year'] == y]
-                df_y[f'單價(萬)_{y}'] = df_y[f'單價(萬)']
-                df_ym = df_y.groupby('month', as_index=True)[f'單價(萬)_{y}'].mean()
-                df_yp = pd.concat([df_yp, df_ym], axis=1)
-            df_yp.reset_index(inplace=True)
-            df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
             y = [c for c in df_yp.columns if '單價' in c]
-
             st.line_chart(df_yp, x='Month', y=y, height=320)
 
+    with tab_trend_amount:
+
+        df_yp = pd.DataFrame()
+        for y in df_plost['year'].unique():
+            df_y = df_plost[df_plost['year'] == y]
+            df_y[f'單價(萬)_{y}'] = df_y[f'單價(萬)']
+            df_ym = df_y.groupby('month', as_index=True)[f'單價(萬)_{y}'].count()
+            df_yp = pd.concat([df_yp, df_ym], axis=1)
+        df_yp.reset_index(inplace=True)
+        df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
+        df_yp.rename(columns={c: c.replace('單價(萬)', '交易量') for c in df_yp.columns if '單價(萬)' in c}, inplace=True)
+
+        v='NA'
+        m='NA'
+        d='NA'
+        col_y = f'交易量_{this_y}'
+        col_yp = f'交易量_{this_y - 1}'
+        if col_y in df_yp.columns:
+            for idx in df_yp.index:
+                if str(df_yp.loc[idx, col_y]) == 'nan':
+                    try:
+                        v = int(round(df_yp.loc[idx-1, col_y], 0))
+                        m = idx
+                        vp = df_yp.loc[idx-1, col_yp]
+                        if str(vp) != 'nan':
+                            d = int(round(v - df_yp.loc[idx-1, col_yp], 0))
+                    except:
+                        pass
+                        # st.write(idx)
+                        # st.write(df_yp)
+                    break
+
+        st.metric(f'{place} {this_y}年{m}月 交易量', f'{v} 筆', f'{d} 筆(比較去年同期)', delta_color='inverse')
         c1, c2 = st.columns([1, 2])
         with c1:
-            st.markdown('### 交易量')
             plost.time_hist(
                 data=df_plost,
                 date='date',
@@ -2356,20 +2411,7 @@ def fn_gen_web_eda(df):
                 use_container_width=True)
 
         with c2:
-            st.markdown('### 走勢')
-            # df_plost['year'] = pd.DatetimeIndex(df_plost['date']).year
-            # df_plost['month'] = pd.DatetimeIndex(df_plost['date']).month
-            df_yp = pd.DataFrame()
-            for y in df_plost['year'].unique():
-                df_y = df_plost[df_plost['year'] == y]
-                df_y[f'單價(萬)_{y}'] = df_y[f'單價(萬)']
-                df_ym = df_y.groupby('month', as_index=True)[f'單價(萬)_{y}'].count()
-                df_yp = pd.concat([df_yp, df_ym], axis=1)
-            df_yp.reset_index(inplace=True)
-            df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
-            df_yp.rename(columns={c: c.replace('單價(萬)', '交易量') for c in df_yp.columns if '單價(萬)' in c}, inplace=True)
             y = [c for c in df_yp.columns if '交易量' in c]
-
             st.line_chart(df_yp, x='Month', y=y, height=320)
 
     with tab_price_map:
