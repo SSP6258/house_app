@@ -2361,7 +2361,7 @@ def fn_gen_web_eda(df):
 
         with c2:
             y = [c for c in df_yp.columns if '單價' in c]
-            st.line_chart(df_yp, x='Month', y=y, height=320)
+            st.line_chart(df_yp, x='Month', y=y, height=345)
 
     with tab_trend_amount:
 
@@ -2395,6 +2395,7 @@ def fn_gen_web_eda(df):
                         # st.write(df_yp)
                     break
 
+        st.write('')
         st.metric(f'{place} {this_y}年{m}月 交易量', f'{v} 筆', f'{d} 筆(比較去年同期)', delta_color='inverse')
         c1, c2 = st.columns([1, 2])
         with c1:
@@ -2412,7 +2413,7 @@ def fn_gen_web_eda(df):
 
         with c2:
             y = [c for c in df_yp.columns if '交易量' in c]
-            st.line_chart(df_yp, x='Month', y=y, height=320)
+            st.line_chart(df_yp, x='Month', y=y, height=345)
 
     with tab_price_map:
         st.plotly_chart(fig_map_all)
