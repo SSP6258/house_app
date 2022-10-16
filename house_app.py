@@ -2294,7 +2294,24 @@ def fn_gen_web_eda(df):
 
     # rendering web view
     st.write('')
-    st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
+
+    # st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
+
+    c1, c2 = st.columns([4, 1])
+    c1.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
+    latest_file = df["File"].values[-1]
+    latest_records = df[df["File"]==latest_file].shape[0]
+    pre_file = df[df["File"]!=latest_file]["File"].values[-1]
+
+    pre_records = df[df["File"] == pre_file].shape[0]
+    delta = latest_records - pre_records
+    # st.write(f'{latest_file} {latest_records} {pre_file} {pre_records} {delta}')
+    latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
+    latest_date = latest_date[:2]+'/'+latest_date[2:] if latest_date.isnumeric() else latest_date
+    pre_date = str(pre_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
+    pre_date = pre_date[:2] + '/' + pre_date[2:] if pre_date.isnumeric() else pre_date
+    c2.metric(f'最新更新: {latest_date} 🌟', f'{latest_records} 筆', f'{delta} 筆(前期: {pre_date})', delta_color='inverse')
+    # st.write(df.head())
 
     tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價格走勢', '交易量走勢'])
     tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend_price, tab_trend_amount = tabs
@@ -2342,7 +2359,10 @@ def fn_gen_web_eda(df):
 
         st.write('')
         place = city[-1] if dist == '' else dist
-        st.metric(f'{place} {this_y}年{m}月 均價', f'{v} 萬/坪', f'{d} 萬/坪(比較去年同期)', delta_color='inverse')
+        c1, c2= st.columns(2)
+
+        c1.metric(f'{place} {this_y}年{m}月 均價', f'{v} 萬/坪', f'{d} 萬/坪(比較去年同期)', delta_color='inverse')
+
         c1, c2 = st.columns([1, 2])
 
         with c1:
@@ -3668,10 +3688,18 @@ def fn_read_shp_wrap(is_dist_only=False):
     return shapes_new, properties_new
 
 
+def fn_add_style():
+    # with open('style.css', encoding="utf-8") as f:
+    #     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    pass
+
+
 def fn_app(page='data'):
-    print(f'fn_app() start, page = {page}')
+    # print(f'fn_app() start, page = {page}')
     fn_chrome_96_workaround()
     # st.legacy_caching.clear_cache()
+
+    fn_add_style()
 
     this_yr = datetime.datetime.now().year - 1911
     dic_of_dbg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
