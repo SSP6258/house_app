@@ -2310,7 +2310,7 @@ def fn_gen_web_eda(df):
     latest_date = latest_date[:2]+'/'+latest_date[2:] if latest_date.isnumeric() else latest_date
     pre_date = str(pre_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
     pre_date = pre_date[:2] + '/' + pre_date[2:] if pre_date.isnumeric() else pre_date
-    c2.metric(f'最新更新: {latest_date} 🌟', f'{latest_records} 筆', f'{delta} 筆(前期: {pre_date})', delta_color='inverse')
+    c2.metric(f'本期更新: {latest_date} 🌟', f'{latest_records} 筆', f'{delta} 筆(前期: {pre_date})', delta_color='inverse')
     # st.write(df.head())
 
     tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價格走勢', '交易量走勢'])
