@@ -2449,6 +2449,7 @@ def fn_gen_web_eda(df):
         st.plotly_chart(fig_tm)
         fn_dbg('fn_gen_web_eda 2-1')
 
+
     with tab_price:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
