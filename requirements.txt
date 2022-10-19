@@ -24,3 +24,5 @@ Shapely==1.7.1
 matplotlib==3.5.1
 click==8.0.4
 plost==0.2.5
+ipyvizzu==0.12.1
+ipyvizzu-story==0.4.1
