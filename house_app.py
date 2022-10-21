@@ -28,7 +28,8 @@ from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, geodesi
 from house_elt import fn_addr_handle, fn_house_coor_read, fn_house_coor_save
 from house_elt import fn_gen_build_case, fn_gen_house_data
 import plost
-
+from streamlit.components.v1 import html
+from ipyvizzu import Chart, Data, Config, Style, DisplayTarget
 try:
     from streamlit_player import st_player
 except:
@@ -2081,6 +2082,33 @@ def fn_gen_bc_summary(dic_df_show, key):
         st.write('')
 
 
+def fn_create_chart(df):
+    df['交易年'] = df['交易年'].astype(str)+'年'
+
+    # initialize chart
+    chart = Chart(width="640px", height="680px", display=DisplayTarget.MANUAL)
+    # st.write(df)
+    # add data
+    data = Data()
+    # df = pd.read_csv("https://github.com/vizzuhq/ipyvizzu/raw/main/docs/examples/stories/titanic/titanic.csv")
+    data.add_data_frame(df)
+    chart.animate(data)
+
+    # add config
+    # chart.animate(Config({"x": "Count", "y": "Sex", "label": "Count","title":"Passengers of the Titanic"}))
+    # chart.animate(Config({"x": ["Count","Survived"], "label": ["Count","Survived"], "color": "Survived"}))
+    # chart.animate(Config({"x": "Count", "y": ["Sex","Survived"]}))
+
+    chart.animate(Config({"x": "count", "y": "鄉鎮市區", "label": "count", "title": "台北預售屋"}))
+    chart.animate(Config({"x": "count", "y": ["鄉鎮市區","交易年"], "label": ["count","交易年"], "color": "交易年"}))
+    # chart.animate(Config({"x": "Count", "y": ["Sex", "Survived"]}))
+
+    # add style
+    chart.animate(Style({"title": {"fontSize": 30}}))
+
+    return chart._repr_html_()
+
+
 @fn_profiler
 def fn_gen_web_eda(df):
     # t_s = time.time()
@@ -2296,16 +2324,19 @@ def fn_gen_web_eda(df):
     st.write('')
 
     # st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
-    c1, c2 = st.columns([4, 1])
+    c1, c2 = st.columns([4, 1.1])
     c1.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
     latest_file = df["File"].values[-1]
-    latest_records = df[df["File"]==latest_file].shape[0]
-    pre_file = df[df["File"]!=latest_file]["File"].values[-1]
+    latest_records = df[df["File"] == latest_file].shape[0]
+    pre_file = df[df["File"] != latest_file]["File"].values[-1]
 
     pre_records = df[df["File"] == pre_file].shape[0]
     delta = latest_records - pre_records
     # st.write(f'{latest_file} {latest_records} {pre_file} {pre_records} {delta}')
-    latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
+    if latest_file.split('.')[0].endswith('p'):
+        latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-2]
+    else:
+        latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
     latest_date = latest_date[:2]+'/'+latest_date[2:] if latest_date.isnumeric() else latest_date
     pre_date = str(pre_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
     pre_date = pre_date[:2] + '/' + pre_date[2:] if pre_date.isnumeric() else pre_date
@@ -2315,8 +2346,15 @@ def fn_gen_web_eda(df):
     # tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '交易筆數', '最小坪數', '最大坪數', '價格走勢', '交易量走勢'])
     # tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend_price, tab_trend_amount = tabs
 
-    tabs = st.tabs([f'{cities}實價登錄', '台北市均價', '行政區均價', '價格走勢', '交易量走勢'])
-    tab_price_map, tab_price_tpe, tab_price,  tab_trend_price, tab_trend_amount = tabs
+    tabs = st.tabs(['預售總覽', f'預售地圖', '行政區均價', '價格走勢', '交易量走勢'])
+    tab_overview, tab_price_map, tab_price,  tab_trend_price, tab_trend_amount = tabs
+
+    with tab_overview:
+        df_s = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)', '交易年']]
+        df_s['count'] = 1
+
+        story = fn_create_chart(df_s)
+        html(story, width=800, height=800)
 
     with tab_trend_price:
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
@@ -2442,12 +2480,12 @@ def fn_gen_web_eda(df):
         st.write('')
         fn_dbg('fn_gen_web_eda 2')
 
-    with tab_price_tpe:
-        fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '建案名稱'], values='每坪均價(萬)',
-                                       color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
-                                       mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
-        st.plotly_chart(fig_tm)
-        fn_dbg('fn_gen_web_eda 2-1')
+    # with tab_price_tpe:
+    #     fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '建案名稱'], values='每坪均價(萬)',
+    #                                    color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
+    #                                    mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
+    #     st.plotly_chart(fig_tm)
+    #     fn_dbg('fn_gen_web_eda 2-1')
 
     with tab_price:
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
