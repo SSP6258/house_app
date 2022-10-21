@@ -2393,7 +2393,6 @@ def fn_gen_web_eda(df):
                             d = int(round(v - df_yp.loc[idx-1, col_yp], 0))
                     except:
                         pass
-                        # st.write(idx)
                     break
 
         st.write('')
