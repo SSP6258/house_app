@@ -30,6 +30,7 @@ from house_elt import fn_gen_build_case, fn_gen_house_data
 import plost
 from streamlit.components.v1 import html
 from ipyvizzu import Chart, Data, Config, Style, DisplayTarget
+from ipyvizzustory import Story, Slide, Step
 try:
     from streamlit_player import st_player
 except:
@@ -2087,26 +2088,47 @@ def fn_create_chart(df):
 
     # initialize chart
     chart = Chart(width="320px", height="680px", display=DisplayTarget.MANUAL)
-    # st.write(df)
     # add data
     data = Data()
-    # df = pd.read_csv("https://github.com/vizzuhq/ipyvizzu/raw/main/docs/examples/stories/titanic/titanic.csv")
     data.add_data_frame(df)
     chart.animate(data)
 
-    # add config
-    # chart.animate(Config({"x": "Count", "y": "Sex", "label": "Count","title":"Passengers of the Titanic"}))
-    # chart.animate(Config({"x": ["Count","Survived"], "label": ["Count","Survived"], "color": "Survived"}))
-    # chart.animate(Config({"x": "Count", "y": ["Sex","Survived"]}))
-
     chart.animate(Config({"x": "count", "y": "鄉鎮市區", "label": "count", "title": "台北預售屋"}))
-    chart.animate(Config({"x": "count", "y": ["鄉鎮市區","交易年"], "label": ["count", "交易年"], "color": "交易年"}))
-    # chart.animate(Config({"x": "Count", "y": ["Sex", "Survived"]}))
+    chart.animate(Config({"x": "count", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年"}))
 
     # add style
     chart.animate(Style({"title": {"fontSize": 30}}))
 
     return chart._repr_html_()
+
+
+def fn_create_slide(df):
+    years = df['交易年'].unique()
+    df['交易年'] = df['交易年'].astype(str) + '年'
+    data = Data()
+
+    data.add_data_frame(df)
+    story = Story(data=data)
+    title = f"{min(years)}年 ~ {max(years)}年 台北預售屋銷售 "
+    slide1 = Slide(
+        Step(
+            Config({"x": "count", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年", "title": f"{title}"}),
+            Style({"title": {"fontSize": 24}}),
+        )
+    )
+    story.add_slide(slide1)
+
+    slide2 = Slide(
+        Step(
+            Config({"x": "count", "y": "鄉鎮市區", "label": "count", "color": None}),
+            Style({"title": {"fontSize": 24}}),
+        )
+    )
+    story.add_slide(slide2)
+
+    story.set_size(width=460, height=680)
+
+    story.play()
 
 
 @fn_profiler
@@ -2353,8 +2375,10 @@ def fn_gen_web_eda(df):
         df_s = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)', '交易年']]
         df_s['count'] = 1
 
-        story = fn_create_chart(df_s)
-        html(story, width=800, height=700)
+        # story = fn_create_chart(df_s.copy())
+        # html(story, width=800, height=700)
+
+        fn_create_slide(df_s.copy())
 
     with tab_trend_price:
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
