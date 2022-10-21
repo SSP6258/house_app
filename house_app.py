@@ -2086,7 +2086,7 @@ def fn_create_chart(df):
     df['交易年'] = df['交易年'].astype(str)+'年'
 
     # initialize chart
-    chart = Chart(width="640px", height="680px", display=DisplayTarget.MANUAL)
+    chart = Chart(width="320px", height="680px", display=DisplayTarget.MANUAL)
     # st.write(df)
     # add data
     data = Data()
@@ -2100,7 +2100,7 @@ def fn_create_chart(df):
     # chart.animate(Config({"x": "Count", "y": ["Sex","Survived"]}))
 
     chart.animate(Config({"x": "count", "y": "鄉鎮市區", "label": "count", "title": "台北預售屋"}))
-    chart.animate(Config({"x": "count", "y": ["鄉鎮市區","交易年"], "label": ["count","交易年"], "color": "交易年"}))
+    chart.animate(Config({"x": "count", "y": ["鄉鎮市區","交易年"], "label": ["count", "交易年"], "color": "交易年"}))
     # chart.animate(Config({"x": "Count", "y": ["Sex", "Survived"]}))
 
     # add style
@@ -2354,7 +2354,7 @@ def fn_gen_web_eda(df):
         df_s['count'] = 1
 
         story = fn_create_chart(df_s)
-        html(story, width=800, height=800)
+        html(story, width=800, height=700)
 
     with tab_trend_price:
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
