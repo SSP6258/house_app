@@ -2394,7 +2394,6 @@ def fn_gen_web_eda(df):
                     except:
                         pass
                         # st.write(idx)
-                        # st.write(df_yp)
                     break
 
         st.write('')
