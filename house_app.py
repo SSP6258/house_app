@@ -2108,6 +2108,7 @@ def fn_create_slide(df):
     df['交易年'] = df['交易年'].astype(str) + '年'
     data = Data()
 
+
     data.add_data_frame(df)
     story = Story(data=data)
     title = f"{min(years)}年 ~ {max(years)}年 台北預售屋銷售 "
