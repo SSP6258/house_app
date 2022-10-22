@@ -2103,6 +2103,7 @@ def fn_create_chart(df):
 
 
 def fn_create_slide(df):
+    df['交易筆數'] = df['count']
     years = df['交易年'].unique()
     df['交易年'] = df['交易年'].astype(str) + '年'
     data = Data()
@@ -2120,7 +2121,7 @@ def fn_create_slide(df):
 
     slide2 = Slide(
         Step(
-            Config({"x": "count", "y": "鄉鎮市區", "label": "count", "color": None}),
+            Config({"x": "交易筆數", "y": "鄉鎮市區", "label": "count", "color": None}),
             Style({"title": {"fontSize": 24}}),
         )
     )
