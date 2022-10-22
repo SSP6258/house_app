@@ -2085,7 +2085,7 @@ def fn_gen_bc_summary(dic_df_show, key):
 
 def fn_create_chart(df):
     df['交易年'] = df['交易年'].astype(str)+'年'
-
+    df['交易筆數'] = df['count']
     # initialize chart
     chart = Chart(width="320px", height="680px", display=DisplayTarget.MANUAL)
     # add data
@@ -2093,11 +2093,11 @@ def fn_create_chart(df):
     data.add_data_frame(df)
     chart.animate(data)
 
-    chart.animate(Config({"x": "count", "y": "鄉鎮市區", "label": "count", "title": "台北預售屋"}))
-    chart.animate(Config({"x": "count", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年"}))
+    chart.animate(Config({"x": "交易筆數", "y": "鄉鎮市區", "label": "count", "title": "台北市預售屋"}))
+    chart.animate(Config({"x": "交易筆數", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年"}))
 
     # add style
-    chart.animate(Style({"title": {"fontSize": 30}}))
+    chart.animate(Style({"title": {"fontSize": 24}}))
 
     return chart._repr_html_()
 
@@ -2110,7 +2110,7 @@ def fn_create_slide(df):
 
     data.add_data_frame(df)
     story = Story(data=data)
-    title = f"{min(years)}年 ~ {max(years)}年 台北預售屋銷售 "
+    title = f"{min(years)}年 ~ {max(years)}年 台北市預售屋銷售"
     slide1 = Slide(
         Step(
             Config({"x": "交易筆數", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年", "title": f"{title}"}),
