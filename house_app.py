@@ -2108,13 +2108,12 @@ def fn_create_slide(df):
     df['交易年'] = df['交易年'].astype(str) + '年'
     data = Data()
 
-
     data.add_data_frame(df)
     story = Story(data=data)
     title = f"{min(years)}年 ~ {max(years)}年 台北預售屋銷售 "
     slide1 = Slide(
         Step(
-            Config({"x": "count", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年", "title": f"{title}"}),
+            Config({"x": "交易筆數", "y": ["鄉鎮市區", "交易年"], "label": ["count", "交易年"], "color": "交易年", "title": f"{title}"}),
             Style({"title": {"fontSize": 24}}),
         )
     )
