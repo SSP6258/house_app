@@ -429,6 +429,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
         df_mrt_ave = pd.read_csv(os.path.join(ave_path, 'MRT_ave.csv'), index_col='MRT')
         df_dist_ave = pd.read_csv(os.path.join(ave_path, 'DIST_ave.csv'), index_col='鄉鎮市區')
 
+
         n_data = df.shape[0] - 1
         temp = os.path.join(path, 'output\\temp')
         if not os.path.exists(temp):
