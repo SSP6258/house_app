@@ -429,7 +429,6 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
         df_mrt_ave = pd.read_csv(os.path.join(ave_path, 'MRT_ave.csv'), index_col='MRT')
         df_dist_ave = pd.read_csv(os.path.join(ave_path, 'DIST_ave.csv'), index_col='鄉鎮市區')
 
-
         n_data = df.shape[0] - 1
         temp = os.path.join(path, 'output\\temp')
         if not os.path.exists(temp):
@@ -441,6 +440,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
         except:
             st.write(df['MRT'])
             st.write(df_mrt_ave)
+
         df['SKU_ave'] = df['sku_name'].apply(lambda x: df_sku_ave.loc[x, '每坪單價(萬)'])
         df['DIST_ave'] = df['鄉鎮市區'].apply(lambda x: df_dist_ave.loc[x, '每坪單價(萬)'])
 
