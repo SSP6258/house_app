@@ -441,7 +441,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             st.write(df['MRT'])
             st.write(df_mrt_ave)
             for m in df['MRT'].unique():
-                if m in df['MRT_ave'].index:
+                if m in df_mrt_ave.index:
                     pass
                 else:
                     st.error(f'{m} not in MRT_ave !')
