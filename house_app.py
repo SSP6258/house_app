@@ -439,7 +439,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             if m in df_mrt_ave.index:
                 pass
             else:
-                st.error(f'{m} not in MRT_ave ! Remove it !')
+                st.error(f'{m} not in MRT_ave ! Remove {df[df["MRT"] == m].shape[0]} raws !')
                 df = df[df['MRT'] != m]
 
         try:
