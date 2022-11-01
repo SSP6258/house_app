@@ -2342,7 +2342,7 @@ def fn_gen_web_eda(df):
     hover_data = ["MRT", '最新登錄']
     color = '每坪均價(萬)'
 
-    fig_map_all = fn_gen_plotly_map(df_bc_cnt, title, hover_name, hover_data, map_style, color=color, zoom=10.5,
+    fig_map_all = fn_gen_plotly_map(df_bc_cnt, None, hover_name, hover_data, map_style, color=color, zoom=10.5,
                                     op=0.55,
                                     size='交易量')
 
@@ -2384,6 +2384,7 @@ def fn_gen_web_eda(df):
 
     tabs = st.tabs(['預售總覽', f'預售地圖', '行政區均價', '價格走勢', '交易量走勢'])
     tab_overview, tab_price_map, tab_price,  tab_trend_price, tab_trend_amount = tabs
+    st.write(f'{title}')
 
     with tab_overview:
         df_s = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)', '交易年']]
