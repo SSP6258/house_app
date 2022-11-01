@@ -2182,7 +2182,8 @@ def fn_gen_web_eda(df):
 
     options = list(df_sel[['MRT']].sort_values(by='MRT')['MRT'].unique()) + ['不限']
     # idx = options.index('R線_明德站') if 'R線_明德站' in options else 0
-    idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
+    # idx = options.index('R線_關渡站') if 'R線_關渡站' in options else 0
+    idx = options.index('不限') if '不限' in options else 0
 
     mrt = st.sidebar.selectbox('捷運站', options=options, index=idx)
 
