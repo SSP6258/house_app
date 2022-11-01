@@ -2384,9 +2384,10 @@ def fn_gen_web_eda(df):
 
     tabs = st.tabs(['預售總覽', f'預售地圖', '行政區均價', '價格走勢', '交易量走勢'])
     tab_overview, tab_price_map, tab_price,  tab_trend_price, tab_trend_amount = tabs
-    st.write(f'{title}')
+
 
     with tab_overview:
+        st.write(f'{title}')
         df_s = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)', '交易年']]
         df_s['count'] = 1
 
@@ -2396,6 +2397,7 @@ def fn_gen_web_eda(df):
         fn_create_slide(df_s.copy())
 
     with tab_trend_price:
+        st.write(f'{title}')
         df_plost = df[['交易年月日', '鄉鎮市區', '每坪單價(萬)']]
         df_plost.reset_index(drop=True, inplace=True)
         df_plost['交易年月日'] = df_plost['交易年月日'].apply(lambda x: str(x + 19110000))
@@ -2461,6 +2463,7 @@ def fn_gen_web_eda(df):
             st.line_chart(df_yp, x='Month', y=y, height=345)
 
     with tab_trend_amount:
+        st.write(f'{title}')
 
         df_yp = pd.DataFrame()
         for y in df_plost['year'].unique():
@@ -2513,6 +2516,7 @@ def fn_gen_web_eda(df):
             st.line_chart(df_yp, x='Month', y=y, height=345)
 
     with tab_price_map:
+        st.write(f'{title}')
         st.plotly_chart(fig_map_all)
         st.write('')
         fn_dbg('fn_gen_web_eda 2')
@@ -2525,6 +2529,7 @@ def fn_gen_web_eda(df):
     #     fn_dbg('fn_gen_web_eda 2-1')
 
     with tab_price:
+        st.write(f'{title}')
         fig_tm = fn_gen_plotly_treemap(df_tm, path=['城市', '行政區', '建案名稱'], values='每坪均價(萬)',
                                        color='每坪均價(萬)', hover=['交易年', '捷運', '小學'],
                                        mid=np.average(df_tm['每坪均價(萬)'], weights=df_tm['交易筆數']))
