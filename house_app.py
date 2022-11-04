@@ -2632,6 +2632,9 @@ def fn_gen_web_eda(df):
                     v = v.split('.')[0] if '總戶數' in i or '車位' in i or '面積' in i else v
                     v = v + '%' if '%' in i else v
                     v = v + '年' if i == '完工年度' else v
+                    if i == '建造執照' and v != 'nan':
+                        url = r'https://tccmoapply.dba.tcg.gov.tw/tccmoapply/maliapp/asp/aspcons01.do?node=20181011170807773001'
+                        v = f'[{v}]({url})'
                     c1.write(f'{i}: {v}')
                     builder = v if i == '投資建設' else builder
                     builders = fn_util_split(builder) if i == '投資建設' else builders
