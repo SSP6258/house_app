@@ -3585,6 +3585,7 @@ def fn_gen_web_ref():
         st.write("- 經濟部 商業司: [商工登記公示資料查詢服務](https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do)")
         st.write("- 內政部 營建署: [建築工程履歷查詢系統](http://cpabm.cpami.gov.tw/cers/SearchLicForm.do)")
         st.write("- 透明足跡: [掃了再買－讓企業負起責任](https://thaubing.gcaa.org.tw/)")
+        st.write("- 台北市建管業務: [施工進度案件查詢](https://tccmoapply.dba.tcg.gov.tw/tccmoapply/maliapp/asp/aspcons01.do?node=20181011170807773001)")
 
         st.write('')
         st.subheader('廣告不實 怎麼辦?')
