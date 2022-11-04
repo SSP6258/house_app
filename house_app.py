@@ -173,7 +173,6 @@ def fn_cln_house_data(df):
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
     df = df[df['里'].apply(lambda x: str(x).endswith('里'))] if '里' in df.columns else df
     df = df[df['稅_中位數'].apply(lambda x: str(x) != 'nan')] if '稅_中位數' in df.columns else df
-
     df['戶別'] = df['戶別'].apply(fn_house_hold_rename)
 
     df = fn_gen_build_case(df)
