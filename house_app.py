@@ -31,6 +31,7 @@ import plost
 from streamlit.components.v1 import html
 from ipyvizzu import Chart, Data, Config, Style, DisplayTarget
 from ipyvizzustory import Story, Slide, Step
+
 try:
     from streamlit_player import st_player
 except:
@@ -148,6 +149,20 @@ def fn_anomaly_detection(df, n_comp, percent):
     return df
 
 
+def fn_house_hold_rename(x):
+    y = ''
+    for i in str(x):
+        i = str(int(i)) if i.isnumeric() else i
+        y += i
+
+    y = y.replace(' ', '')
+
+    # if x != y:
+    #     print(f'{x} --> {y}')
+
+    return y
+
+
 @fn_profiler
 def fn_cln_house_data(df):
     df['city'] = df['土地位置建物門牌'].apply(lambda x: x.split('市')[0].replace('臺', '台') + '市')
@@ -158,6 +173,8 @@ def fn_cln_house_data(df):
     df = df[df['車位總價元'].astype(float) > 0] if '車位總價元' in df.columns else df
     df = df[df['里'].apply(lambda x: str(x).endswith('里'))] if '里' in df.columns else df
     df = df[df['稅_中位數'].apply(lambda x: str(x) != 'nan')] if '稅_中位數' in df.columns else df
+
+    df['戶別'] = df['戶別'].apply(fn_house_hold_rename)
 
     df = fn_gen_build_case(df)
     df[['經度', '緯度']] = df[['log', 'lat']]
@@ -723,7 +740,7 @@ def fn_gen_plotly_hist(fig, data, title, row=1, col=1, margin=None, bins=100, li
                       font=dict(
                           family=None,  # "Courier New, monospace",
                           size=font_size,
-                          color=None,)
+                          color=None, )
                       )
 
     return fig
@@ -923,7 +940,8 @@ def fn_gen_analysis_admin(df, margin=None, bc_name=None):
     df_dist_hl = df_sort if dist == '不限' else df_sort[df_sort['鄉鎮市區'] == dist]
     hover_text = fn_get_hover_text(df_dist_hl)
     fig_sct = fn_gen_plotly_scatter(fig_sct, df_dist_hl['鄉鎮市區'], df_dist_hl['每坪單價(萬)'],
-                                    margin=margin, color='lightseagreen', text=hover_text, opacity=0.8, row=1, size=8, width=700)
+                                    margin=margin, color='lightseagreen', text=hover_text, opacity=0.8, row=1, size=8,
+                                    width=700)
 
     if bc_name != '不限':
         hover_txt1 = fn_get_hover_text(df_hl)
@@ -1925,6 +1943,8 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
 
         df_show = df_show[df_show.index != '1F']
 
+        # st.write(df_show)  # test
+
         if r == '樓層價差(%)':
             df_show_diff = df_show.copy()
             rows, cols = df_show_diff.shape[0], df_show_diff.shape[1]
@@ -1953,6 +1973,7 @@ def fn_gen_bc_deals(build_case, dic_df_show, r):
             fmt = None
 
         df_show = df_show.astype(int) if r == '交易日期' else df_show
+
         df_show_fig = df_show.style.format(fmt).applymap(fn_gen_df_color)
 
         if r == '單價分布':
@@ -2096,7 +2117,7 @@ def fn_gen_bc_summary(dic_df_show, key):
 
 
 def fn_create_chart(df):
-    df['交易年'] = df['交易年'].astype(str)+'年'
+    df['交易年'] = df['交易年'].astype(str) + '年'
     df['交易筆數'] = df['count']
     # initialize chart
     chart = Chart(width="320px", height="680px", display=DisplayTarget.MANUAL)
@@ -2373,7 +2394,7 @@ def fn_gen_web_eda(df):
         latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-2]
     else:
         latest_date = str(latest_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
-    latest_date = latest_date[:2]+'/'+latest_date[2:] if latest_date.isnumeric() else latest_date
+    latest_date = latest_date[:2] + '/' + latest_date[2:] if latest_date.isnumeric() else latest_date
     pre_date = str(pre_file).lower().split('_b_')[-1].split('.')[0].split('_')[-1]
     pre_date = pre_date[:2] + '/' + pre_date[2:] if pre_date.isnumeric() else pre_date
     c2.metric(f'本期更新: {latest_date} 🌟', f'{latest_records} 筆', f'{delta} 筆(前期: {pre_date})', delta_color='inverse')
@@ -2383,8 +2404,7 @@ def fn_gen_web_eda(df):
     # tab_price_map, tab_price_tpe, tab_price, tab_deals, tab_area_min, tab_area_max, tab_trend_price, tab_trend_amount = tabs
 
     tabs = st.tabs(['預售總覽', f'預售地圖', '行政區均價', '價格走勢', '交易量走勢'])
-    tab_overview, tab_price_map, tab_price,  tab_trend_price, tab_trend_amount = tabs
-
+    tab_overview, tab_price_map, tab_price, tab_trend_price, tab_trend_amount = tabs
 
     with tab_overview:
         st.write(f'{title}')
@@ -2418,27 +2438,27 @@ def fn_gen_web_eda(df):
         df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
 
         this_y = datetime.datetime.today().year
-        v='NA'
-        m='NA'
-        d='NA'
+        v = 'NA'
+        m = 'NA'
+        d = 'NA'
         col_y = f'單價(萬)_{this_y}'
-        col_yp = f'單價(萬)_{this_y-1}'
+        col_yp = f'單價(萬)_{this_y - 1}'
         if col_y in df_yp.columns:
             for idx in df_yp.index:
                 if str(df_yp.loc[idx, col_y]) == 'nan':
                     try:
-                        v = int(round(df_yp.loc[idx-1, col_y], 0))
+                        v = int(round(df_yp.loc[idx - 1, col_y], 0))
                         m = idx
-                        vp = df_yp.loc[idx-1, col_yp]
+                        vp = df_yp.loc[idx - 1, col_yp]
                         if str(vp) != 'nan':
-                            d = int(round(v - df_yp.loc[idx-1, col_yp], 0))
+                            d = int(round(v - df_yp.loc[idx - 1, col_yp], 0))
                     except:
                         pass
                     break
 
         st.write('')
         place = city[-1] if dist == '' else dist
-        c1, c2= st.columns(2)
+        c1, c2 = st.columns(2)
 
         c1.metric(f'{place} {this_y}年{m}月 均價', f'{v} 萬/坪', f'{d} 萬/坪(比較去年同期)', delta_color='inverse')
 
@@ -2475,20 +2495,20 @@ def fn_gen_web_eda(df):
         df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
         df_yp.rename(columns={c: c.replace('單價(萬)', '交易量') for c in df_yp.columns if '單價(萬)' in c}, inplace=True)
 
-        v='NA'
-        m='NA'
-        d='NA'
+        v = 'NA'
+        m = 'NA'
+        d = 'NA'
         col_y = f'交易量_{this_y}'
         col_yp = f'交易量_{this_y - 1}'
         if col_y in df_yp.columns:
             for idx in df_yp.index:
                 if str(df_yp.loc[idx, col_y]) == 'nan':
                     try:
-                        v = int(round(df_yp.loc[idx-1, col_y], 0))
+                        v = int(round(df_yp.loc[idx - 1, col_y], 0))
                         m = idx
-                        vp = df_yp.loc[idx-1, col_yp]
+                        vp = df_yp.loc[idx - 1, col_yp]
                         if str(vp) != 'nan':
-                            d = int(round(v - df_yp.loc[idx-1, col_yp], 0))
+                            d = int(round(v - df_yp.loc[idx - 1, col_yp], 0))
                     except:
                         pass
                         # st.write(idx)
@@ -2977,7 +2997,7 @@ def fn_gen_web_ml_train(df, path):
             fig = make_subplots(rows=2, cols=1)
 
             margin = dict(t=10, b=0, l=0, r=0)
-            fn_gen_plotly_hist(fig, y_train[watch], '訓練', row=1, margin=margin,width=500)
+            fn_gen_plotly_hist(fig, y_train[watch], '訓練', row=1, margin=margin, width=500)
             fn_gen_plotly_hist(fig, y_test[watch], '測試', row=2, margin=margin, width=500)
             st.plotly_chart(fig)
 
@@ -3585,7 +3605,8 @@ def fn_gen_web_ref():
         st.write("- 經濟部 商業司: [商工登記公示資料查詢服務](https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do)")
         st.write("- 內政部 營建署: [建築工程履歷查詢系統](http://cpabm.cpami.gov.tw/cers/SearchLicForm.do)")
         st.write("- 透明足跡: [掃了再買－讓企業負起責任](https://thaubing.gcaa.org.tw/)")
-        st.write("- 台北市建管業務: [施工進度案件查詢](https://tccmoapply.dba.tcg.gov.tw/tccmoapply/maliapp/asp/aspcons01.do?node=20181011170807773001)")
+        st.write(
+            "- 台北市建管業務: [施工進度案件查詢](https://tccmoapply.dba.tcg.gov.tw/tccmoapply/maliapp/asp/aspcons01.do?node=20181011170807773001)")
 
         st.write('')
         st.subheader('廣告不實 怎麼辦?')
