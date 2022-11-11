@@ -1517,7 +1517,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1, build_case_sel, color_by, c = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr',
                                                              sel_option=['dist'], dist_default=None)
 
-        bc_show = c[1].selectbox('建案位置', options=['建案位置隱藏', '建案位置顯示'], index=0, key='show_bc')
+        bc_show = c[1].selectbox('建案位置', options=['建案位置: 隱藏', '建案位置: 顯示'], index=0, key='show_bc')
 
         if build_case_sel == '不限':
             bc_vill = build_case_sel
