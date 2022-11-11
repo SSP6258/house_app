@@ -1517,7 +1517,7 @@ def fn_gen_analysis(df, latest_records, build_case):
         df_1, build_case_sel, color_by, c = fn_gen_analysis_sel(df.copy(), build_case, latest_records, key='pr',
                                                              sel_option=['dist'], dist_default=None)
 
-        bc_show = c[1].selectbox('建案位置', options=['建案位置: 隱藏', '建案位置: 顯示'], index=0, key='show_bc')
+        bc_show = c[1].selectbox('建案位置', options=['建案位置: 隱藏', '建案位置: 顯示'], index=1, key='show_bc')
 
         if build_case_sel == '不限':
             bc_vill = build_case_sel
@@ -2354,88 +2354,7 @@ def fn_gen_web_eda(df):
     ave = round(df_sel['每坪單價(萬)'].mean(), 0)
 
     # df_bc = pd.DataFrame()
-    dic_df_show = dict()
-    if False:  # build_case != '不限' and not build_case.endswith('區'):
-        floor_max = df_sel['總樓層數'].max()
-        floor_list = [str(floor_max - i) + 'F' for i in range(floor_max)]
-
-        if len(df_sel['戶別'].unique()) == 1:
-            df_sel['house_num'] = df_sel['土地位置建物門牌'].apply(fn_addr_2_house_num)
-        else:
-            df_sel['house_num'] = df_sel['戶別'].apply(lambda x: x.split('-')[0] if '-' in x else x)
-
-        house_nums = sorted(df_sel['house_num'].unique())
-
-        df_bc = pd.DataFrame(index=floor_list, columns=house_nums)
-        df_bc_t = df_bc.copy()
-        df_bc_car = df_bc.copy()
-        df_bc_s = df_bc.copy()
-        df_bc_ps = df_bc.copy()
-        df_bc_d = df_bc.copy()
-
-        df_sel_sort = df_sel.sort_values(by='交易年月日', ascending=True)
-        # print(f'{df_sel[["移轉層次", "建物坪數"]]}')
-        for idx in df_sel_sort.index:
-            flr = str(df_sel_sort.loc[idx, '移轉層次']) + 'F'
-            num = df_sel_sort.loc[idx, 'house_num']
-            val, total, car, size, p_size, date = df_sel_sort.loc[
-                idx, ['每坪單價(萬)', '總價(萬)', '車位總價(萬)', '建物坪數', '車位坪數', '交易年月日']]
-
-            df_bc.at[flr, num] = round(val, 2)
-            df_bc_t.at[flr, num] = total
-            df_bc_car.at[flr, num] = car
-            df_bc_s.at[flr, num] = size
-            df_bc_ps.at[flr, num] = p_size
-            df_bc_d.at[flr, num] = date
-            # print(f'{flr}, {p_size}, {size}')
-
-        df_bc.fillna(round(0, 1), inplace=True)
-        df_bc_t.fillna(round(0, 1), inplace=True)
-        df_bc_car.fillna(round(0, 1), inplace=True)
-        df_bc_s.fillna(round(0, 1), inplace=True)
-        df_bc_ps.fillna(round(0, 1), inplace=True)
-        df_bc_d.fillna(round(0, 1), inplace=True)
-
-        if floor != 0:
-            df_bc = df_bc[df_bc.index == str(floor) + 'F']
-            df_bc_t = df_bc_t[df_bc_t.index == str(floor) + 'F']
-            df_bc_car = df_bc_car[df_bc_car.index == str(floor) + 'F']
-            df_bc_s = df_bc_s[df_bc_s.index == str(floor) + 'F']
-            df_bc_ps = df_bc_ps[df_bc_ps.index == str(floor) + 'F']
-            df_bc_d = df_bc_d[df_bc_d.index == str(floor) + 'F']
-
-        dic_df_show['每坪單價(萬)'] = df_bc[df_bc.sum(axis=1) > 0]
-        dic_df_show['總價(萬)'] = df_bc_t[df_bc_t.sum(axis=1) > 0]
-        dic_df_show['車位總價(萬)'] = df_bc_car[df_bc_car.sum(axis=1) > 0]
-        dic_df_show['建物坪數'] = df_bc_s[df_bc_s.sum(axis=1) > 0]
-        dic_df_show['車位坪數'] = df_bc_ps[df_bc_ps.sum(axis=1) > 0]
-        # dic_df_show['建物-車位(坪)'] = dic_df_show['建物坪數'] - dic_df_show['車位坪數']
-        dic_df_show['總價-車位(萬)'] = dic_df_show['總價(萬)'] - dic_df_show['車位總價(萬)']
-        dic_df_show['交易日期'] = df_bc_d[df_bc_d.sum(axis=1) > 0] / 100
-        # print(f'{dic_df_show["建物坪數"] }')
-
-    if False:
-        floors = list(df_sel['移轉層次'].unique())
-        floors.sort()
-        prices = []
-        deals = []
-        for f in floors:
-            price = int(df_sel[df_sel['移轉層次'] == f]['每坪單價(萬)'].mean())
-            deal = len(df_sel[df_sel['移轉層次'] == f])
-            prices.append(price)
-            deals.append(deal)
-
-        floors = [str(f) + 'F' for f in floors]
-        fig_bar2 = go.Figure(data=[
-            go.Bar(name='均價(萬/坪)', x=floors, y=prices, opacity=0.7),
-            go.Bar(name='成交戶數', x=floors, y=deals, opacity=0.7)
-        ],
-            layout={'title': f'{mrt} ({From_To})'})
-
-        fig_bar2.update_layout(barmode='group',  # One of 'group', 'overlay' or 'relative'
-                               margin=dict(l=30, r=20, t=60, b=40),
-                               # paper_bgcolor="LightsteelBlue",
-                               font=dict(size=16))
+    # dic_df_show = dict()
 
     df_sel.rename(columns={'log': 'lon'}, inplace=True)  # rename for st.map
 
