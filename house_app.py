@@ -1334,14 +1334,16 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
     # dist = c1.selectbox('行政區', options=dists, index=0, key=f'{key}+dist')
     df = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
 
-    build_cases = ['不限'] + list(df['建案名稱'].unique())
-    build_cases = [b for b in build_cases if str(b) != 'nan']
+    df.sort_values(by='coor_ave', ascending=False, inplace=True)
+    build_cases = ['不限'] + [b for b in list(df['建案名稱'].unique()) if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else len(build_cases) - 1
 
     if 'build_case' in sel_option:
         bc = c2.selectbox(f'建案(共{len(build_cases) - 1}個)', options=build_cases, index=bc_idx, key=f'{key}+bc')
     else:
         bc = '不限'
+
+    bc = bc.split('_')[0]
 
     if 'color_by' in sel_option:
         colors = ['無', '依交易年', '依總樓層數', '依建物坪數', f'依最新登({latest_records})'] if colors == None else colors
@@ -2317,20 +2319,9 @@ def fn_gen_web_eda(df):
     mrt = st.sidebar.selectbox('捷運站', options=options, index=idx)
     df_sel = df_sel.reset_index(drop=True) if mrt == '不限' else df_sel[df_sel['MRT'] == mrt].reset_index(drop=True)
 
-    if True:
-        df_latest = df_sel[df_sel['交易年月日'] == max(df_sel['交易年月日'])]
-        build_case = df_latest['建案名稱'].values[0]
-        df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
-    else:
-        build_cases = ['不限'] + [b for b in df_sel['建案名稱'].astype(str).unique()]
-        build_cases.remove('nan') if 'nan' in build_cases else None
-        idx_dft = build_cases.index('康寶日出印象') if '康寶日出印象' in build_cases else len(build_cases) - 1
-        build_case = st.sidebar.selectbox('建案名稱', options=build_cases, index=idx_dft)
-        df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
-
-    floor = 0  # 0: default all floors
-    # floor = st.sidebar.selectbox('移轉層次', (0, *df_sel['移轉層次'].unique()))
-    # df_sel = df_sel[df_sel['移轉層次'] == floor].reset_index(drop=True) if floor != 0 else df_sel
+    df_latest = df_sel[df_sel['交易年月日'] == max(df_sel['交易年月日'])]
+    build_case = df_latest['建案名稱'].values[0]
+    df_sel = df_sel[df_sel['建案名稱'] == build_case].reset_index(drop=True) if build_case != '不限' else df_sel
 
     for i in range(5):
         st.sidebar.write('')
