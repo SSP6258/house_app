@@ -1334,7 +1334,7 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
     # dist = c1.selectbox('行政區', options=dists, index=0, key=f'{key}+dist')
     df = df if dist == '不限' else df[df['鄉鎮市區'] == dist]
 
-    df.sort_values(by='coor_ave', ascending=False, inplace=True)
+    # df.sort_values(by='coor_ave', ascending=False, inplace=True)
     build_cases = ['不限'] + [b for b in list(df['建案名稱'].unique()) if str(b) != 'nan']
     bc_idx = build_cases.index(build_case) if build_case in build_cases else len(build_cases) - 1
 
