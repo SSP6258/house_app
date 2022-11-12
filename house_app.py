@@ -2266,7 +2266,8 @@ def fn_gen_floor_ave(df_sel):
         go.Bar(name='均價(萬/坪)', x=floors, y=prices, opacity=0.7),
         go.Bar(name='成交戶數', x=floors, y=deals, opacity=0.7)
     ],
-        layout={'title': title})
+        layout={'title': title},
+        layout_yaxis_range=[min(prices)-5, max(prices)+5])
 
     fig_bar2.update_layout(barmode='group',  # One of 'group', 'overlay' or 'relative'
                            margin=dict(l=30, r=20, t=60, b=40),
