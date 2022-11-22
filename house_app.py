@@ -1322,7 +1322,6 @@ def fn_gen_analysis_sel(df, build_case, latest_records, key='k', colors=None,
     dists = ['不限'] + list(df['鄉鎮市區'].unique())
     # dist_dft = dists.index('北投區') if '北投區' in dists else 0
 
-
     if build_case is not None and build_case != '不限':
         df_bc = df[df['建案名稱'] == build_case]
         if dist_default == '不限':
@@ -3724,8 +3723,9 @@ def fn_gen_web_tools():
 
 def fn_gen_web_projs():
     st.write('')
-    st.subheader('📌 專案: [利用座標查詢行政區](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
-    st.subheader('📌 專案: [離散事件模擬器](https://share.streamlit.io/ssp6258/des_app/app.py)')
+    st.subheader('📌 專案: 🕷️ [爬蟲練習](https://share.streamlit.io/ssp6258/des_app/app.py)')
+    st.subheader('📌 專案: 🌏 [利用座標查詢行政區](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
+    st.subheader('📌 專案: 🎲 [離散事件模擬器](https://share.streamlit.io/ssp6258/des_app/app.py)')
 
 
 def fn_gen_web_intro():
