@@ -6,7 +6,7 @@ import datetime
 import time
 import pandas as pd
 import pprint
-from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, fn_read_shp, fn_search_vill, fn_profiler
+from house_utils import fn_get_geo_info, fn_get_admin_dist, dic_of_path, fn_read_shp, fn_search_vill, fn_profiler, dic_bc_rename
 
 dic_of_filter = {
     '交易標的': '房地(土地+建物)+車位',
@@ -87,6 +87,17 @@ dic_of_name_2_addr = {
     '基泰碧湖': '台北市內湖區內湖路一段741號',
     '華固文臨': '台北市北投區文林北路175號',
     '華固翡儷': '台北市北投區西安街二段197號',
+    '明臣勸': '臺北市文山區指南路一段67號',
+    '青耘上': '台北市文山區光輝路22巷',
+    '國泰蒔美': '台北市內湖區行善路281巷',
+    '忠泰湛': '臺北市文山區木新里開元街47號',
+    '有川翩翩': '台北市士林區文林路594巷',
+    '向陽上冠': '台北市中正區漢口街一段67號',
+    '圓山帝寶': '台北市士林區承德路四段72號',
+    '璞晛': '台北市北投區文林北路158號',
+    '璞有聲-璞月': '台北市北投區西安街二段261號',
+    '國泰華威豐年': '台北市北投區大業路520號',
+    '當代一號院': '台北市大同區民族西路221巷33號',
 
 }
 
@@ -435,10 +446,11 @@ def fn_gen_build_case(df):
             addr = df.loc[idx, '土地位置建物門牌']
             addr = fn_addr_handle(addr)
             if addr in df_coor_read.index:
-                build_case = str(df_coor_read.loc[addr, 'Build case'])
-                if build_case != 'nan' and build_case != 'NA' and not build_case.endswith('區'):
-                    df.at[idx, '建案名稱'] = build_case
-                    print(addr, '-->', df.at[idx, '建案名稱'])
+                if 'Build case' in df_coor_read.columns:
+                    build_case = str(df_coor_read.loc[addr, 'Build case'])
+                    if build_case != 'nan' and build_case != 'NA' and not build_case.endswith('區'):
+                        df.at[idx, '建案名稱'] = build_case
+                        print(addr, '-->', df.at[idx, '建案名稱'])
 
     # print('fn_gen_build_case end')
     return df
@@ -570,10 +582,14 @@ def fn_gen_raw_data(path, slp=5, is_force=True):
         is_new = False
         if 'File' in df_all.columns:
             is_new = f[0] not in df_all['File'].values
-        if is_force or is_new:
+        if is_force or is_new:  # or '111_1201' in f[0]:
             print(info, 'Parsing:', f[0])
             df = fn_gen_house_data(dir_f, f[1], slp)
-            df_all = df_all.append(df, ignore_index=True)
+            # df_all = df_all.append(df, ignore_index=True)
+            if len(df.columns) != len(df_all.columns):
+                print(f'{df_all.shape}, {df_all.columns}')
+                print(f'{df.shape}, {df.columns}')
+            df_all = pd.concat([df_all, df], ignore_index=True)
         else:
             print(info, 'Existed: ', f[0])
 
@@ -632,25 +648,27 @@ def fn_gen_vill(file):
 
         print(f'Vill updated !')
 
-
-dic_bc_rename = {
-    '中星仁愛旭': '仁愛旭',
-    '宏國大道城A棟': '宏國大道城-A區',
-    '宏國大道城B棟': '宏國大道城-B區',
-    '宏國大道城C棟': '宏國大道城-C區',
-    '宏國大道城D棟': '宏國大道城-D區',
-    '政大爵鼎NO2': '政大爵鼎NO.2',
-    '政大爵鼎NO1': '政大爵鼎NO.1',
-    '吉美君悅': '吉美君悦',
-    '忠泰衍見築': '衍見築',
-    '台大學': '台太學',
-    '寶舖ＣＡＲＥ': '寶舖CARE',
-    '三磐舍紫II': '三磐舍紫2',
-    '德杰羽森-璽': '德杰羽森',
-    '德杰羽森-琚': '德杰羽森',
-    '德杰羽森-玥': '德杰羽森',
-    '吉吉美': '喆美',
-}
+# should import from house_utils.py
+# dic_bc_rename = {
+#     '中星仁愛旭': '仁愛旭',
+#     '宏國大道城A棟': '宏國大道城-A區',
+#     '宏國大道城B棟': '宏國大道城-B區',
+#     '宏國大道城C棟': '宏國大道城-C區',
+#     '宏國大道城D棟': '宏國大道城-D區',
+#     '政大爵鼎NO2': '政大爵鼎NO.2',
+#     '政大爵鼎NO1': '政大爵鼎NO.1',
+#     '吉美君悅': '吉美君悦',
+#     '忠泰衍見築': '衍見築',
+#     '台大學': '台太學',
+#     '寶舖ＣＡＲＥ': '寶舖CARE',
+#     '三磐舍紫II': '三磐舍紫2',
+#     '德杰羽森-璽': '德杰羽森',
+#     '德杰羽森-琚': '德杰羽森',
+#     '德杰羽森-玥': '德杰羽森',
+#     '吉吉美': '喆美',
+#     '韋昌?青江': '韋昌画清江',
+#     '睿泰川? ': '睿泰川矅',
+# }
 
 
 def fn_gen_bc_info():
@@ -659,6 +677,9 @@ def fn_gen_bc_info():
 
     file_df_bc = os.path.join(dic_of_path['database'], 'build_case_info_ext.csv')
     df_bc_info = pd.read_csv(file_df_bc, encoding='utf-8-sig')
+
+    file_df_lg = os.path.join(dic_of_path['database'], 'builder_litigation.csv')
+    df_lg_info = pd.read_csv(file_df_lg, encoding='utf-8-sig')
 
     '''
     行政區	
@@ -675,9 +696,11 @@ def fn_gen_bc_info():
     地下樓層	總戶數	平面車位	機械車位	總車位數	預估工期	建造執照	預估工期	投資建設	建築設計	營造公司	企劃銷售	結構工程	座向規劃	車位規劃	車位配比	用途規劃	土地分區	管理費用	景觀設計	公設設計	燈光設計	棟戶規劃	樓層規劃	基地地址	建材說明	url	爬蟲耗時(秒)	更新日期		
     '''
 
-    bc_infos = ['投資建設', '營造公司', '建造執照', '企劃銷售', '公開銷售', '預估工期', '座向規劃', '土地分區',
-                '完工年度', '建蔽率(%)', '基地面積(坪)', '建蔽面積(坪)', '容積率(%)', '公設比(%)',
-                '地上樓層', '地下樓層', '總戶數', '平面車位', '機械車位']
+    bc_infos_all = ['投資建設', '營造公司', '建造執照', '企劃銷售', '公開銷售', '預估工期', '座向規劃', '土地分區',
+                    '完工年度', '建蔽率(%)', '基地面積(坪)', '建蔽面積(坪)', '容積率(%)', '公設比(%)',
+                    '地上樓層', '地下樓層', '總戶數', '平面車位', '機械車位']
+
+    bc_infos = [i for i in bc_infos_all if i in df_bc_info.columns]
 
     cols = bc_infos + list(df.columns)
     bc_lack = []
@@ -697,6 +720,15 @@ def fn_gen_bc_info():
                         bc_lack.append(bc)
     else:
         assert False, f'建案名稱 NOT in df.columns'
+
+    for idx in df.index:
+        builder = df.loc[idx, '投資建設']
+        constructor = df.loc[idx, '營造公司']
+        lg_num_b = df_lg_info[df_lg_info['建商營造'] == builder]['歷年案件'].values[0] if builder in df_lg_info['建商營造'].values else 0
+        lg_num_c = df_lg_info[df_lg_info['建商營造'] == constructor]['歷年案件'].values[0] if constructor in df_lg_info['建商營造'].values else 0
+        df.at[idx, '建商訴訟'] = lg_num_b if lg_num_b < 2500 else 0
+        df.at[idx, '營造訴訟'] = lg_num_c if lg_num_c < 2500 else 0
+        df.at[idx, '所有訴訟'] = df.at[idx, '建商訴訟'] + df.at[idx, '營造訴訟']
 
     df.to_csv(file_df_all, encoding='utf-8-sig', index=False)
 
@@ -737,7 +769,7 @@ def fn_main():
     # XX path = os.path.join(dic_of_path['root'], 'pre_owned_house')
 
     path = os.path.join(dic_of_path['root'], 'pre_sold_house')
-    fn_gen_raw_data(path, slp=5, is_force=False)
+    fn_gen_raw_data(path, slp=3, is_force=False)
 
     # XX fn_save_building_name(path)
 
