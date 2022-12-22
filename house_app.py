@@ -2699,7 +2699,7 @@ def fn_gen_web_eda(df):
                             lg_reason = df_lg_b['裁判案由'].values[0]
                             b = ''  # if len(builders) <= 1 else f' ({builder})'
                             c1.write(
-                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
+                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://judgment.judicial.gov.tw/FJUD/default.aspx) ❗{b}')
 
                     for constructor in constructors:
                         if i == '營造公司' and constructor in df_lg['建商營造'].values:
@@ -2708,7 +2708,7 @@ def fn_gen_web_eda(df):
                             lg_reason = df_lg_b['裁判案由'].values[0]
                             c = ''  # if len(constructors) <= 1 else f' ({constructor})'
                             c1.write(
-                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://law.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
+                                f'👉 最新裁判: [{lg_latest} - {lg_reason}](https://judgment.judicial.gov.tw/FJUD/default.aspx) ❗{c}')
 
                 for i in bc_info_c2:
                     v = str(df_sel[i].values[0])
@@ -2731,7 +2731,7 @@ def fn_gen_web_eda(df):
 
                 with st.expander(f' 👉 建商:{builder} {"    "}  ⚖️歷史裁判案件數: {lg_total}件 ❗'):
                     st.write('')
-                    st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
+                    st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://judgment.judicial.gov.tw/FJUD/default.aspx)')
                     st.write('')
                     AgGrid(df_lg_b, theme='blue', enable_enterprise_modules=True)
 
@@ -2745,7 +2745,7 @@ def fn_gen_web_eda(df):
 
                     with st.expander(f'👉 營造商:{c} {"    "}  ⚖️ 歷史裁判案件數: {lg_total}件 ❗'):
                         st.write('')
-                        st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)')
+                        st.write(f'- 資料來源: [司法院 法學資料檢索系統](https://judgment.judicial.gov.tw/FJUD/default.aspx)')
                         st.write('')
                         AgGrid(df_lg_c, theme='blue', enable_enterprise_modules=True)
 
@@ -3617,7 +3617,7 @@ def fn_gen_web_ref():
     st.write("- 房價預測網站: [好時價House+(利用統計學、數學及人工智慧(AI)演算法,算出不動產價值)](https://www.houseplus.tw/)")
     st.write("- 房價指數: [國立清華大學 安富金融工程研究中心](https://aife.site.nthu.edu.tw/p/404-1389-220340.php)")
     st.write("- 房價指標: [臺北市地政局 房市指標溫度計](https://emuseum.land.gov.taipei/TaipeiLandRealEstate/)")
-    st.write("- 裁判書查詢: [司法院 法學資料檢索系統](https://law.judicial.gov.tw/FJUD/default.aspx)")
+    st.write("- 裁判書查詢: [司法院 法學資料檢索系統](https://judgment.judicial.gov.tw/FJUD/default.aspx)")
     st.write("- 耐震標章: [台灣建築中心 耐震標章](https://www.tabc.org.tw/sab/modules/news/article.php?storyid=7)")
 
     st.write('')
@@ -3652,7 +3652,7 @@ def fn_gen_web_ref():
 
         st.write('')
         st.subheader('訴訟案件 哪裡查?')
-        st.write("- 司法院 法學資料檢索系統: [裁判書查詢](https://law.judicial.gov.tw/FJUD/default.aspx)")
+        st.write("- 司法院 法學資料檢索系統: [裁判書查詢](https://judgment.judicial.gov.tw/FJUD/default.aspx)")
 
         st.write('')
         st.subheader('建築標章 哪裡查?')
