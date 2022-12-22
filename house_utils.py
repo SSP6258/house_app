@@ -15,13 +15,14 @@ from geopy.distance import geodesic
 from collections import defaultdict
 from workalendar.asia import Taiwan
 from shapely.geometry import shape, Point
+
 # from tabula import read_pdf
 
 dic_of_path = {
-    # 'root': r'D:\05_Database\house_data',
-    # 'database': r'D:\05_Database\house_data\database'
-    'root': 'house_data',
-    'database': 'house_data/database',
+    'root': r'D:\05_Database\house_data',
+    'database': r'D:\05_Database\house_data\database'
+    # 'root': 'house_data',
+    # 'database': 'house_data/database',
 }
 
 dic_of_bc_info = defaultdict(list)
@@ -33,21 +34,122 @@ dic_of_capacity_ratio = {
     '承辦人': '[都市規劃科] 關仲芸',
     '聯絡電話': '02-27208889 轉8265',
     '住ㄧ': 60,
+    '住一': 60,
+    '住壹': 60,
     '住二': 120,
-    '住二之一': 160,
+    '住貳': 120,
+    '住二之壹': 160,
+    '住貳之一': 160,
+    '住2-1': 160,
     '住二之二': 225,
+    '住貳之貳': 225,
+    '住2-2': 225,
     '住三': 225,
+    '住參': 225,
+    '住宅區': 225,
     '住三之一': 300,
+    '住3-1': 300,
     '住三之二': 400,
+    '住3-2': 400,
     '住四': 300,
+    '住肆': 300,
     '住四之一': 400,
+    '住4-1': 400,
     '商ㄧ': 360,
+    '商壹': 360,
+    '商一': 360,
+    '商貳': 630,
     '商二': 630,
     '商三': 560,
+    '商業區': 560,
+    '商參': 560,
+    '商肆': 800,
     '商四': 800,
     '工二': 200,
     '工三': 300,
 }
+
+dic_bc_rename = {
+    '中星仁愛旭': '仁愛旭',
+    '宏國大道城A棟': '宏國大道城-A區',
+    '宏國大道城B棟': '宏國大道城-B區',
+    '宏國大道城C棟': '宏國大道城-C區',
+    '宏國大道城D棟': '宏國大道城-D區',
+    '政大爵鼎NO2': '政大爵鼎NO.2',
+    '政大爵鼎NO1': '政大爵鼎NO.1',
+    '吉美君悅': '吉美君悦',
+    '忠泰衍見築': '衍見築',
+    '台大學': '台太學',
+    '寶舖ＣＡＲＥ': '寶舖CARE',
+    '三磐舍紫II': '三磐舍紫2',
+    '六德．拾翫': '六德拾翫',
+    '德杰羽森-璽': '德杰羽森',
+    '德杰羽森-琚': '德杰羽森',
+    '德杰羽森-玥': '德杰羽森',
+    '吉吉美': '喆美',
+    '韋昌?青江': '韋昌画清江',
+    '睿泰川? ': '睿泰川矅',
+    '宏築天?': '宏築天藴',
+    '當代一號院': '當代1號院',
+    '當代1號院': '當代1號院',
+    '璞有聲-璞月': '璞有聲',
+    '大安MONEY 賦寓': '大安MONEY',
+    '大安MONEY 璞寓': '大安MONEY',
+    '信義THE 1': '信義THE1',
+    '幸褔安家': '幸福安家',
+}
+
+black_list = [
+    '枝盈',
+    '華固上文林',
+    '新碩大砌',
+    '家居璽玉',
+    '忠泰旭美',
+    '華固文臨',
+    '常殷泊美',
+    '明臣勸',
+    '達欣東匯',
+    '景美聯山-臻品區',
+    '友座安森',
+    '富裔Corner',
+    '璞晛',
+    '義泰吾境',
+    '日安吉林',
+    '禾碩沐晴',
+    '?山',
+    'Vigorlin 東門',
+    '基泰磺溪',
+    '太平洋敦南麗舍',
+    '久云嘉潤日出',
+    '華固翡儷',
+    '國泰悠陽',
+    '樂行館',
+    '品陽大苑',
+    '朗朗台大',
+    '旺德福',
+    '璞園榮',
+    '真實永澤',
+    '吉美信義',
+    '美',
+    '達欣東門馥寓',
+    '新碩文曲',
+    '永陞鳳翎',
+    '信義一品',
+    '六德拾翫',
+    '景美聯山-極品區',
+    '鐫豊',
+    '玉成大賞',
+    '信義THE1',
+    '首敦旭日',
+    '琢豐',
+    '首泰城人之美',
+    '源利御品',
+    '璞園寬心苑',
+    '璞森晴',
+    '晶華 MORI',
+    '勤耕延吉',
+    '信義大樓',
+]
 
 
 def fn_profiler(func):
@@ -542,7 +644,7 @@ def fn_get_geo_info(addr, df_addr_coor=pd.DataFrame(), slp=5):
             # addr_coor = fn_get_coordinate(addr, slp)
 
             chromedriver = os.path.join(dic_of_path['database'], 'chromedriver.exe')
-            print(f'find {addr} from database, is {chromedriver} existed = {os.path.exists(chromedriver)}')
+            print(f'find {addr} from database !!!, is {chromedriver} existed = {os.path.exists(chromedriver)}')
             addr_coor, is_match, add_fr_db = fn_get_coor_fr_db(addr, df_addr_coor.copy())
             # addr_coor = [0, 0]
             is_save = False
@@ -781,7 +883,6 @@ def fn_gen_school_data():
 
 
 def fn_read_shp(is_dist_only=False):
-
     if is_dist_only:
         path = os.path.join(dic_of_path['database'], 'mapdata202104280245')
         file = r'TOWN_MOI_1100415.shp'
@@ -907,6 +1008,7 @@ def fn_gen_tax_file():
 
 
 def fn_web_click(drv, val, slp=2, by=By.XPATH):
+    time.sleep(slp)
     elm = drv.find_element(by=by, value=val)
     elm.click()
     time.sleep(slp)
@@ -956,7 +1058,6 @@ def fn_web_handle(drv, act, typ, slp, by, val, key):
 
 
 def fn_web_init(link, is_headless=True):
-
     """
     要注意用selenium進行爬蟲的時候，
     chrome 有時候會出現「自動軟體正在控制您的瀏覽器」，然後程式可能會跑不動。
@@ -980,11 +1081,17 @@ def fn_web_init(link, is_headless=True):
     return driver, action
 
 
-def fn_bc_info_parser(bc, info, dic_id, is_dbg=False):
+def fn_bc_info_parser(bc, info, dic_id, k, is_dbg=False):
+    if dic_id == 'dic1':
+        addr = ['基地地址', '台北市']
+    else:
+        addr = ['基地地址']
+
     items = [['投資建設'],
-             ['基地地址', '台北市'],
+             addr,
+             ['基地地址'],
              ['預期完工', '交屋時間'],
-             ['公開銷售', bc],
+             # ['公開銷售', bc],
              ['公設比'],
              ['棟戶規劃', '樓棟規劃'],
              ['建蔽率'],
@@ -1009,9 +1116,19 @@ def fn_bc_info_parser(bc, info, dic_id, is_dbg=False):
     infos = [_.replace(' ', '').replace('查看地圖', '').replace('有限公司', '').
                  replace('股份', '').replace('事業', '').replace('開售通知我', '') for _ in info.split('\n')]
 
-    print(info) if is_dbg else None
+    if infos[0] == '建築設計':
+        infos = infos[1:]
+        print('remove 1st 建築設計') if is_dbg else None
+
+    print('\n'.join(infos)) if is_dbg else None
     dic_of_bc_info['建案名稱'].append(bc) if bc not in dic_of_bc_info['建案名稱'] else None
-    in_above = ['營造公司', '企劃銷售', '建築設計', '景觀設計', '燈光設計', '公設設計']
+    in_above_dic1 = ['營造公司', '企劃銷售', '建築設計', '景觀設計', '燈光設計', '公設設計']
+    in_above_dic1 += ['管理費用', '車位配比']
+
+    in_above_dic2 = []
+    # in_above_dic2 = ['燈光設計', '公設設計']
+    # if k == 'build_spec' or k == 'build_info':
+    #     in_above_dic2 += ['公設比', '建蔽率', '基地面積', '用途規劃']
 
     for idx in range(len(infos)):
         i = infos[idx]
@@ -1020,9 +1137,9 @@ def fn_bc_info_parser(bc, info, dic_id, is_dbg=False):
                 if it in i:
                     if it == i:
                         if dic_id == 'dic1':
-                            val = infos[idx + 1]
+                            val = infos[idx - 1] if i in in_above_dic1 else infos[idx + 1]
                         else:
-                            val = infos[idx - 1] if i in in_above else infos[idx + 1]
+                            val = infos[idx - 1] if i in in_above_dic2 else infos[idx + 1]
                     else:
                         val = i.replace(it, '')
 
@@ -1034,15 +1151,18 @@ def fn_bc_info_parser(bc, info, dic_id, is_dbg=False):
                         else:
                             val = '台北市' + val if it == '台北市' else val
                             val = val.replace('造', '') if its[0] == '結構工程' and val.endswith('造') else val
-                            print(bc, it, it == its[0], its[0], '-->', val) if is_dbg else None
                             dic_of_bc_info[its[0]].append(val)
+                            print(bc, f'{1 + items.index(its)}/{len(items)}', it, it == its[0], its[0], '-->',
+                                  val) if is_dbg else None
+
                     break
 
 
 def fn_get_bc_data(bc, link, dic_web_handle, is_dbg=False):
-    driver, action = fn_web_init(link)
+    driver, action = fn_web_init(link, is_headless=False)
     dic_id = dic_web_handle['id'][0]
     for k in dic_web_handle.keys():
+
         if k == 'id':
             pass
         else:
@@ -1051,22 +1171,49 @@ def fn_get_bc_data(bc, link, dic_web_handle, is_dbg=False):
             by = dic_web_handle[k][2]
             val = dic_web_handle[k][3]
 
+            print(f'{dic_id} {k} {typ} {slp}') if is_dbg else None
+
             if 'web_jump' in k:
-                if k == 'web_jump_2':
-                    driver.get(driver.current_url + f'/{val}')
+                if 'web_jump_w_val' in k:
+                    url = driver.current_url
+                    url = url.split('?v=')[0]
+                    url = url.split('?click_link')[0] if str(url).endswith('?click_link=1') else url
+                    driver.get(url + f'/{val}')
                 else:
                     driver.switch_to.window(driver.window_handles[-1])
                 time.sleep(slp)
-                print(driver.current_url) if is_dbg else None
+                url = driver.current_url
+                print(url) if is_dbg else None
+
+                if dic_id == 'dic1' and k == 'web_jump' and 'newhouse' in url:
+                    # Go dic2 now
+                    print(f'Go dic2 for newhouse') if is_dbg else None
+                    break
             else:
                 try:
                     read = fn_web_handle(driver, action, typ, slp, by, val, bc)
-                    if '社區概況' in read or '建築規劃' in read or '投資建設' in read or '台北市' in read:
-                        fn_bc_info_parser(bc, read, dic_id, is_dbg=is_dbg)
+                    # dic1 --> 社區概況
+                    # dic2 --> 社區規劃
+                    if typ == 'getText':
+                        print(f'read = "{read}" --> check XPATH: {val} !') if len(
+                            str(read)) == 0 or read == 'NA' else None
+                        if dic_id == 'dic1':
+                            if '開箱文' in read:
+                                pass
+                            elif '社區概況' in read or '建築規劃' in read or '投資建設' in read or '基本資料' in read or '台北市' in read:
+                                fn_bc_info_parser(bc, read, dic_id, k, is_dbg=is_dbg)
 
-                    if k == 'build_info' and len(dic_of_bc_info['url']) < len(dic_of_bc_info['建案名稱']):
-                        print(f'{bc} --> {driver.current_url}') if is_dbg else None
-                        dic_of_bc_info['url'].append(driver.current_url)
+                        elif dic_id == 'dic2':
+                            if '開箱文' in read:
+                                print(f'{dic_id} {k}: bypass 開箱文') if is_dbg else None
+                                pass
+                            else:
+                                fn_bc_info_parser(bc, read, dic_id, k, is_dbg=is_dbg)
+
+                    if 'build_info' in k:
+                        if len(dic_of_bc_info['url']) < len(dic_of_bc_info['建案名稱']):
+                            print(f'{bc} --> {driver.current_url}') if is_dbg else None
+                            dic_of_bc_info['url'].append(driver.current_url)
                 except:
                     print(bc, dic_id, k, dic_web_handle[k][0], 'FAIL', val) if is_dbg else None
                     if k == 'bc_sel':
@@ -1081,26 +1228,33 @@ def fn_get_bc_data_fr_591(bc, is_dbg=False):
 
     dic_web_handle_591 = {
         'id': ['dic1'],
-        'x': ['click', 1, By.XPATH, '/html/body/div[9]/div[1]/div[1]/a'],
-        # 'x2': ['click', 1, By.XPATH, '/html/body/div[10]/a[1]'],
+
+        'x': ['click', 2, By.XPATH, '/html/body/div[9]/div[1]/div[1]/a'],
+        'x_591000': ['click', 2, By.XPATH, '/html/body/div[11]/div/em'],
+        'x2': ['click', 1, By.XPATH, '/html/body/div[10]/a[1]'],
         'typ_sel': ['move2', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[1]/a[3]'],
         'city_sel': ['click', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[1]/div/span/i'],
         'city_tpe': ['click', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[1]/div/div/dl[1]/dd/a[1]'],
         'enter_bc': ['keyin', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/input'],
-        'search_bt': ['click', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[2]/span'],
-        'bc_sel': ['click', 1, By.XPATH, '/html/body/div[5]/div[1]/div[2]/ul/span[1]/li/a/div[2]'],
-        'web_jump': ['web_jump', 2, By.XPATH, ''],
-        'build_info': ['getText', 1, By.XPATH, '/html/body/div[4]/section[1]/div[2]/div[1]'],
-        'build_spec_1': ['getText', 1, By.XPATH, '/html/body/div[4]/div[3]/div/div[2]'],
-        'build_spec_2': ['getText', 1, By.XPATH, '/html/body/div[4]/div[2]/div/div[2]'],
-        'builder_1': ['getText', 1, By.XPATH, '/html/body/div[4]/div[3]/div/div[3]'],
-        'builder_2': ['getText', 1, By.XPATH, '/html/body/div[4]/div[2]/div/div[3]'],
+        'search_bt': ['click', 2, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[2]/span'],
+        'bc_sel': ['click', 2, By.XPATH, '/html/body/div[5]/div[1]/div[2]/ul/span[1]/li/a/div[2]'],
+        'web_jump': ['web_jump', 3, By.XPATH, ''],
+        'build_info': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/div[3]/div'],
+        'build_info_1': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/section[3]/div'],
+        'build_info_2': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/section[4]/div'],
+        'build_info_3': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/section[5]/div'],
+        'web_jump_w_val': ['web_jump', 3, By.XPATH, 'overview'],
+        'build_spec_1': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/div[2]/div[1]'],
+        'build_spec_2': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/div[2]/div[2]'],
+        'build_spec_3': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/div[2]/div[3]'],
+
     }
 
     dic_web_handle_591_2 = {
         'id': ['dic2'],
         'x': ['click', 1, By.XPATH, '/html/body/div[9]/div[1]/div[1]/a'],
-        # 'x2': ['click', 1, By.XPATH, '/html/body/div[10]/a[1]'],
+        'x_591000': ['click', 2, By.XPATH, '/html/body/div[11]/div/em'],
+        'x2': ['click', 1, By.XPATH, '/html/body/div[10]/a[1]'],
         'typ_sel': ['move2', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[1]/a[3]'],
         'city_sel': ['click', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[1]/div/span/i'],
         'city_tpe': ['click', 1, By.XPATH, '/html/body/section[1]/div[3]/div/div[2]/div[1]/div/div/dl[1]/dd/a[1]'],
@@ -1109,14 +1263,13 @@ def fn_get_bc_data_fr_591(bc, is_dbg=False):
         'addr_info': ['getText', 1, By.XPATH, '/html/body/div[5]/div[1]/div[2]/ul/span[1]/li/a/div[2]'],
         'bc_sel': ['click', 1, By.XPATH, '/html/body/div[5]/div[1]/div[2]/ul/span[1]/li/a'],
         'web_jump': ['web_jump', 3, By.XPATH, ''],
-        'x4': ['click', 1, By.XPATH, '/html/body/div[1]/main/div/div[5]/div[2]/div[2]/div[3]/i'],
-        'comu_info_1': ['getText', 1, By.XPATH, '/html/body/div[1]/main/div/section[3]/div'],
-        'comu_info_2': ['getText', 1, By.XPATH, '/html/body/div[1]/main/div/section[4]/div'],
-        'x3': ['click', 1, By.XPATH, '/html/body/div[1]/main/div/div[5]/div[2]/div[2]/div[3]/i'],
-        'web_jump_2': ['web_jump', 2, By.XPATH, 'overview'],
-        'build_info': ['getText', 1, By.XPATH, '/html/body/div/main/section/div[2]/div[1]'],
-        'build_spec_1': ['getText', 1, By.XPATH, '/html/body/div/main/section/div[2]/div[2]'],
-        'builder_1': ['getText', 1, By.XPATH, '/html/body/div/main/section/div[2]/div[3]'],
+        # 'x4': ['click', 1, By.XPATH, '/html/body/div[1]/main/div/div[5]/div[2]/div[2]/div[3]/i'],
+        'comu_info_1': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/section[4]'],
+        # 'comu_info_2': ['getText', 2, By.XPATH, '/html/body/div[1]/main/div/section[5]'],
+        'web_jump_w_val': ['web_jump', 2, By.XPATH, 'detail'],
+        'build_info': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/section/div[3]/div[1]'],
+        'build_spec': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/section/div[3]/div[3]'],
+        'builder': ['getText', 1, By.XPATH, '/html/body/div[1]/main/section/section/div[3]/div[4]'],
     }
 
     ts = time.time()
@@ -1144,7 +1297,6 @@ bc_manual = [
     '知鈺',
     '睿泰美',
     '御松軒',
-    '信義大樓',
     '三創爵鼎',
     '樂揚煦煦',
     '長野米蘭',
@@ -1168,7 +1320,10 @@ bc_manual = [
     '信義CASA',
     '天母常玉',
     '睦昇天朗',
-    '岳泰峰? ',
+    '岳泰峰悦',
+    '岳泰峰山',
+    '岳泰峰晴',
+    '岳泰峰範',
     '力麒天沐',
     '擎天森林',
     '新美齊心岳',
@@ -1190,32 +1345,12 @@ bc_manual = [
 ]
 
 
-dic_bc_rename = {
-    '中星仁愛旭': '仁愛旭',
-    '宏國大道城A棟': '宏國大道城-A區',
-    '宏國大道城B棟': '宏國大道城-B區',
-    '宏國大道城C棟': '宏國大道城-C區',
-    '宏國大道城D棟': '宏國大道城-D區',
-    '政大爵鼎NO2': '政大爵鼎NO.2',
-    '政大爵鼎NO1': '政大爵鼎NO.1',
-    '吉美君悅': '吉美君悦',
-    '忠泰衍見築': '衍見築',
-    '台大學': '台太學',
-    '寶舖ＣＡＲＥ': '寶舖CARE',
-    '三磐舍紫II': '三磐舍紫2',
-    '德杰羽森-璽': '德杰羽森',
-    '德杰羽森-琚': '德杰羽森',
-    '德杰羽森-玥': '德杰羽森',
-    '吉吉美': '喆美',
-}
-
-
 def fn_get_bc_info(is_dbg=False, is_force=False, batch=10):
     # bc_manual = ['天母常玉', '奇岩綠境', '富域', '璞知溪', '國泰悠境', '皇鼎一品']
-    first_bc = '康寶日出印象'
+    first_bc = '枝盈'  # '當代1號院'  # '國泰雍萃'  # '敦化豐華'  # '宏國大道城-D區'  # '康寶日出印象'  # '築億丰盛'  # '龍霖初心'  # '有川翩翩' 品陽大苑
     build_case_names = bc_manual
     file_bc_names = os.path.join(dic_of_path['root'], 'pre_sold_house', 'output', 'house_all.csv')
-    df_bc_names = pd.read_csv(file_bc_names, encoding='utf_8_sig', na_filter='False')
+    df_bc_names = pd.read_csv(file_bc_names, encoding='utf_8_sig', na_filter=False)
     bc_names = list(set(df_bc_names['建案名稱'].values))
     del df_bc_names
     build_case_names = build_case_names + bc_names
@@ -1227,14 +1362,23 @@ def fn_get_bc_info(is_dbg=False, is_force=False, batch=10):
     file = os.path.join(dic_of_path['database'], 'build_case_info.csv')
     bc_parsed = []
     if os.path.exists(file):
-        df_pre = pd.read_csv(file, encoding='utf_8_sig', na_filter='False')
+        df_pre = pd.read_csv(file, encoding='utf_8_sig', na_filter=False)
         bc_parsed = df_pre['建案名稱'].values
 
     print(f'There are {len(build_case_names)} build cases to parsing')
 
     # bc = dic_bc_rename[bc] if bc in dic_bc_rename.keys() else bc
 
+    # special !
+    # build_case_names = [b for b in build_case_names if b in dic_bc_rename.keys()]
+
     build_case_names = [dic_bc_rename[bc] if bc in dic_bc_rename.keys() else bc for bc in build_case_names]
+    build_case_names = [b for b in build_case_names if str(b) != 'nan' and len(str(b)) > 0]
+
+    # 六德．拾翫
+    build_case_names = [b.replace('．', '') for b in build_case_names]
+
+    build_case_names = [b for b in build_case_names if b not in black_list]
 
     for bc in build_case_names:
 
@@ -1327,7 +1471,6 @@ def fn_get_mach_parking_num(x):
 
 
 def fn_get_build_cap(v):
-
     # 第三種住宅區 第三之二種住宅區,
     # 第三種商業區
     # 特定農業區甲種建築用地
@@ -1335,7 +1478,7 @@ def fn_get_build_cap(v):
     k = 'NA'
     x = v.split('（')[0].split('(')[0].split('、')[0].split('，')[0]
     if x.endswith('區') and '種' in x:
-        k = x.split('種')[-1][0]+x.split('種')[0].replace('第', '')
+        k = x.split('種')[-1][0] + x.split('種')[0].replace('第', '')
     else:
 
         '''
@@ -1375,10 +1518,13 @@ def fn_get_build_cap(v):
                 print(x, 'Unknown Cap. format')
 
     if k in dic_of_capacity_ratio.keys():
-        print(v, '-->', k)
+        # print(v, '-->', k)
         cap = dic_of_capacity_ratio[k]
     else:
-        # print(k, 'Not in dic_of_capacity_ratio.keys()')
+        if k == 'NA':
+            pass
+        else:
+            print(k, 'Not in dic_of_capacity_ratio.keys()')
         cap = x
 
     return cap
@@ -1390,7 +1536,9 @@ def fn_gen_bc_info_extend():
     df.drop_duplicates(subset=df.columns, inplace=True)
 
     df['行政區'] = df['基地地址'].apply(lambda x: x if x == 'NA' else str(x).split('區')[0].split('北市')[-1] + '區')
-    df['建照年度'] = df['建造執照'].apply(lambda x: x if x == 'NA' else str(x).split('建字')[0])
+
+    if '建造執照' in df.columns:
+        df['建照年度'] = df['建造執照'].apply(lambda x: x if x == 'NA' else str(x).split('建字')[0])
 
     #  地上15、24層，地下5層
     df['地上樓層'] = df['樓層規劃'].apply(
@@ -1406,11 +1554,13 @@ def fn_gen_bc_info_extend():
     df['平面車位'] = df['車位規劃'].apply(fn_get_flat_parking_num)
     df['機械車位'] = df['車位規劃'].apply(fn_get_mach_parking_num)
     df['總車位數'] = df['平面車位'] + df['機械車位']
-    df['公開銷售'] = df['公開銷售'].apply(lambda x: x.split('已完銷')[-1] + '已完銷' if '已完銷' in x else x)
+    if '公開銷售' in df.columns:
+        df['公開銷售'] = df['公開銷售'].apply(lambda x: x.split('已完銷')[-1] + '已完銷' if '已完銷' in x else x)
     df['棟數'] = df['棟戶規劃'].apply(
         lambda x: int(x.split('棟')[0].split('，')[-1]) if '，' in x.split('棟')[0] else int(x.split('棟')[0]))
 
-    s = df['建蔽率'].apply(lambda x: float(x.replace('%', 'e-2')))
+    # s = df['建蔽率'].apply(lambda x: float(x.replace('%', 'e-2')))
+    df['地上樓層'] = df['地上樓層'].apply(lambda x: x.replace(',', '、'))
     f = df['地上樓層'].apply(lambda x: int(max(x.split('、'))) if '、' in x else int(x))
 
     # df['容積率(%)'] = s * f
@@ -1432,12 +1582,12 @@ def fn_gen_bc_info_extend():
     df['完工年度'] = df['預期完工'].apply(lambda x: int(x.split('年')[0]) - 1911 if '年' in x else x)
     df['預估工期'] = df['完工年度'].astype(str)
     for i in range(df['完工年度'].shape[0]):
-        fr = df['建照年度'].values[i]
-        to = df['完工年度'].values[i]
-        if 'NA' in fr or '隨時' in str(to):
-            df['預估工期'].values[i] = 'NA'
-        else:
+        try:
+            fr = df['建照年度'].values[i]
+            to = df['完工年度'].values[i]
             df['預估工期'].values[i] = int(to) - int(fr)
+        except:
+            df['預估工期'].values[i] = 'NA'
 
     for idx in df['建照年度'].index:
         v1 = df.loc[idx, '建照年度']
@@ -1453,20 +1603,54 @@ def fn_gen_bc_info_extend():
     df.sort_values(by=['行政區', '建照年度_tmp', '完工年度_tmp', '基地面積(坪)'], ascending=[True, False, True, False], inplace=True,
                    ignore_index=True)
 
-    cols_order = ['行政區', '建照年度', '完工年度', '公開銷售', '建案名稱', '基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)',
+    # '公開銷售',
+    cols_order = ['行政區', '建照年度', '完工年度', '建案名稱', '基地面積(坪)', '建蔽面積(坪)', '建蔽率(%)', '容積率(%)',
                   '公設比(%)', '棟數', '地上樓層', '地下樓層', '總戶數', '平面車位', '機械車位', '總車位數', '預估工期', '建造執照',
                   '預估工期', '投資建設', '建築設計', '營造公司', '企劃銷售', '結構工程', '座向規劃', '車位規劃', '車位配比',
                   '用途規劃', '土地分區', '管理費用', '景觀設計', '公設設計', '燈光設計', '棟戶規劃', '樓層規劃', '基地地址',
                   '建材說明', 'url', '爬蟲耗時(秒)', '更新日期']
 
-    df = df[cols_order]
+    df = df[[c for c in cols_order if c in df.columns]]
     df = df[df['行政區'] != 'NA']
+
+    df['sell type'] = df['url'].apply(lambda x: 'market' if 'market' in x else 'newhouse')
+
     df.to_csv(os.path.join(dic_of_path['database'], csv_file.split('.csv')[0] + '_ext.csv'), encoding='utf_8_sig',
               index=False)
 
 
+def fn_test_only():
+    # ============================
+    df = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext_1104.csv'), encoding='utf_8_sig',
+                     na_filter=False)
+
+    df1 = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext_1025.csv'), encoding='utf_8_sig',
+                      na_filter=False)
+
+    for idx in df.index:
+        bc = df.loc[idx, '建案名稱']
+        if bc in df1['建案名稱'].values:
+            for c in df.columns:
+                if c in df1.columns:
+                    v = df.loc[idx, c]
+                    if v == 'NA' or v == '':
+                        df1_bc = df1[df1['建案名稱'] == bc]
+                        if df1_bc.shape[0] == 1:
+                            v1 = df1_bc[c].values[0]
+                            df.at[idx, c] = v1
+                    else:
+                        if bc == '康寶日出印象':
+                            print(f'{bc} {c} {v}')
+
+    # ============================
+
+    df.to_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext_1104_new.csv'), encoding='utf_8_sig',
+              index=False)
+
+
 def fn_gen_litigation():
-    link = 'https://law.judicial.gov.tw/FJUD/default.aspx'
+    # link = 'https://law.judicial.gov.tw/FJUD/default.aspx'
+    link = r'https://judgment.judicial.gov.tw/FJUD/default.aspx'
 
     dic_web_handle_litigation = {
         'enter_builder': ['keyin', 1, By.XPATH, '/html/body/form/div[5]/div/div[1]/table/tbody/tr/td/div[1]/input'],
@@ -1480,14 +1664,15 @@ def fn_gen_litigation():
 
     # builders = ['康寶建設', '勝岳營造', '華固建設']
 
-    df_bc_name = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext.csv'), encoding='utf_8_sig', na_filter=False)
+    df_bc_name = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext.csv'), encoding='utf_8_sig',
+                             na_filter=False)
     builders = list(set(df_bc_name['投資建設'].values))
     constructor = list(set(df_bc_name['營造公司'].values))
     seller = list(set(df_bc_name['企劃銷售'].values))
 
     search = []
     # sep = ['、', '、', '-', '/', 'X', '(']
-    for b in list(builders+constructor):
+    for b in list(builders + constructor):
         if '、' in b:
             for each_b in list(b.split('、')):
                 search.append(each_b)
@@ -1562,7 +1747,7 @@ def fn_gen_litigation():
                 else:
                     print(k, '\n', read)
 
-        print(f'({search.index(b)+1}/{len(search)})', b, '-->', evts, 'cases') if k == 'detail' else None
+        print(f'({search.index(b) + 1}/{len(search)})', b, '-->', evts, 'cases') if k == 'detail' else None
 
         driver.close()
         driver.quit()
@@ -1582,10 +1767,12 @@ def fn_main():
     # fn_gen_tax_file()
     pass
 
-    fn_get_bc_info(is_dbg=False, is_force=False, batch=10)
-    fn_gen_bc_info_extend()
+    # fn_get_bc_info(is_dbg=True, is_force=False, batch=10)
+    # fn_gen_bc_info_extend()
 
     fn_gen_litigation()
+
+    # fn_test_only()
 
 
 if __name__ == '__main__':
