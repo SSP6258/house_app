@@ -347,7 +347,7 @@ def fn_get_interest_rate(df, months=1):
 
                 df.at[idx, f'利率_{m}個月前'] = rate_sel[-1]
         else:
-            assert False, f'can NOT find interest_rate of {trade_date}'
+            assert False, f'can NOT find interest_rate of {trade_date} {df.loc[idx, "交易年月日"]}'
 
     return df
 
