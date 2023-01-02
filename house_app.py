@@ -324,6 +324,7 @@ def fn_get_interest_rate(df, months=1):
     file = os.path.join(path, 'a13rate.csv')
 
     last_month = datetime.date.today().month - 1
+    last_month = 12 if last_month == 0 else last_month
     sel_yr = df['交易年'].values[0] - 1 if last_month == 12 else df['交易年'].values[0]
 
     # print(f'last_month {last_month} sel_yr {sel_yr}')
