@@ -326,7 +326,7 @@ def fn_get_interest_rate(df, months=1):
     last_month = datetime.date.today().month - 1
     sel_yr = df['交易年'].values[0] - 1 if last_month == 12 else df['交易年'].values[0]
 
-    print(f'last_month {last_month} sel_yr {sel_yr}')
+    # print(f'last_month {last_month} sel_yr {sel_yr}')
 
     sel_month = last_month - 1 if last_month > 1 else last_month  # ToDo
     df['交易年月日'] = sel_yr * 10000 + int(sel_month) * 100 if '交易年月日' not in df.columns else df['交易年月日']
@@ -349,7 +349,7 @@ def fn_get_interest_rate(df, months=1):
 
                 df.at[idx, f'利率_{m}個月前'] = rate_sel[-1]
         else:
-            assert False, f'can NOT find interest_rate of {trade_date} {df.loc[idx, "交易年月日"]}'
+            assert False, f'can NOT find interest_rate of {trade_date} {df.loc[idx, "交易年月日"]} {last_month} {sel_yr}'
 
     return df
 
