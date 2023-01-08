@@ -69,7 +69,7 @@ class MultiApp:
             'house_0108.JPG': '~ 女兒小二時的勞作 ~',
         }
 
-        img = 'house_cloud.JPG'
+        img = 'house_0108.JPG'
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
         # try:
