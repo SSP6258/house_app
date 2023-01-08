@@ -3846,7 +3846,7 @@ def fn_app(page='data'):
 
     fn_add_style()
 
-    this_yr = datetime.datetime.now().year - 1911 - 1
+    this_yr = datetime.datetime.now().year - 1911
     dic_of_dbg['is_dbg'] = st.sidebar.checkbox('🔨️ 工程模式 ')
     dic_of_dbg['time'] = 0
     dic_of_dbg['sum'] = 0
