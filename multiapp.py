@@ -66,7 +66,7 @@ class MultiApp:
             'house_view.JPG': '~ 🎑 家的視野 ~',
             'house_green.JPG': '~ 綠光 ~',
             'house_cloud.JPG': '~ 5 AM Club ~',
-            'house_0108.JPG': '~ 女兒小二時的勞作 ~'
+            'house_0108.JPG': '~ 女兒小二時的創作 ~',
         }
 
         img = 'house_0108.JPG'
