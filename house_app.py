@@ -2462,7 +2462,7 @@ def fn_gen_web_eda(df):
         df_yp = df_yp.sort_values(by='index', ignore_index=True)
         df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
 
-        this_y = datetime.datetime.today().year
+        this_y = datetime.datetime.today().year - 1
         v = 'NA'
         m = 'NA'
         d = 'NA'
