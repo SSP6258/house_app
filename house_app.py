@@ -3723,6 +3723,7 @@ def fn_gen_web_tools():
     st.write("- 圖轉文字: [LINE OCR](https://www.tech-girlz.com/2021/01/line-ocr.html)")
     st.write("- 圖轉CSV: [誠華 OCR](https://zhtw.109876543210.com/)")
 
+
 def fn_gen_web_projs():
     st.write('')
     st.subheader('📌 專案: 🅱️ [$B 計畫$](https://tw-stock.streamlit.app/)')
