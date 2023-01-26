@@ -3726,9 +3726,9 @@ def fn_gen_web_tools():
 
 def fn_gen_web_projs():
     st.write('')
-    st.subheader('📌 專案: 🕷️ [爬蟲練習](https://tw-stock.streamlit.app/)')
-    st.subheader('📌 專案: 🌏 [利用座標查詢行政區](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
-    st.subheader('📌 專案: 🎲 [離散事件模擬器](https://share.streamlit.io/ssp6258/des_app/app.py)')
+    st.subheader('📌 專案: 🅱️ [$:red[B]計畫$](https://tw-stock.streamlit.app/)')
+    st.subheader('📌 專案: 🌏 [$座標查詢行政區$](https://share.streamlit.io/ssp6258/use_conda_env/GeoPandas.py)')
+    st.subheader('📌 專案: 🎲 [$離散事件模擬器$](https://share.streamlit.io/ssp6258/des_app/app.py)')
 
 
 def fn_gen_web_intro():
