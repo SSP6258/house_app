@@ -2463,11 +2463,12 @@ def fn_gen_web_eda(df):
         df_yp['Month'] = pd.to_datetime(df_yp['index'], format="%m")
 
         this_y = datetime.datetime.today().year  # temp workaround, remove it later !
+        last_y = this_y - 1
         v = 'NA'
         m = 'NA'
         d = 'NA'
         col_y = f'單價(萬)_{this_y}'
-        col_yp = f'單價(萬)_{this_y}'
+        col_yp = f'單價(萬)_{last_y-1}'
         if col_y in df_yp.columns:
             for idx in df_yp.index:
                 if str(df_yp.loc[idx, col_y]) == 'nan':
@@ -2478,7 +2479,12 @@ def fn_gen_web_eda(df):
                         if str(vp) != 'nan':
                             d = int(round(v - df_yp.loc[idx - 1, col_yp], 0))
                     except:
-                        pass
+                        # pass
+                        v = int(round(df_yp.loc[idx - 1, col_y], 0))
+                        m = idx
+                        vp = df_yp.loc[idx - 1, col_yp]
+                        if str(vp) != 'nan':
+                            d = int(round(v - df_yp.loc[idx - 1, col_yp], 0))
                     break
 
         st.write('')
