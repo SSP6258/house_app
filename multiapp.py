@@ -69,7 +69,7 @@ class MultiApp:
             'house_0108.JPG': '~ 女兒小二時的勞作 ~',
             'me.JPG': '~ 小奇萊 3152 ~',
             'tree.JPG': '~ 合歡北峰名樹 ~',
-            'bird.JPG': '~ 合歡山日出 ~',
+            'bird.jpg': '~ 合歡山日出 ~',
         }
 
         img = 'bird.JPG'
