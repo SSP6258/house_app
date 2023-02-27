@@ -72,6 +72,7 @@ class MultiApp:
             'bird.jpg': '~ 合歡山日出 ~',
         }
 
+
         img = 'me.jpg'
         fn_show_img(dic_of_path['database'], img, is_sidebar=True, width=None, caption=dic_imgs[img])
 
