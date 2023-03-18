@@ -1561,7 +1561,10 @@ def fn_gen_bc_info_extend():
 
     # s = df['建蔽率'].apply(lambda x: float(x.replace('%', 'e-2')))
     df['地上樓層'] = df['地上樓層'].apply(lambda x: x.replace(',', '、'))
-    f = df['地上樓層'].apply(lambda x: int(max(x.split('、'))) if '、' in x else int(x))
+    try:
+        f = df['地上樓層'].apply(lambda x: int(max(x.split('、'))) if '、' in x else int(x))
+    except:
+        f = 'na'
 
     # df['容積率(%)'] = s * f
     # df['容積率(%)'] = df['容積率(%)'].apply(lambda x: int(100 * x))
