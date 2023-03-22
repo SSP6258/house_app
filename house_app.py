@@ -2362,6 +2362,7 @@ def fn_gen_web_eda(df):
     city = df['土地位置建物門牌'].apply(lambda x: str(x).split('市')[0] + '市')
     city = city.unique()[0]
 
+
     period = f"$民國 {df['交易年'].min()} \sim {df['交易年'].max()}年$"
     b_typ = '' if df["建物型態"].nunique() > 1 else df["建物型態"].values[0] + '型 '
     title = f'{period} :blue[${city}$] ${df["建案名稱"].nunique()}個 $:blue[${b_typ}\ {house_typ}$] $建案 共$ :red[${df.shape[0]}筆$] $實價登錄資料$'
