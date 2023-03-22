@@ -2406,6 +2406,7 @@ def fn_gen_web_eda(df):
     # rendering web view
     st.write('')
 
+
     # st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
     c1, c2 = st.columns([4, 1.1])
     c1.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
