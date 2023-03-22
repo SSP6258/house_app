@@ -3857,7 +3857,7 @@ def fn_app(page='data'):
     dic_of_dbg['time'] = 0
     dic_of_dbg['sum'] = 0
     fn_dbg(f'', is_force=True)
-    st.sidebar.header(f'🔍 資訊篩選:\n')
+    st.sidebar.markdown('### 🔍 $資訊篩選:$')
     year_sel = st.sidebar.slider('交易年(民國)', min_value=100, max_value=this_yr, value=(this_yr - 2, this_yr))
     price_sel = st.sidebar.slider('每坪單價(萬)', min_value=40, max_value=200, value=(40, 200))
     c1, c2 = st.sidebar.columns(2)
