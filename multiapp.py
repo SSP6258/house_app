@@ -88,7 +88,7 @@ class MultiApp:
         #     imgs = ['house_dora.JPG', 'house_dora.jpg', 'house_dora_2.jpg', 'house_dora_88.jpg']
         #     fn_show_img(dic_of_path['database'], imgs[3], is_sidebar=True, width=None, caption="~ 女兒蓋了棟別墅送我 💖 ~")
 
-        st.sidebar.title("👨‍🏫 [$Jack.Pan's$](https://www.facebook.com/jack.pan.96/) $房市看板$ ")
+        st.sidebar.markdown("👨‍🏫 [$Jack.Pan's$](https://www.facebook.com/jack.pan.96/) $房市看板$ ")
         # st.sidebar.write('- ✉️ ssp6258@yahoo.com.tw')
         # st.sidebar.write('- 🚧 [故障報修、意見反饋](https://github.com/SSP6258/house_app/issues/new)')
         st.sidebar.header('🧭 功能導航')
