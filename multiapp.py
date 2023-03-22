@@ -91,7 +91,7 @@ class MultiApp:
         st.sidebar.markdown("## 👨‍🏫 [$Jack.Pan's$](https://www.facebook.com/jack.pan.96/) $房市看板$ ")
         # st.sidebar.write('- ✉️ ssp6258@yahoo.com.tw')
         # st.sidebar.write('- 🚧 [故障報修、意見反饋](https://github.com/SSP6258/house_app/issues/new)')
-        st.sidebar.header('🧭 功能導航')
+        st.sidebar.header('🧭 $功能導航$')
         app = st.sidebar.selectbox(
             '應用選單',
             self.apps,
