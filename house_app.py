@@ -2407,7 +2407,8 @@ def fn_gen_web_eda(df):
 
     # st.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 (最新:{Latest_date}) ')
     c1, c2 = st.columns([4, 1.1])
-    c1.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
+    # c1.header(f'🏙️ {cities}{dist} {house_typ} 實價登錄 ')
+    c1.markdown(f'## $🏙️ {cities}{dist}\ {house_typ} 實價登錄 $')
     latest_file = df["File"].values[-1]
     latest_records = df[df["File"] == latest_file].shape[0]
     pre_file = df[df["File"] != latest_file]["File"].values[-1]
