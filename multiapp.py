@@ -102,4 +102,3 @@ class MultiApp:
 
         app['function']()
 
-
