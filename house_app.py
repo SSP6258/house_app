@@ -2366,6 +2366,7 @@ def fn_gen_web_eda(df):
     b_typ = '' if df["建物型態"].nunique() > 1 else df["建物型態"].values[0] + '型 '
     title = f'{period} :blue[${city}$] ${df["建案名稱"].nunique()} 個 {b_typ}$ :blue[${house_typ}$] $建案 共$ :red[${df.shape[0]}$] $筆 實價登錄資料$'
 
+
     map_style = "carto-positron"  # "open-street-map"
     df = df.sort_values(by=['交易年月日'])
 
