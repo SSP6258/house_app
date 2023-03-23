@@ -433,7 +433,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     st.write('')
     # st.subheader('批次驗證')
     st.markdown('#### :blue[$批次驗證:$]')
-    st.markdown("$驗證資料:$ :blue[$内政部不動產成交案件 資料供應系統(每月1、11、21日發布)$](https://plvr.land.moi.gov.tw/DownloadOpenData)")
+    st.markdown("$驗證資料:$ [$内政部不動產成交案件 資料供應系統(每月1、11、21日發布)$](https://plvr.land.moi.gov.tw/DownloadOpenData)")
 
     df_tax = pd.read_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), index_col='行政區')
     df_bc = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext.csv'), index_col='建案名稱')
