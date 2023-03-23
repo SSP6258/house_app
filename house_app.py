@@ -2792,7 +2792,7 @@ def fn_gen_web_eda(df):
         AgGrid(df_cols, theme='blue', fit_columns_on_grid_load=True, enable_enterprise_modules=True)
 
         st.write(
-            f'$資料來源:$ [$内政部不動產交易實價查詢服務網(每月1、11、21 日發布)$](https://plvr.land.moi.gov.tw/DownloadOpenData), 共{df_cols.shape[0]}筆資料')
+            f'$資料來源:$ [$内政部不動產交易實價查詢服務網(每月1、11、21 日發布)$](https://plvr.land.moi.gov.tw/DownloadOpenData) $,\ 共{df_cols.shape[0]}筆資料$')
 
         fn_dbg(f'fn_gen_web_eda 6 {build_case}')
 
