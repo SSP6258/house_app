@@ -431,7 +431,8 @@ def fn_get_hover_text(df):
 @fn_profiler
 def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     st.write('')
-    st.subheader('批次驗證')
+    # st.subheader('批次驗證')
+    st.markdown('#### :blue[$批次驗證:$]')
     st.write("驗證資料:[内政部不動產成交案件 資料供應系統(每月1、11、21日發布)](https://plvr.land.moi.gov.tw/DownloadOpenData)")
 
     df_tax = pd.read_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), index_col='行政區')
@@ -3371,7 +3372,7 @@ def fn_gen_web_ml_inference(path, build_typ):
     if len(models) > 0:
         st.write('')
         # st.subheader('模型推論')
-        st.markdown('$模型選擇:$')
+        st.markdown('#### :blue[$模型選擇:$]')
         model_sel = st.selectbox('模型選擇:', models, label_visibility='collapsed')
         model_typ = model_sel.split('tpe')[-1].split('mse')[0].replace('_', '')
         model_sel = os.path.join(model_fdr, model_sel)
