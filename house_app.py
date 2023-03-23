@@ -3370,9 +3370,9 @@ def fn_gen_web_ml_inference(path, build_typ):
 
     if len(models) > 0:
         st.write('')
-        st.subheader('模型推論')
-
-        model_sel = st.selectbox('模型選擇:', models)
+        # st.subheader('模型推論')
+        st.markdown('$模型選擇:$')
+        model_sel = st.selectbox('模型選擇:', models, label_visibility='collapsed')
         model_typ = model_sel.split('tpe')[-1].split('mse')[0].replace('_', '')
         model_sel = os.path.join(model_fdr, model_sel)
 
