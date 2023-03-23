@@ -438,7 +438,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
     df_tax = pd.read_csv(os.path.join(dic_of_path['database'], '108_165-A.csv'), index_col='行政區')
     df_bc = pd.read_csv(os.path.join(dic_of_path['database'], 'build_case_info_ext.csv'), index_col='建案名稱')
 
-    st.markdown('資料上傳:$')
+    st.markdown('$資料上傳:$')
     file = st.file_uploader("資料上傳", type=['csv'], label_visibility='collapsed')
     print(file)
     if not file:
