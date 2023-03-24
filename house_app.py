@@ -2474,7 +2474,7 @@ def fn_gen_web_eda(df):
         m = 'NA'
         d = 'NA'
         col_y = f'單價(萬)_{this_y}'
-        col_yp = f'單價(萬)_{last_y-1}'
+        col_yp = f'單價(萬)_{last_y}'
         if col_y in df_yp.columns:
             for idx in df_yp.index:
                 if str(df_yp.loc[idx, col_y]) == 'nan':
