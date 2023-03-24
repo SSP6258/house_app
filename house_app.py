@@ -1281,7 +1281,7 @@ def fn_gen_analysis_statistic(df):
 
     margin = {'l': 0, 'r': 50, 't': 30, 'b': 20}
 
-    fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易年', '交易月', '每坪單價(萬)', '總價(萬)'))
+    fig_bar = make_subplots(rows=2, cols=2, subplot_titles=('交易量/年', '交易量/月', '每坪單價(萬)', '總價(萬)'))
     fig_bar_2 = make_subplots(rows=2, cols=2, subplot_titles=('建物坪數', '總樓層數', '車位類別', '車位單價(萬)'))
     df_pk_1 = df[df['車位類別'] == '坡道平面']
     df_pk_2 = df[df['車位類別'] == '坡道機械']
