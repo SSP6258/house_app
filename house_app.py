@@ -469,6 +469,10 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             st.write(df['MRT'])
             st.write(df_mrt_ave)
 
+        for s in df['sku_name'].values:
+            if s not in df_sku_ave.index:
+                st.write(s)
+
         df['SKU_ave'] = df['sku_name'].apply(lambda x: df_sku_ave.loc[x, '每坪單價(萬)'])
         df['DIST_ave'] = df['鄉鎮市區'].apply(lambda x: df_dist_ave.loc[x, '每坪單價(萬)'])
 
