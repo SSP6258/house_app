@@ -621,7 +621,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                         fig.add_vrect(x0=th_l, row=2, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
                         fig.add_vrect(x0=th_l, row=1, col=1, x1=th_h, line_width=0, fillcolor="red", opacity=0.1)
 
-                    st.plotly_chart(fig, config=config)
+                    st.plotly_chart(fig, config=config, theme=None)
 
             st.write('')
             AgGrid(df_show, theme='blue', enable_enterprise_modules=True)
