@@ -571,7 +571,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                 colors = ['無', f'依行政區({len(df["鄉鎮市區"].unique())})', '依捷運距離', '依通勤時間']
                 color_by = c1.selectbox('著色條件:', colors)
 
-                margin = dict(t=50, l=20, r=0, b=0)
+                margin = dict(t=50, l=50, r=0, b=30)
                 fig = make_subplots()
                 color_set, opacity = fn_set_color_by(color_by, df)
                 hover_text = fn_get_hover_text(df)
