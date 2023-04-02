@@ -595,7 +595,7 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
                                                 xlabel='實際單價(萬/坪)', ylabel='預估單價(萬/坪)', title=title)
 
                 st.write('')
-                st.plotly_chart(fig, config=config)
+                st.plotly_chart(fig, config=config, theme=None)
 
                 if is_rf:
                     fig = make_subplots(rows=2, cols=2, specs=[[{"rowspan": 1, "colspan": 2}, None], [{}, {}]],
