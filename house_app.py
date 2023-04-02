@@ -469,8 +469,6 @@ def fn_gen_pred(path, model, model_name, df_F, build_typ, is_rf):
             st.write(df['MRT'])
             st.write(df_mrt_ave)
 
-
-
         try:
             df['SKU_ave'] = df['sku_name'].apply(lambda x: df_sku_ave.loc[x, '每坪單價(萬)'])
         except:
@@ -3561,8 +3559,8 @@ def fn_gen_web_ml_inference(path, build_typ):
     st.write(" ")
     st.subheader(f'其它房價預測平台:')
     st.markdown(
-        f'{"#" * 4} 🔮 [中信銀行 智慧估價平台](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)')
-    st.markdown(f'{"#" * 4} 🔮 [好時價House+](https://www.houseplus.tw/)')
+        f'{"#" * 4} 🔮 [:blue[$中信銀行-智慧估價平台$]](https://www.ctbcbank.com/content/dam/minisite/long/loan/ctbc-mortgage/index.html)')
+    st.markdown(f'{"#" * 4} 🔮 [:blue[$好時價$]](https://www.houseplus.tw/)')
 
     # te = time.time()
     # dur = round(te - ts, 5)
