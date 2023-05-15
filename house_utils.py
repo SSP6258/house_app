@@ -97,6 +97,7 @@ dic_bc_rename = {
     '大安MONEY 璞寓': '大安MONEY',
     '信義THE 1': '信義THE1',
     '幸褔安家': '幸福安家',
+    '璞園?里東': '璞園喆里東',
 }
 
 black_list = [
@@ -186,9 +187,15 @@ def fn_get_coordinate(addr, slp=5):
     # search = browser.find_element_by_id("searchword")
     search = browser.find_element(by=By.ID, value="searchWord")
     search.clear()
-    time.sleep(random.randint(1, 3))
+    time.sleep(3)
     search.send_keys(addr)
-    browser.find_element(by=By.XPATH, value="/html/body/form/div[10]/div[2]/img[2]").click()
+    time.sleep(3)
+
+    # browser.find_element(by=By.XPATH, value="/html/body/form/div[10]/div[2]/img[2]").click()
+
+    search_btn = r'/html/body/form/table/tbody/tr[1]/td/div[4]/table/tbody/tr/td[2]/table/tbody/tr/td[3]/div'
+    browser.find_element(by=By.XPATH, value=search_btn).click()
+
     slp = slp + random.randint(5, 15)
     time.sleep(slp)
     iframe = browser.find_elements(by=By.CLASS_NAME, value="winfoIframe")[0]
@@ -1556,6 +1563,11 @@ def fn_gen_bc_info_extend():
     df['總車位數'] = df['平面車位'] + df['機械車位']
     if '公開銷售' in df.columns:
         df['公開銷售'] = df['公開銷售'].apply(lambda x: x.split('已完銷')[-1] + '已完銷' if '已完銷' in x else x)
+
+    # print(df['棟戶規劃'])
+
+    df['棟戶規劃'] = df['棟戶規劃'].apply(lambda x: '1棟' if x=='NA' else x)
+
     df['棟數'] = df['棟戶規劃'].apply(
         lambda x: int(x.split('棟')[0].split('，')[-1]) if '，' in x.split('棟')[0] else int(x.split('棟')[0]))
 
