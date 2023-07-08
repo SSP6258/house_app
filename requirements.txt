@@ -6,7 +6,7 @@ plotly-express==0.4.1
 cn2an==0.5.16
 pandas==2.0.1
 streamlit==1.24.1
-streamlit-aggrid==0.2.3
+streamlit-aggrid==0.3.4
 streamlit-player==0.1.5
 workalendar==16.2.0
 waterfallcharts==3.8
