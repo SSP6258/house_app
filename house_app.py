@@ -40,7 +40,8 @@ except:
 # pip list --format=freeze > requirements.txt
 dic_of_dbg = {'is_dbg': False,
               'time': 0,
-              'sum': 0}
+              'sum': 0,
+              'is_bypass_date_chk': True}
 
 dic_of_cn_2_en = {'經度': 'longitude',
                   '緯度': 'latitude',
@@ -338,8 +339,12 @@ def fn_get_interest_rate(df, months=1):
     for idx in df.index:
         trade_date = float(int(df.loc[idx, '交易年月日'] / 100))
 
-        if trade_date in df_rate[date_col].values:
-            df_t = df_rate[df_rate[date_col] <= trade_date]
+        if dic_of_dbg['is_bypass_date_chk']: # @ 240517
+            if trade_date in df_rate[date_col].values:
+                df_t = df_rate[df_rate[date_col] <= trade_date]
+            else:
+                df_t = df_rate.copy()
+
             rates = df_t[rate_col].values
             rate_sel = []
             for m in range(months):
@@ -350,7 +355,20 @@ def fn_get_interest_rate(df, months=1):
 
                 df.at[idx, f'利率_{m}個月前'] = rate_sel[-1]
         else:
-            assert False, f'can NOT find interest_rate of {trade_date} {df.loc[idx, "交易年月日"]} {last_month} {sel_yr}'
+
+            if trade_date in df_rate[date_col].values:
+                df_t = df_rate[df_rate[date_col] <= trade_date]
+                rates = df_t[rate_col].values
+                rate_sel = []
+                for m in range(months):
+                    try:
+                        rate_sel.append(rates[-1 - m])
+                    except:
+                        rate_sel.append(rate_sel[-1])
+
+                    df.at[idx, f'利率_{m}個月前'] = rate_sel[-1]
+            else:
+                assert False, f'can NOT find interest_rate of {trade_date} {df.loc[idx, "交易年月日"]} {last_month} {sel_yr}'
 
     return df
 
