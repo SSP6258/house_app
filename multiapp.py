@@ -97,7 +97,7 @@ class MultiApp:
             '應用選單',
             self.apps,
             format_func=lambda app: app['title'],
-            index=1,
+            index=2,
             label_visibility='collapsed'
             )
 
